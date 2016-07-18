@@ -2,16 +2,28 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from autoslug import AutoSlugField
 from localflavor.us.models import PhoneNumberField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Profile(models.Model):
+    FARMERS_MARKET = 'Farmers Market'
+    VENDOR = 'Vendor'
+    REVIEWER = 'Reviewer'
+    user_type_choices = ((FARMERS_MARKET, 'Farmers Market'), (VENDOR, 'Vendor'), (REVIEWER, 'Reviewer'))
     profile_user = models.OneToOneField('auth.User')
-    user_type = models.CharField(max_length=15) # choices? vendor or fm
+    user_type = models.CharField(max_length=15, choices=user_type_choices)
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
+
+    def __str__(self):
+        return self.profile_user
 
 
 class VendorType(models.Model):
-    vendor_type = models.CharField(max_length=30) # choice?
+    vendor_type = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.vendor_type
 
 
 class FarmersMarket(models.Model):
@@ -24,8 +36,10 @@ class FarmersMarket(models.Model):
     fm_contact_name = models.CharField(max_length=30)
     fm_contact_email = models.EmailField()
     fm_website = models.URLField(blank=True)
-    fm_facility_type = models.CharField(max_length=30, blank=True) # choice? Open-Air, Open-Air/Covered
-    fm_county = models.CharField(max_length=30, blank=True)
+    OPEN_AIR = 'Open-Air'
+    OA_COVERED = 'Open-Air/Covered'
+    facility_choices = ((OPEN_AIR, 'Open-Air'), (OA_COVERED, 'Open-Air/Covered'))
+    fm_facility_type = models.CharField(max_length=30, blank=True, choices=facility_choices)
     fm_address = models.CharField(max_length=30, blank=True)
     fm_programs_accepted = models.CharField(max_length=30, blank=True)
     # https://pypi.python.org/pypi/django-localflavor
@@ -35,6 +49,9 @@ class FarmersMarket(models.Model):
     fm_handicap_accessible = models.CharField(max_length=30, blank=True)
     fm_iframe_url = models.URLField(blank=True)
     fm_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.fm_name
 
 
 class Vendor(models.Model):
@@ -53,6 +70,9 @@ class Vendor(models.Model):
     vendor_type = models.ForeignKey(VendorType)
     vendor_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.vendor_name
+
 
 class Rating(models.Model):
     # would like a way to limit it to one rating per user per Vendor/FarmersMarket
@@ -63,3 +83,14 @@ class Rating(models.Model):
     rating = models.PositiveIntegerField() # choices? 1-5?
     rating_comment = models.TextField()
     rating_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.rating_user
+
+
+@receiver(post_save, sender='auth.User')
+def create_user_profile(**kwargs):
+    created = kwargs.get("created")
+    instance = kwargs.get("instance")
+    if created:
+        Profile.objects.create(user=instance)
