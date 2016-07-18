@@ -1,5 +1,5 @@
 """
-Django settings for helloworld project on Heroku. Fore more info, see:
+Django settings for tiy_final project on Heroku. Fore more info, see:
 https://github.com/heroku/heroku-django-template
 
 For more information on this file, see
@@ -53,7 +53,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'helloworld.urls'
+ROOT_URLCONF = 'tiy_final.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'helloworld.wsgi.application'
+WSGI_APPLICATION = 'tiy_final.wsgi.application'
 
 
 # Database

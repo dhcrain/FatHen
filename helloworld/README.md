@@ -19,9 +19,9 @@ To use this project, follow these steps:
 
 Using this template to create a new Django app is easy::
 
-    $ django-admin.py startproject --template=https://github.com/heroku/heroku-django-template/archive/master.zip --name=Procfile helloworld
+    $ django-admin.py startproject --template=https://github.com/heroku/heroku-django-template/archive/master.zip --name=Procfile tiy_final
 
-You can replace ``helloworld`` with your desired project name.
+You can replace ``tiy_final`` with your desired project name.
 
 ## Deployment to Heroku
 
