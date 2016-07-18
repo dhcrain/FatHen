@@ -16,7 +16,7 @@ class Profile(models.Model):
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
 
     def __str__(self):
-        return self.profile_user
+        return str(self.profile_user)
 
 
 class VendorType(models.Model):
@@ -85,7 +85,7 @@ class Rating(models.Model):
     rating_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.rating_user
+        return str(self.rating_user)
 
 
 @receiver(post_save, sender='auth.User')
