@@ -12,7 +12,7 @@ import os
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hello_heroku.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fm_proj.settings")
 
 application = get_wsgi_application()
 application = DjangoWhiteNoise(application)
