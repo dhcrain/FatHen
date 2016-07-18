@@ -14,3 +14,4 @@ requests==2.10.0
 six==1.10.0
 usaddress==0.5.7
 whitenoise==3.2
+gunicorn==19.6.0
