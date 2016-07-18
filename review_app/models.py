@@ -18,6 +18,14 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.profile_user)
 
+    @property
+    def profile_picture_url(self):
+        if self.profile_picture:
+            return self.profile_picture.url
+        else:
+            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
+
+
 
 class VendorType(models.Model):
     vendor_type = models.CharField(max_length=30)

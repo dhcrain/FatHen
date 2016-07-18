@@ -3,10 +3,38 @@
     <head>
         <meta charset="utf-8">
         <title>{% block title %}Title{% endblock %}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.3/foundation-flex.min.css">
     </head>
     <body>
-        {% block body %}
-
-        {% endblock %}
+    {# nav bar #}
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <ul class="dropdown menu" data-dropdown-menu>
+                <li class="menu-text">YELP?</li>
+                <li><a href="{% url 'index_view' %}">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li></li>
+                {% else %}
+                    {# <li><a href="{% url 'register_view' %}">Create Account</a></li>#}
+                {% endif %}
+            </ul>
+        </div>
+        <div class="top-bar-right">
+            <ul class="menu">
+                {% if user.is_authenticated %}
+                    <li class="menu-text">Welcome {{ user }}</li>
+                    <li><a href="{% url 'logout' %}?next={% url 'index_view' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </div>
     </body>
 </html>
