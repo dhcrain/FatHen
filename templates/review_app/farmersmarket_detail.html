@@ -2,5 +2,26 @@
 
 {% block body %}
     <h1>{{ object.fm_name }}</h1>
-    {{ object.fm_description }}
+    {{ object.pk }}
+    <p>{{ object.fm_contact_name }}</p>
+    <p>{{ object.fm_contact_email }}</p>
+    <p>{{ object.fm_facility_type }}</p>
+    <p>{{ object.fm_county }}</p>
+    <p>{{ object.fm_address }}</p>
+    <p>{{ object.fm_programs_accepted }}</p>
+    <p>{{ object.fm_phone }}</p>
+    <p>{{ object.fm_hrs_of_operation }}</p>
+    <p>{{ object.fm_seasons_of_operation }}</p>
+    <p>{{ object.fm_handicap_accessible }}</p>
+    <iframe src="{{ object.fm_iframe_url }}" width="" height=""></iframe>
+    <p>{{ object.fm_iframe_url }}</p>
+    <p>{{ object.fm_updated }}</p>
+
+
+
 {% endblock %}
+
+
+
+{# fm_picture#}
+{# fm_banner_picture #}
