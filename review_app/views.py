@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import TemplateView, UpdateView, CreateView
+from django.views.generic import TemplateView, UpdateView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-
+from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating
 
 # Create your views here.
 
@@ -15,6 +15,10 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["login_form"] = AuthenticationForm()
         return context
+
+class FarmersMarketListView(ListView):
+    template_name = 'review_app/farmersmarkets_list.html'
+    model = FarmersMarket
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):

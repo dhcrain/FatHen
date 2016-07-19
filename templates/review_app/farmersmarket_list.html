@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+    <h1>FM list</h1>
+
+    {% for market in object_list %}
+        {{ market }}
+    {% endfor %}
+
+{% endblock %}

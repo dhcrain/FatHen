@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from review_app.views import IndexView, ProfileView, RegisterView
+from review_app.views import IndexView, ProfileView, RegisterView, FarmersMarketListView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -23,5 +23,7 @@ urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index_view'),
     url(r'^register/$', RegisterView.as_view(), name='register_view'),
     url(r'^accounts/profile/$', ProfileView.as_view(), name='profile_view'),
+    url(r'^farmers_markets/$', FarmersMarketListView.as_view(), name='famers_market_list_view')
+    # url(r'^farmers_markets/(P?<>)$', FarmersMarketListView.as_view(), name='famers_market_list_view')
 
 ]

@@ -37,7 +37,7 @@ class VendorType(models.Model):
 class FarmersMarket(models.Model):
     fm_name = models.CharField(max_length=30)
     # https://pypi.python.org/pypi/django-autoslug
-    fm_slug = AutoSlugField(populate_from='fm_name', unique=True, editable=True)
+    fm_slug = AutoSlugField(populate_from='fm_name', unique=True, editable=True, blank=True)
     fm_description = models.TextField(blank=True)
     fm_picture = models.ImageField(upload_to="fm_images", blank=True)
     fm_banner_picture = models.ImageField(upload_to="fm_images", blank=True)

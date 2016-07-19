@@ -16,10 +16,10 @@
             <ul class="dropdown menu" data-dropdown-menu>
                 <li class="menu-text">YELP?</li>
                 <li><a href="{% url 'index_view' %}">Home</a></li>
+                <li><a href="{% url 'famers_market_list_view' %}">List of FM's</a></li>
                 {% if user.is_authenticated %}
-                    <li></li>
                 {% else %}
-                    {# <li><a href="{% url 'register_view' %}">Create Account</a></li>#}
+                    <li><a href="{% url 'register_view' %}">Create Account</a></li>
                 {% endif %}
             </ul>
         </div>
@@ -27,6 +27,7 @@
             <ul class="menu">
                 {% if user.is_authenticated %}
                     <li class="menu-text">Welcome {{ user }}</li>
+                    <li><a href="{% url 'profile_view' %}">Profile</a></li>
                     <li><a href="{% url 'logout' %}?next={% url 'index_view' %}">Logout</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
