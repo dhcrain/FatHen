@@ -48,6 +48,7 @@ class FarmersMarket(models.Model):
     OA_COVERED = 'Open-Air/Covered'
     facility_choices = ((OPEN_AIR, 'Open-Air'), (OA_COVERED, 'Open-Air/Covered'))
     fm_facility_type = models.CharField(max_length=30, blank=True, choices=facility_choices)
+    fm_county = models.CharField(max_length=20, blank=True)
     fm_address = models.CharField(max_length=30, blank=True)
     fm_programs_accepted = models.CharField(max_length=30, blank=True)
     # https://pypi.python.org/pypi/django-localflavor
