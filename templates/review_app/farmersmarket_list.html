@@ -5,7 +5,7 @@
     <h1>FM list</h1>
 
     {% for market in object_list %}
-        {{ market }}
+        <a href="{% url 'farmers_market_detail_view' fm_slug=market.fm_slug %}">{{ market }}</a>
     {% endfor %}
 
 {% endblock %}

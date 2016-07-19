@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import TemplateView, UpdateView, CreateView, ListView
+from django.views.generic import TemplateView, UpdateView, CreateView, DetailView, ListView
+# from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating
-
 # Create your views here.
 
 class IndexView(TemplateView):
@@ -19,6 +19,11 @@ class IndexView(TemplateView):
 class FarmersMarketListView(ListView):
     template_name = 'review_app/farmersmarkets_list.html'
     model = FarmersMarket
+
+class FarmersMarketDetailView(DetailView):
+    model = FarmersMarket
+    slug_field = 'fm_slug'
+    slug_url_kwarg = 'fm_slug'
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
