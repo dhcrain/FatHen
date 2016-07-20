@@ -17,7 +17,9 @@
     <p>{{ object.fm_iframe_url }}</p>
     <p>{{ object.fm_updated }}</p>
 
-
+{% for vendor in vendor_list %}
+    <p><a href="{% url 'vendor_detail_view' object.fm_slug vendor.vendor_slug %}">{{ vendor }}</a></p>
+{% endfor %}
 
 {% endblock %}
 

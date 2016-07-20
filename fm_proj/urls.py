@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from review_app.views import IndexView, ProfileView, RegisterView, FarmersMarketListView, FarmersMarketDetailView
+from review_app.views import IndexView, ProfileView, RegisterView, FarmersMarketListView, FarmersMarketDetailView, VendorDetailView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,8 +24,7 @@ urlpatterns = [
     url(r'^register/$', RegisterView.as_view(), name='register_view'),
     url(r'^accounts/profile/$', ProfileView.as_view(), name='profile_view'),
     url(r'^farmers_markets/$', FarmersMarketListView.as_view(), name='farmers_market_list_view'),
-    url(r'^farmers_markets/(?P<fm_slug>[A-Za-z0-9_\-]+)/$', FarmersMarketDetailView.as_view(), name='farmers_market_detail_view'),
-    url(r'^farmers_markets/$', FarmersMarketListView.as_view(), name='farmers_market_list_view'),
-    url(r'^farmers_markets/(?P<fm_slug>[A-Za-z0-9_\-]+)/$', FarmersMarketDetailView.as_view(), name='farmers_market_detail_view'),
+    url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/$', FarmersMarketDetailView.as_view(), name='farmers_market_detail_view'),
+    url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/(?P<vendor_slug>[A-Za-z0-9_\-]+)/$', VendorDetailView.as_view(), name='vendor_detail_view'),
 
 ]

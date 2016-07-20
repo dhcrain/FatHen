@@ -25,6 +25,19 @@ class FarmersMarketDetailView(DetailView):
     slug_field = 'fm_slug'
     slug_url_kwarg = 'fm_slug'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fm_slug = self.kwargs.get('fm_slug')
+        mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
+        context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug)
+        return context
+
+
+class VendorDetailView(DetailView):
+    model = Vendor
+    slug_field = 'vendor_slug'
+    slug_url_kwarg = 'vendor_slug'
+
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'profile.html'
