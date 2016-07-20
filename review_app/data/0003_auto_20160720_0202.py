@@ -6,7 +6,6 @@ from django.db import migrations
 import csv
 from django.template.defaultfilters import slugify
 
-
 def mainst_vendor_import(apps, schema_editor):
     Vendor = apps.get_model("review_app", "Vendor")
     FarmersMarket = apps.get_model("review_app", "FarmersMarket")
@@ -20,7 +19,6 @@ def mainst_vendor_import(apps, schema_editor):
             # http://stackoverflow.com/questions/12764347/django-invalid-keyword-argument-for-this-function
             vendor.save()
             vendor.at_farmers_market.add(fm)
-
     # raise Exception("2 yay")
 
 def tr_vendor_import(apps, schema_editor):
@@ -39,7 +37,6 @@ def tr_vendor_import(apps, schema_editor):
             )
             vendor.save()
             vendor.at_farmers_market.add(fm)
-
     # raise Exception("2 yay")
 
 class Migration(migrations.Migration):

@@ -41,15 +41,15 @@ class FarmersMarket(models.Model):
     fm_description = models.TextField(blank=True)
     fm_picture = models.ImageField(upload_to="fm_images", blank=True)
     fm_banner_picture = models.ImageField(upload_to="fm_images", blank=True)
-    fm_contact_name = models.CharField(max_length=30)
+    fm_contact_name = models.CharField(max_length=50)
     fm_contact_email = models.EmailField()
     fm_website = models.URLField(blank=True)
     OPEN_AIR = 'Open-Air'
     OA_COVERED = 'Open-Air/Covered'
     facility_choices = ((OPEN_AIR, 'Open-Air'), (OA_COVERED, 'Open-Air/Covered'))
-    fm_facility_type = models.CharField(max_length=30, blank=True, choices=facility_choices)
+    fm_facility_type = models.CharField(max_length=20, blank=True, choices=facility_choices)
     fm_county = models.CharField(max_length=20, blank=True)
-    fm_address = models.CharField(max_length=30, blank=True)
+    fm_address = models.CharField(max_length=75, blank=True)
     fm_programs_accepted = models.CharField(max_length=100, blank=True)
     # https://pypi.python.org/pypi/django-localflavor
     fm_phone = PhoneNumberField(blank=True)
@@ -71,7 +71,7 @@ class Vendor(models.Model):
     vendor_description = models.TextField(blank=True)
     vendor_picture = models.ImageField(upload_to="vendor_images", blank=True)
     vendor_banner_picture = models.ImageField(upload_to="vendor_images", blank=True)
-    vendor_contact_name = models.CharField(max_length=30)
+    vendor_contact_name = models.CharField(max_length=50)
     vendor_contact_email = models.EmailField()
     vendor_website = models.URLField(blank=True)
     # https://pypi.python.org/pypi/django-localflavor
