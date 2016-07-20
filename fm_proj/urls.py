@@ -25,5 +25,7 @@ urlpatterns = [
     url(r'^accounts/profile/$', ProfileView.as_view(), name='profile_view'),
     url(r'^farmers_markets/$', FarmersMarketListView.as_view(), name='farmers_market_list_view'),
     url(r'^farmers_markets/(?P<fm_slug>[A-Za-z0-9_\-]+)/$', FarmersMarketDetailView.as_view(), name='farmers_market_detail_view'),
+    url(r'^farmers_markets/$', FarmersMarketListView.as_view(), name='farmers_market_list_view'),
+    url(r'^farmers_markets/(?P<fm_slug>[A-Za-z0-9_\-]+)/$', FarmersMarketDetailView.as_view(), name='farmers_market_detail_view'),
 
 ]

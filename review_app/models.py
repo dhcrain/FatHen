@@ -35,7 +35,7 @@ class VendorType(models.Model):
 
 
 class FarmersMarket(models.Model):
-    fm_name = models.CharField(max_length=30)
+    fm_name = models.CharField(max_length=100)
     # https://pypi.python.org/pypi/django-autoslug
     fm_slug = AutoSlugField(populate_from='fm_name', unique=True, editable=True, blank=True)
     fm_description = models.TextField(blank=True)
@@ -65,7 +65,7 @@ class FarmersMarket(models.Model):
 
 class Vendor(models.Model):
     at_farmers_market = models.ManyToManyField("FarmersMarket")
-    vendor_name = models.CharField(max_length=30)
+    vendor_name = models.CharField(max_length=100)
     # https://pypi.python.org/pypi/django-autoslug
     vendor_slug = AutoSlugField(populate_from='fm_name', unique=True, editable=True)
     vendor_description = models.TextField(blank=True)

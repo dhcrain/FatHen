@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
             name='FarmersMarket',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fm_name', models.CharField(max_length=30)),
+                ('fm_name', models.CharField(max_length=100)),
                 ('fm_slug', autoslug.fields.AutoSlugField(editable=True, populate_from='fm_name', unique=True)),
                 ('fm_description', models.TextField(blank=True)),
                 ('fm_picture', models.ImageField(blank=True, upload_to='fm_images')),
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
             name='Vendor',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('vendor_name', models.CharField(max_length=30)),
+                ('vendor_name', models.CharField(max_length=100)),
                 ('vendor_slug', autoslug.fields.AutoSlugField(editable=True, populate_from='fm_name', unique=True)),
                 ('vendor_description', models.TextField(blank=True)),
                 ('vendor_picture', models.ImageField(blank=True, upload_to='vendor_images')),
