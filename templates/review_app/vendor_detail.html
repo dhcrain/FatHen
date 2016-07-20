@@ -2,18 +2,45 @@
 
 {% block body %}
 
+{# fm_picture#}
+{# fm_banner_picture #}
 <h1>{{ object.vendor_name }}</h1>
-{% for fm in object.at_farmers_market.all %}
-    <p>{{ fm }}</p>
-{% endfor %}
-<p>{{ object.vendor_description }}</p>
-<p>{{ object.vendor_contact_name }}</p>
-<p>{{ object.vendor_contact_email }}</p>
-<p>{{ object.vendor_website }}</p>
-<p>{{ object.vendor_phone }}</p>
-<p>{{ object.vendor_type }}</p>
-<p>{{ object.vendor_updated }}</p>
-<p>{{ object.pk }}</p>
+<hr>
+<div class="row">
+    <div class="small-6 columns">
+        <h3>Avg Review info here</h3>
+        <p>Stars....</p>
+    </div>
+    <div class="small-6 columns">
+        <a class="large button success radius" href="#">Add a Review</a>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="small-6 columns">
+        <p>{% if object.vendor_type %}<strong>Vendor Type:</strong> {{ object.vendor_type }}{% endif %}<br>
+            {{ object.vendor_description }}<br>
+        </p>
+    </div>
+    <div class="small-6 columns">
+        {% if object.vendor_website %}
+        <a class="secondary hollow button" href="{{ object.vendor_website }}"><strong>Website</strong></a><br>
+        {% endif %}
+        <strong>Found at these Farmers Markets: </strong>{% for fm in object.at_farmers_market.all %}<a href="{% url 'farmers_market_detail_view' fm.fm_slug %}">{{ fm }}</a>{% endfor %}</p>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="small-7 columns boarder-right">
+        <h2>REVIEWS........</h2>
+    </div>
+    <div class="small-5 columns">
+        <p><strong>Contact: </strong>{{ object.vendor_contact_name }}<br>
+        <strong>Phone:</strong>{{ object.vendor_phone }}<br>
+        <small><strong>updated:</strong> {{ object.vendor_updated }}</small></p>
+    </div>
+</div>
 
+{{ object.vendor_website }}
 
 {% endblock %}

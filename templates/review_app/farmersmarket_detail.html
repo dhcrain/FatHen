@@ -3,7 +3,7 @@
 {% block body %}
     {# fm_picture#}
     {# fm_banner_picture #}
-    <h1 class="text-right">{{ object.fm_name }}</h1>
+    <h1>{{ object.fm_name }}</h1>
     <hr>
     <div class="row">
         <div class="small-6 columns">
@@ -28,12 +28,12 @@
     </div>
     <hr>
     <div class="row">
-        <div class="small-8 columns boarder-right">
+        <div class="small-7 columns boarder-right">
             {% for vendor in vendor_list %}
             <p><a href="{% url 'vendor_detail_view' object.fm_slug vendor.vendor_slug %}">{{ vendor }}</a></p>
             {% endfor %}
         </div>
-        <div class="small-4 columns">
+        <div class="small-5 columns">
             <iframe src="{{ object.fm_iframe_url }}" width="" height=""></iframe>
             <p><strong>Address:</strong> <br>{{ object.fm_address }}<br>
             <strong>County:</strong> {{ object.fm_county }}<br>
