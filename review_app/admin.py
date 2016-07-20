@@ -6,5 +6,11 @@ from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating
 admin.site.register(Profile)
 admin.site.register(VendorType)
 admin.site.register(Vendor)
-admin.site.register(FarmersMarket)
 admin.site.register(Rating)
+
+
+class FarmersMarketAdmin(admin.ModelAdmin):
+    list_display = ('fm_name', 'fm_county')
+    search_fields = ['fm_name']
+
+admin.site.register(FarmersMarket, FarmersMarketAdmin)
