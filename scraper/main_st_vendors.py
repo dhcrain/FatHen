@@ -34,7 +34,7 @@ with open ("gvl_mainst_vendors.csv", "w", newline="") as outfile:
         try:
             if vendor_link[1]:
                 try:
-                    vendor_web = vendor_link[1].find("a").attrs['href']
+                    vendor_web = vendor_link[1].find("a").attrs['href'].strip()
                 except AttributeError:
                     vendor_web = ""
         except IndexError:
@@ -42,7 +42,7 @@ with open ("gvl_mainst_vendors.csv", "w", newline="") as outfile:
         print(vendor_web)
 
 
-        csv_row = [vendor_name, vendor_desc, vendor_web]
+        csv_row = [vendor_name, vendor_desc.strip('\n'), vendor_web]
 
         writer = csv.writer(outfile, quoting=csv.QUOTE_MINIMAL)
         writer.writerow(csv_row)

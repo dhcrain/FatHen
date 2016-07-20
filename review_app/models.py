@@ -76,7 +76,7 @@ class Vendor(models.Model):
     vendor_website = models.URLField(blank=True)
     # https://pypi.python.org/pypi/django-localflavor
     vendor_phone = PhoneNumberField(blank=True)
-    vendor_type = models.ForeignKey(VendorType)
+    vendor_type = models.ForeignKey(VendorType, blank=True, null=True)
     vendor_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
