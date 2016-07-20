@@ -102,4 +102,4 @@ def create_user_profile(**kwargs):
     created = kwargs.get("created")
     instance = kwargs.get("instance")
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(profile_user=instance)

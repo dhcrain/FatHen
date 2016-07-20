@@ -22,7 +22,16 @@ def fm_data_migrate(apps, schema_editor):
             fm_handicap_accessible=row[12], fm_iframe_url=row[13]
             )
 
-    # raise Exception("2 yay")
+    raise Exception("2 yay")
+
+def verndor_type_import(apps, schema_editor):
+    VendorType = apps.get_model("review_app", "VendorType")
+    with open("review_app/data/vendor_types.csv") as infile:
+        vendor_types = csv.reader(infile)
+        for row in vendor_types:
+            VendorType.objects.create(vendor_type=row[1])
+
+    raise Exception("1 yay")
 
 class Migration(migrations.Migration):
 
@@ -31,5 +40,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(fm_data_migrate)
+        migrations.RunPython(fm_data_migrate),
+        migrations.RunPython(verndor_type_import),
     ]

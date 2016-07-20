@@ -7,16 +7,6 @@ import csv
 from django.template.defaultfilters import slugify
 
 
-def verndor_type_import(apps, schema_editor):
-    VendorType = apps.get_model("review_app", "VendorType")
-    with open("review_app/data/vendor_types.csv") as infile:
-        vendor_types = csv.reader(infile)
-        for row in vendor_types:
-            VendorType.objects.create(vendor_type=row[1])
-
-    # raise Exception("1 yay")
-
-
 def mainst_vendor_import(apps, schema_editor):
     Vendor = apps.get_model("review_app", "Vendor")
     FarmersMarket = apps.get_model("review_app", "FarmersMarket")
@@ -31,7 +21,27 @@ def mainst_vendor_import(apps, schema_editor):
             vendor.save()
             vendor.at_farmers_market.add(fm)
 
-    # raise Exception("2 yay")
+    raise Exception("2 yay")
+
+def tr_vendor_import(apps, schema_editor):
+    Vendor = apps.get_model("review_app", "Vendor")
+    FarmersMarket = apps.get_model("review_app", "FarmersMarket")
+    VendorType = apps.get_model("review_app", "VendorType")
+    with open("review_app/data/tr_vendors.csv") as infile:
+        tr_vendors = csv.reader(infile)
+        fm = FarmersMarket.objects.get(fm_name="Travelers Rest Farmers Market")
+        for row in tr_vendors:
+            vendor_slug = slugify(row[1])
+            vendor_type = VendorType.objects.get(id=row[0])
+            vendor = Vendor.objects.create(
+            vendor_name=row[1], vendor_slug=vendor_slug,
+            vendor_description=row[2], vendor_type=vendor_type
+            )
+            vendor.save()
+            vendor.at_farmers_market.add(fm)
+
+    raise Exception("2 yay")
+
 
 class Migration(migrations.Migration):
 
@@ -40,6 +50,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(verndor_type_import),
+        migrations.RunPython(tr_vendor_import),
         migrations.RunPython(mainst_vendor_import),
     ]
