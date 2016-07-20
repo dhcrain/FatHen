@@ -9,5 +9,25 @@
             <a href="{% url 'farmers_market_detail_view' fm_slug=market.fm_slug %}">{{ market }}</a>
         </p>
     {% endfor %}
+    {# pagination #}
+    <ul class="pagination text-center" role="navigation" aria-label="Pagination">
+        {% if page_obj.has_previous %}
+            <li class="pagination-previous"><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% else %}
+            <li class="pagination-previous disabled">Previous <span class="show-for-sr">page</span></li>
+        {% endif %}
+        {% for linkpage in paginator.page_range  %}
+            {% if linkpage == page_obj.number %}
+                <li class="current"><span class="show-for-sr">You're on page</span>{{ linkpage }}</li>
+            {% else %}
+                <li><a href="?page={{ linkpage }}" aria-label="Page {{ linkpage }}">{{ linkpage }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li class="pagination-next"><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        {% else %}
+            <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
+        {% endif %}
+    </ul>
 
 {% endblock %}

@@ -2,8 +2,10 @@
 
 {% block body %}
 
-<p>{{ object.vendor_name }}</p>
-<p>{{ object.at_farmers_market }}</p>
+<h1>{{ object.vendor_name }}</h1>
+{% for fm in object.at_farmers_market.all %}
+    <p>{{ fm }}</p>
+{% endfor %}
 <p>{{ object.vendor_description }}</p>
 <p>{{ object.vendor_contact_name }}</p>
 <p>{{ object.vendor_contact_email }}</p>

@@ -19,12 +19,13 @@ class IndexView(TemplateView):
 class FarmersMarketListView(ListView):
     template_name = 'review_app/farmersmarkets_list.html'
     model = FarmersMarket
+    paginate_by = 25
 
 class FarmersMarketDetailView(DetailView):
     model = FarmersMarket
     slug_field = 'fm_slug'
     slug_url_kwarg = 'fm_slug'
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         fm_slug = self.kwargs.get('fm_slug')

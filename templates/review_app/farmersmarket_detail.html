@@ -1,29 +1,48 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <h1>{{ object.fm_name }}</h1>
-    {{ object.pk }}
-    <p>{{ object.fm_contact_name }}</p>
-    <p>{{ object.fm_contact_email }}</p>
-    <p>{{ object.fm_facility_type }}</p>
-    <p>{{ object.fm_county }}</p>
-    <p>{{ object.fm_address }}</p>
-    <p>{{ object.fm_programs_accepted }}</p>
-    <p>{{ object.fm_phone }}</p>
-    <p>{{ object.fm_hrs_of_operation }}</p>
-    <p>{{ object.fm_seasons_of_operation }}</p>
-    <p>{{ object.fm_handicap_accessible }}</p>
-    <iframe src="{{ object.fm_iframe_url }}" width="" height=""></iframe>
-    <p>{{ object.fm_iframe_url }}</p>
-    <p>{{ object.fm_updated }}</p>
+    {# fm_picture#}
+    {# fm_banner_picture #}
+    <h1 class="text-right">{{ object.fm_name }}</h1>
+    <hr>
+    <div class="row">
+        <div class="small-6 columns">
+            <h3>Review info here</h3>
+            <p>Stars....</p>
+        </div>
+        <div class="small-6 columns">
+            <a class="large button success radius" href="#">Add a Review</a>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="small-6 columns">
+            <p><strong>Season of Operation:</strong> {{ object.fm_seasons_of_operation }}<br>
+                <strong>Facilty Type:</strong> {{ object.fm_facility_type }}<br>
+                <strong>Hours:</strong> {{ object.fm_hrs_of_operation }}<br>
+        </div>
+        <div class="small-6 columns">
+            <a class="secondary hollow button" href="{{ object.fm_website }}"><strong>Website</strong></a><br>
+            <strong>Programs Accpted:</strong> {{ object.fm_programs_accepted }}<br></p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="small-8 columns boarder-right">
+            {% for vendor in vendor_list %}
+            <p><a href="{% url 'vendor_detail_view' object.fm_slug vendor.vendor_slug %}">{{ vendor }}</a></p>
+            {% endfor %}
+        </div>
+        <div class="small-4 columns">
+            <iframe src="{{ object.fm_iframe_url }}" width="" height=""></iframe>
+            <p><strong>Address:</strong> <br>{{ object.fm_address }}<br>
+            <strong>County:</strong> {{ object.fm_county }}<br>
+            <strong>Phone:</strong> {{ object.fm_phone }}<br>
+            <strong>Email:</strong> <a href="mailto:{{ object.fm_contact_email }}?subject=Hello!">{{ object.fm_contact_email }}</a><br>
+            <strong>Contact Name:</strong> {{ object.fm_contact_name }}<br>
+            <small><strong>updated:</strong> {{ object.fm_updated }}</small></p>
+        </div>
+    </div>
 
-{% for vendor in vendor_list %}
-    <p><a href="{% url 'vendor_detail_view' object.fm_slug vendor.vendor_slug %}">{{ vendor }}</a></p>
-{% endfor %}
 
 {% endblock %}
-
-
-
-{# fm_picture#}
-{# fm_banner_picture #}
