@@ -7,3 +7,6 @@ button.round, .button.round {
 .boarder-right {
     border-right: 1px solid #CACACA;
 }
+.fm-hero {
+     background: url({{ object.fm_banner_picture_url }});
+}

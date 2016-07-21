@@ -35,6 +35,7 @@ class VendorType(models.Model):
 
 
 class FarmersMarket(models.Model):
+    fm_user = models.ForeignKey('auth.User')
     fm_name = models.CharField(max_length=100)
     # https://pypi.python.org/pypi/django-autoslug
     fm_slug = AutoSlugField(populate_from='fm_name', unique=True, editable=True, blank=True)
@@ -78,6 +79,7 @@ class FarmersMarket(models.Model):
 
 
 class Vendor(models.Model):
+    vendor_user = models.ForeignKey('auth.User')
     at_farmers_market = models.ManyToManyField("FarmersMarket")
     vendor_name = models.CharField(max_length=100)
     # https://pypi.python.org/pypi/django-autoslug

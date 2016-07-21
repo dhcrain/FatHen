@@ -8,6 +8,7 @@
         <title>{% block title %}Title{% endblock %}</title>
         <link rel="stylesheet" href="{% static "review_app/css/foundation.min.css" %}" />
         <link rel="stylesheet" href="{% static "review_app/css/app.css" %}" />
+        {% block head %}{% endblock %}
     </head>
     <body>
     {# nav bar #}
@@ -36,6 +37,9 @@
             </ul>
         </div>
     </div>
+    {% block hero %}
+        <h1>hi</h1>
+    {% endblock %}
     <div class="container">
         <div class="row">
             {% block body %}

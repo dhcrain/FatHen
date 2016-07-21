@@ -1,9 +1,19 @@
 {% extends "base.html" %}
+{% block head %}
+<style media="screen">
+.fm-hero {
+     background: url({{ object.fm_banner_picture_url }});
+     height: 250px;
+}
+</style>
+{% endblock %}
+{% block hero %}
+<div class="fm-hero">
+    <h1 class="text-center"><strong>{{ object.fm_name }}</strong></h1>
 
+</div>
+{% endblock %}
 {% block body %}
-    {# fm_picture#}
-    {# fm_banner_picture #}
-    <h1>{{ object.fm_name }}</h1>
     <hr>
     {# Review Row #}
     <div class="row">
@@ -16,8 +26,8 @@
         </div>
     </div>
     <hr>
-    <img src="{{ object.fm_picture_url }}" alt="{{ object.fm_name }} Profile Picture" />
     <img src="{{ object.fm_banner_picture_url }}" alt="{{ object.fm_name }} Banner Picture" />
+    <img src="{{ object.fm_picture_url }}" alt="{{ object.fm_name }} Profile Picture" />
     {# info row #}
     <div class="row">
         <div class="small-6 columns">
