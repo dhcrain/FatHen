@@ -6,3 +6,4 @@ staticfiles
 __pycache__/
 db.sqlite3
 fm_images/
+vendor_images/

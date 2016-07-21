@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <h1>Farmers Markets Info</h1>
+    <h1>Vendor Information</h1>
     <form class="" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <input class="success button large" type="submit" name="add_fm" value="Add New Farmers Market">
+        <input class="success button large" type="submit" name="vendor_info_sub" value="Submit Vendor Information">
     </form>
 {% endblock %}

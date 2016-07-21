@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from review_app.views import IndexView, ProfileView, RegisterView, FarmersMarketListView, FarmersMarketDetailView, FarmersMarketCreateView, VendorDetailView
+from review_app.views import IndexView, ProfileView, RegisterView, FarmersMarketListView, FarmersMarketDetailView, FarmersMarketCreateView, FarmersMarketUpdateView, VendorDetailView, VendorCreateView, VendorUpdateView, RatingVendorCreateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,6 +28,10 @@ urlpatterns = [
     url(r'^farmers_markets/$', FarmersMarketListView.as_view(), name='farmers_market_list_view'),
     url(r'^farmers_markets/add/$', FarmersMarketCreateView.as_view(), name='farmers_market_create_view'),
     url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/$', FarmersMarketDetailView.as_view(), name='farmers_market_detail_view'),
-    url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/(?P<vendor_slug>[A-Za-z0-9_\-]+)/$', VendorDetailView.as_view(), name='vendor_detail_view'),
+    url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/update/$', FarmersMarketUpdateView.as_view(), name='farmers_market_update_view'),
+    url(r'^vendor/add/$', VendorCreateView.as_view(), name='vendor_create_view'),
+    url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/$', VendorDetailView.as_view(), name='vendor_detail_view'),
+    url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/update$', VendorUpdateView.as_view(), name='vendor_update_view'),
+    url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/rate$', RatingVendorCreateView.as_view(), name='rating_vendor_create_view'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

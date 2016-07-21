@@ -1,21 +1,32 @@
 {% extends "base.html" %}
-{% load staticfiles %}
-{% block body %}
 
-{# fm_banner_picture #}
-<h1>{{ object.vendor_name }}</h1>
+{% block head %}
+    <style media="screen">
+    .fm-hero {
+         background: url({{ object.vendor_banner_picture_url }});
+         height: 15em;
+    }
+    </style>
+{% endblock %}
+
+{% block hero %}
+    <div class="fm-hero">
+        <h1 class="hero-text text-center"><strong>{{ object.vendor_name }}</strong></h1>
+    </div>
+{% endblock %}
+
+{% block body %}
 <hr>
 <div class="row">
     <div class="small-4 columns">
         <img src="{{ object.vendor_picture_url }}" alt="{{ object.vendor_name }} Profile Picture" />
-        <img src="{{ oject.vendor_banner_picture_url}}" alt="{{ object.vendor_name }} Banner Picture" />
     </div>
     <div class="small-4 columns">
         <h3>Avg Review info here</h3>
         <p>Stars....</p>
     </div>
     <div class="small-4 columns">
-        <a class="large button success radius" href="#">Add a Review</a>
+        <a class="large button success radius" href="{% url 'rating_vendor_create_view' object.vendor_slug %}">Add a Review</a>
     </div>
 </div>
 <hr>
@@ -29,7 +40,10 @@
         {% if object.vendor_website %}
         <a class="secondary hollow button" href="{{ object.vendor_website }}"><strong>Website</strong></a><br>
         {% endif %}
-        <strong>Found at these Farmers Markets: </strong>{% for fm in object.at_farmers_market.all %}<a href="{% url 'farmers_market_detail_view' fm.fm_slug %}">{{ fm }}</a>{% endfor %}</p>
+        <strong>Found at these Farmers Markets: </strong><br>
+        {% for fm in object.at_farmers_market.all %}
+            <a href="{% url 'farmers_market_detail_view' fm.fm_slug %}">{{ fm }}</a><br>
+        {% endfor %}</p>
     </div>
 </div>
 <hr>
@@ -41,6 +55,9 @@
         <p><strong>Contact: </strong>{{ object.vendor_contact_name }}<br>
         <strong>Phone:</strong>{{ object.vendor_phone }}<br>
         <small><strong>updated:</strong> {{ object.vendor_updated }}</small></p>
+        {% if request.user == object.vendor_user %}
+            <a class="button" href="{% url 'vendor_update_view' object.vendor_slug %}">Update This Listing</a>
+        {% endif %}
     </div>
 </div>
 

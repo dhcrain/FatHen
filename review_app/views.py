@@ -21,6 +21,7 @@ class FarmersMarketListView(ListView):
     model = FarmersMarket
     paginate_by = 25
 
+
 class FarmersMarketDetailView(DetailView):
     model = FarmersMarket
     slug_field = 'fm_slug'
@@ -36,7 +37,6 @@ class FarmersMarketDetailView(DetailView):
 
 class FarmersMarketCreateView(CreateView):
     model = FarmersMarket
-    # success_url = reverse_lazy('farmers_market_detail_view')
     fields = ['fm_name', 'fm_description', 'fm_contact_name', 'fm_contact_email',
               'fm_website', 'fm_facility_type', 'fm_county', 'fm_address',
               'fm_programs_accepted', 'fm_phone', 'fm_hrs_of_operation',
@@ -46,10 +46,78 @@ class FarmersMarketCreateView(CreateView):
         return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))
 
 
+class FarmersMarketUpdateView(UpdateView):
+    model = FarmersMarket
+    slug_field = 'fm_slug'
+    slug_url_kwarg = 'fm_slug'
+    fields = ['fm_name', 'fm_description', 'fm_contact_name', 'fm_contact_email',
+              'fm_website', 'fm_facility_type', 'fm_county', 'fm_address',
+              'fm_programs_accepted', 'fm_phone', 'fm_hrs_of_operation',
+              'fm_seasons_of_operation', 'fm_handicap_accessible', 'fm_picture', 'fm_banner_picture']
+
+    def form_valid(self, form):
+        fm_form = form.save(commit=False)
+        fm_form.fm_user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))
+
+
 class VendorDetailView(DetailView):
     model = Vendor
     slug_field = 'vendor_slug'
     slug_url_kwarg = 'vendor_slug'
+
+
+class VendorCreateView(CreateView):
+    model = Vendor
+    slug_field = 'vendor_slug'
+    slug_url_kwarg = 'vendor_slug'
+    fields = ['at_farmers_market', 'vendor_name', 'vendor_description', 'vendor_contact_name',
+              'vendor_contact_email', 'vendor_website', 'vendor_phone', 'vendor_type',
+              'vendor_picture', 'vendor_banner_picture']
+
+    def form_valid(self, form):
+        vendor_form = form.save(commit=False)
+        vendor_form.vendor_user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('vendor_detail_view',args=(self.object.vendor_slug,))
+
+
+class VendorUpdateView(UpdateView):
+    model = Vendor
+    slug_field = 'vendor_slug'
+    slug_url_kwarg = 'vendor_slug'
+    fields = ['at_farmers_market', 'vendor_name', 'vendor_description', 'vendor_contact_name',
+              'vendor_contact_email', 'vendor_website', 'vendor_phone', 'vendor_type',
+              'vendor_picture', 'vendor_banner_picture']
+
+    def form_valid(self, form):
+        vendor_form = form.save(commit=False)
+        vendor_form.vendor_user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('vendor_detail_view',args=(self.object.vendor_slug,))
+
+
+class RatingVendorCreateView(CreateView):
+    model = Rating
+    fields = ['rating', 'rating_comment', 'rating_picture']
+
+    def form_valid(self, form):
+        vendor_review_form = form.save(commit=False)
+        vendor_review_form.rating_user = self.request.user
+        vendor_slug = self.kwargs.get('vendor_slug')
+        vendor_review_form.rating_vendor = Vendor.objects.get(vendor_slug=vendor_slug)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        vendor_slug = self.kwargs.get('vendor_slug')
+        return reverse('vendor_detail_view',args=(vendor_slug,))
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):

@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 {% block head %}
-<style media="screen">
-.fm-hero {
-     background: url({{ object.fm_banner_picture_url }});
-     height: 250px;
-}
-</style>
+    <style media="screen">
+    .fm-hero {
+         background: url({{ object.fm_banner_picture_url }});
+         height: 15em;
+    }
+    </style>
 {% endblock %}
-{% block hero %}
-<div class="fm-hero">
-    <h1 class="text-center"><strong>{{ object.fm_name }}</strong></h1>
 
-</div>
+{% block hero %}
+    <div class="fm-hero">
+        <h1 class="hero-text text-center"><strong>{{ object.fm_name }}</strong></h1>
+    </div>
 {% endblock %}
+
 {% block body %}
     <hr>
     {# Review Row #}
@@ -26,7 +27,6 @@
         </div>
     </div>
     <hr>
-    <img src="{{ object.fm_banner_picture_url }}" alt="{{ object.fm_name }} Banner Picture" />
     <img src="{{ object.fm_picture_url }}" alt="{{ object.fm_name }} Profile Picture" />
     {# info row #}
     <div class="row">
@@ -45,7 +45,7 @@
     <div class="row">
         <div class="small-7 columns boarder-right">
             {% for vendor in vendor_list %}
-            <p><a href="{% url 'vendor_detail_view' object.fm_slug vendor.vendor_slug %}">{{ vendor }}</a></p>
+            <p><a href="{% url 'vendor_detail_view' vendor.vendor_slug %}">{{ vendor }}</a></p>
             {% endfor %}
         </div>
         <div class="small-5 columns">
@@ -56,6 +56,9 @@
             <strong>Email:</strong> <a href="mailto:{{ object.fm_contact_email }}?subject=Hello!">{{ object.fm_contact_email }}</a><br>
             <strong>Contact Name:</strong> {{ object.fm_contact_name }}<br>
             <small><strong>updated:</strong> {{ object.fm_updated }}</small></p>
+            {% if request.user == object.fm_user %}
+                <a class="button" href="{% url 'farmers_market_update_view' object.fm_slug %}">Update This Listing</a>
+            {% endif %}
         </div>
     </div>
 

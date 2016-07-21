@@ -83,7 +83,7 @@ class Vendor(models.Model):
     at_farmers_market = models.ManyToManyField("FarmersMarket")
     vendor_name = models.CharField(max_length=100)
     # https://pypi.python.org/pypi/django-autoslug
-    vendor_slug = AutoSlugField(populate_from='fm_name', unique=True, editable=True)
+    vendor_slug = AutoSlugField(populate_from='vendor_name', unique=True, editable=True)
     vendor_description = models.TextField(blank=True)
     vendor_picture = models.ImageField(upload_to="vendor_images", blank=True)
     vendor_banner_picture = models.ImageField(upload_to="vendor_images", blank=True)
