@@ -5,6 +5,7 @@
     {# fm_banner_picture #}
     <h1>{{ object.fm_name }}</h1>
     <hr>
+    {# Review Row #}
     <div class="row">
         <div class="small-6 columns">
             <h3>Review info here</h3>
@@ -15,6 +16,9 @@
         </div>
     </div>
     <hr>
+    <img src="{{ object.fm_picture_url }}" alt="{{ object.fm_name }} Profile Picture" />
+    <img src="{{ object.fm_banner_picture_url }}" alt="{{ object.fm_name }} Banner Picture" />
+    {# info row #}
     <div class="row">
         <div class="small-6 columns">
             <p><strong>Season of Operation:</strong> {{ object.fm_seasons_of_operation }}<br>
@@ -27,6 +31,7 @@
         </div>
     </div>
     <hr>
+    {# Content Row #}
     <div class="row">
         <div class="small-7 columns boarder-right">
             {% for vendor in vendor_list %}

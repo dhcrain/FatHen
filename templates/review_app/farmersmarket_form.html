@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1>Add a FM</h1>
+    <form class="" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="success button large" type="submit" name="add_fm" value="Add New Farmers Market">
+    </form>
+{% endblock %}

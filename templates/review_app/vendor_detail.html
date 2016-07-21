@@ -1,17 +1,20 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block body %}
 
-{# fm_picture#}
 {# fm_banner_picture #}
 <h1>{{ object.vendor_name }}</h1>
 <hr>
 <div class="row">
-    <div class="small-6 columns">
+    <div class="small-4 columns">
+        <img src="{{ object.vendor_picture_url }}" alt="HI!" />
+
+    </div>
+    <div class="small-4 columns">
         <h3>Avg Review info here</h3>
         <p>Stars....</p>
     </div>
-    <div class="small-6 columns">
+    <div class="small-4 columns">
         <a class="large button success radius" href="#">Add a Review</a>
     </div>
 </div>

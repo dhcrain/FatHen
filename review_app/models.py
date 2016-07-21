@@ -62,6 +62,20 @@ class FarmersMarket(models.Model):
     def __str__(self):
         return self.fm_name
 
+    @property
+    def fm_picture_url(self):
+        if self.fm_picture:
+            return self.fm_picture.url
+        else:
+            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
+
+    @property
+    def fm_banner_picture_url(self):
+        if self.fm_banner_picture:
+            return self.fm_banner_picture.url
+        else:
+            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
+
 
 class Vendor(models.Model):
     at_farmers_market = models.ManyToManyField("FarmersMarket")
@@ -81,6 +95,20 @@ class Vendor(models.Model):
 
     def __str__(self):
         return self.vendor_name
+
+    @property
+    def vendor_picture_url(self):
+        if self.vendor_picture:
+            return self.vendor_picture.url
+        else:
+            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
+
+    @property
+    def vendor_banner_picture_url(self):
+        if self.vendor_banner_picture:
+            return self.vendor_banner_picture.url
+        else:
+            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
 
 
 class Rating(models.Model):

@@ -17,6 +17,7 @@
                 <li class="menu-text">YELP?</li>
                 <li><a href="{% url 'index_view' %}">Home</a></li>
                 <li><a href="{% url 'farmers_market_list_view' %}">List of FM's</a></li>
+                <li><a href="{% url 'farmers_market_create_view' %}">Add a FM</a></li>
                 {% if user.is_authenticated %}
                 {% else %}
                     <li><a href="{% url 'register_view' %}">Create Account</a></li>
