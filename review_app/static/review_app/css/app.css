@@ -10,8 +10,7 @@ button.round, .button.round {
 .hero-text {
     color: white;
     padding-top: 1.75em;
-    /*position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);*/
+}
+.badge {
+    font-size: 1.1em
 }

@@ -50,17 +50,24 @@
 <div class="row">
     <div class="small-7 columns boarder-right">
         <h2>REVIEWS........</h2>
+        {% for review in rating_list %}
+            <div class="callout">
+                <span class="success badge">{{ review.rating }}</span>
+                {{ review.rating_comment }}<br>
+                <small>{{ review.rating_user }}</small>
+                <small class="float-right">{{ review.rating_created }}</small>
+            </div>
+        {% endfor %}
     </div>
     <div class="small-5 columns">
         <p><strong>Contact: </strong>{{ object.vendor_contact_name }}<br>
-        <strong>Phone:</strong>{{ object.vendor_phone }}<br>
-        <small><strong>updated:</strong> {{ object.vendor_updated }}</small></p>
+        <strong>Phone: </strong>{{ object.vendor_phone }}<br>
+        <small><strong>updated: </strong>{{ object.vendor_updated }}</small></p>
         {% if request.user == object.vendor_user %}
             <a class="button" href="{% url 'vendor_update_view' object.vendor_slug %}">Update This Listing</a>
         {% endif %}
     </div>
 </div>
 
-{{ object.vendor_website }}
 
 {% endblock %}

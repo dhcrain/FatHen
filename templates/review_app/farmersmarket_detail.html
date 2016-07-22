@@ -45,7 +45,10 @@
     <div class="row">
         <div class="small-7 columns boarder-right">
             {% for vendor in vendor_list %}
-            <p><a href="{% url 'vendor_detail_view' vendor.vendor_slug %}">{{ vendor }}</a></p>
+                <div class="callout">
+
+                    <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}">{{ vendor }}</a>
+                </div>
             {% endfor %}
         </div>
         <div class="small-5 columns">

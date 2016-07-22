@@ -69,6 +69,13 @@ class VendorDetailView(DetailView):
     slug_field = 'vendor_slug'
     slug_url_kwarg = 'vendor_slug'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vendor_slug = self.kwargs.get('vendor_slug')
+        vendor = Vendor.objects.get(vendor_slug=vendor_slug)
+        context['rating_list'] = Rating.objects.filter(rating_vendor=vendor)
+        return context
+
 
 class VendorCreateView(CreateView):
     model = Vendor
