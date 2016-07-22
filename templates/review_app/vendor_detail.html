@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load review_tags %}
 {% block head %}
     <style media="screen">
     .fm-hero {
@@ -24,6 +24,7 @@
     <div class="small-4 columns">
         <h3>Avg Review info here</h3>
         <p>Stars....</p>
+        <a href="{% url "review_create" content_type='vendor' object_id=vendor.pk %}">review this vendor</a>
     </div>
     <div class="small-4 columns">
         <a class="large button success radius" href="{% url 'rating_vendor_create_view' object.vendor_slug %}">Add a Review</a>
@@ -33,6 +34,7 @@
 <div class="row">
     <div class="small-6 columns">
         <p>{% if object.vendor_type %}<strong>Vendor Type:</strong> {{ object.vendor_type }}{% endif %}<br>
+            <br>
             {{ object.vendor_description }}<br>
         </p>
     </div>

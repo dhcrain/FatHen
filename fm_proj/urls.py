@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from review_app.views import IndexView, ProfileView, RegisterView, FarmersMarketListView, FarmersMarketDetailView, FarmersMarketCreateView, FarmersMarketUpdateView, VendorDetailView, VendorCreateView, VendorUpdateView, RatingVendorCreateView
 
 urlpatterns = [
+    url(r'^review/', include('review.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^$', IndexView.as_view(), name='index_view'),
