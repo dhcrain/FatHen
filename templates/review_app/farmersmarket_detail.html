@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 {% load review_tags %}
-
+{% block title %}
+    {{ object.fm_name }}
+{% endblock %}
 {% block head %}
     <style media="screen">
     .fm-hero {
-         background: url({{ object.fm_banner_picture_url }});
-         height: 15em;
+        background: linear-gradient(rgba(23, 23, 23, 0.45), rgba(23, 23, 23, 0.45)),
+                    url({{ object.fm_banner_picture_url }});
+        height: 15em;
+        background-repeat:no-repeat;
+        -webkit-background-size:cover;
+        -moz-background-size:cover;
+        -o-background-size:cover;
+        background-size:cover;
+        background-position:center;
     }
     </style>
 {% endblock %}

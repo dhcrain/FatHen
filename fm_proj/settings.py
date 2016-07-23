@@ -153,3 +153,5 @@ MEDIA_URL = '/media/'
 # For django-review
 # this would use a RadioSelect instead of the default Select
 REVIEW_FORM_CHOICE_WIDGET = 'django.forms.widgets.RadioSelect'
+# Limit to 1 review per user per item REVIEW_FORM_CHOICE_WIDGET
+REVIEW_AVOID_MULTIPLE_REVIEWS = True

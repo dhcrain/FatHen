@@ -75,7 +75,7 @@ class FarmersMarket(models.Model):
         if self.fm_banner_picture:
             return self.fm_banner_picture.url
         else:
-            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
+            return "static/review_app/img/greens.jpg"
 
 
 class Vendor(models.Model):
@@ -110,7 +110,7 @@ class Vendor(models.Model):
         if self.vendor_banner_picture:
             return self.vendor_banner_picture.url
         else:
-            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
+            return "static/review_app/img/pea.jpg"
 
 
 class Rating(models.Model):
