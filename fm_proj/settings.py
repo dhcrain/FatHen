@@ -149,3 +149,7 @@ DATABASES['default'].update(db_from_env)
 
 MEDIA_ROOT = BASE_DIR
 MEDIA_URL = '/media/'
+
+# For django-review
+# this would use a RadioSelect instead of the default Select
+REVIEW_FORM_CHOICE_WIDGET = 'django.forms.widgets.RadioSelect'

@@ -12,5 +12,8 @@ button.round, .button.round {
     padding-top: 1.75em;
 }
 .badge {
-    font-size: 1.1em
+    font-size: 1.1em;
+}
+.thumbnail {
+    height: 3em;
 }

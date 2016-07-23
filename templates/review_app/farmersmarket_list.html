@@ -1,14 +1,47 @@
 {% extends "base.html" %}
+{% load review_tags %}
 
 {% block body %}
 
     <h1>FM list</h1>
-
-    {% for market in object_list %}
-        <p>
-            <a href="{% url 'farmers_market_detail_view' fm_slug=market.fm_slug %}">{{ market }}</a>
-        </p>
-    {% endfor %}
+    <div class="row">
+        {# Main Columun #}
+        <div class="small-9 columns boarder-right">
+            {% for market in object_list %}
+                <div class="callout">
+                    <div class="row">
+                        {# Thumbnail #}
+                        <div class="small-1 columns">
+                            <img class="thumbnail" src="{{ market.fm_picture_url}}" alt="{{ market.fm_name }}" />
+                        </div>
+                        {# Main FM content #}
+                        <div class="small-8 columns">
+                            <a href="{% url 'farmers_market_detail_view' fm_slug=market.fm_slug %}">
+                                <strong>{{ market.fm_name }}</strong><br>
+                            </a>
+                            {% total_review_average market 5 as stars %}
+                            {% if stars == 0 %}
+                                <p>No reviews yet.</p>
+                            {% else %}
+                                <p>This market got {{ stars }} out of 5 stars.</p>
+                            {% endif %}
+                        </div>
+                        {# FM Address #}
+                        <div class="small-3 columns">
+                            {{ market.fm_address }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {# SideBar column #}
+        <div class="small-2 columns" data-sticky-container>
+            <div class="sticky" data-sticky data-margin-top="5">
+                <h1>Sidebar!</h1>
+                <h3>Good place for search...</h3>
+            </div>
+        </div>
+    </div>
     {# pagination #}
     <ul class="pagination text-center" role="navigation" aria-label="Pagination">
         {% if page_obj.has_previous %}

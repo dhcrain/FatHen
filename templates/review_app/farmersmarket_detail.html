@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load review_tags %}
+
 {% block head %}
     <style media="screen">
     .fm-hero {
@@ -21,6 +23,9 @@
         <div class="small-6 columns">
             <h3>Review info here</h3>
             <p>Stars....</p>
+            {# Link for review plug in #}
+            <a href="{% url "review_create" content_type='farmersmarket' object_id=farmersmarket.pk %}">review this vendor</a>
+
         </div>
         <div class="small-6 columns">
             <a class="large button success radius" href="#">Add a Review</a>
@@ -44,6 +49,26 @@
     {# Content Row #}
     <div class="row">
         <div class="small-7 columns boarder-right">
+            {# Start Review plug in code #}
+            {% total_review_average object 100 as percentage %}
+            <p>{{ percentage }}% of our users recommended this!</p>
+
+            {% total_review_average object 5 as stars %}
+            <p>This object got {{ stars }} out of 5 stars.</p>
+
+            <hr>
+            {% get_review_count object as review_count %}
+            <p>{{ review_count }} users have reviewed this so far.</p>
+            <hr>
+            {# {% user_has_reviewed object request.user as has_reviewed %}#}
+            {# {% if has_reviewed %}#}
+                <p>Thanks for your opinion!</p>
+            {# {% else %}#}
+                <a href="{% url "review_create" content_type='farmersmarket' object_id=farmersmarket.pk %}">"Review this book"</a>
+            {# {% endif %}#}
+            <hr>
+            {# End Review Plug in Info #}
+
             {% for vendor in vendor_list %}
                 <div class="callout">
 

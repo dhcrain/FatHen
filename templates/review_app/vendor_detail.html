@@ -24,6 +24,7 @@
     <div class="small-4 columns">
         <h3>Avg Review info here</h3>
         <p>Stars....</p>
+        {# Link for review plug in #}
         <a href="{% url "review_create" content_type='vendor' object_id=vendor.pk %}">review this vendor</a>
     </div>
     <div class="small-4 columns">
@@ -52,9 +53,44 @@
 <div class="row">
     <div class="small-7 columns boarder-right">
         <h2>REVIEWS........</h2>
+        {# Start Review plug in code #}
+        {% total_review_average object 100 as percentage %}
+        <p>{{ percentage }}% of our users recommended this!</p>
+
+        {% total_review_average object 5 as stars %}
+        <p>This object got {{ stars }} out of 5 stars.</p>
+
+        <hr>
+        {% get_review_count object as review_count %}
+        <p>{{ review_count }} users have reviewed this so far.</p>
+        <hr>
+        {% user_has_reviewed object request.user as has_reviewed %}
+        {% if has_reviewed %}
+            <p>Thanks for your opinion!</p>
+        {% else %}
+            <a href="{% url "review_create" content_type='vendor' object_id=vendor.pk %}">"Review this book"</a>
+        {% endif %}
+        <hr>
+        {# End Review Plug in Info #}
+        {% get_reviews object as reviews %}
+        {% for review in reviews %}
+            <div class="callout">
+                <p>{{ review.get_average_rating }}</p>
+                <p>{% if review.content %}
+                        {{ review.content|truncatewords:'70' }}
+                    {% else %}
+                        Reviewed without description.
+                    {% endif %}</p>
+                <a href="{% url "review_detail" pk=object.pk %}">Review details</a>
+            </div>
+        {% endfor %}
+<hr>
+        {% get_review_average object as review_average %}
+        <p>This object is rated by {{ review_average }}</p>
+<hr>
         {% for review in rating_list %}
             <div class="callout">
-                <span class="success badge">{{ review.rating }}</span>
+                <span class="success badge"><strong>{{ review.rating }}</strong></span>
                 {{ review.rating_comment }}<br>
                 <small>{{ review.rating_user }}</small>
                 <small class="float-right">{{ review.rating_created }}</small>

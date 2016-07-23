@@ -68,7 +68,7 @@ class FarmersMarket(models.Model):
         if self.fm_picture:
             return self.fm_picture.url
         else:
-            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
+            return "http://www.downtownmorganton.com/images/farmersmarket-icon.png"
 
     @property
     def fm_banner_picture_url(self):
@@ -103,7 +103,7 @@ class Vendor(models.Model):
         if self.vendor_picture:
             return self.vendor_picture.url
         else:
-            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
+            return "http://www.muhisimbi.com/wp-content/uploads/2013/05/muhis_icon_market1.png"
 
     @property
     def vendor_banner_picture_url(self):
