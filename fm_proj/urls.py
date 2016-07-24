@@ -17,13 +17,14 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from review_app.views import IndexView, ProfileView, RegisterView, FarmersMarketListView, FarmersMarketDetailView, FarmersMarketCreateView, FarmersMarketUpdateView, VendorDetailView, VendorCreateView, VendorUpdateView, RatingVendorCreateView
+from review_app.views import IndexView, ProfileView, RegisterView, SearchListView, FarmersMarketListView, FarmersMarketDetailView, FarmersMarketCreateView, FarmersMarketUpdateView, VendorDetailView, VendorCreateView, VendorUpdateView, RatingVendorCreateView
 
 urlpatterns = [
     url(r'^review/', include('review.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^$', IndexView.as_view(), name='index_view'),
+    url(r'^search/$', SearchListView.as_view(), name='search_list_view'),
     url(r'^register/$', RegisterView.as_view(), name='register_view'),
     url(r'^accounts/profile/$', ProfileView.as_view(), name='profile_view'),
     url(r'^farmers_markets/$', FarmersMarketListView.as_view(), name='farmers_market_list_view'),

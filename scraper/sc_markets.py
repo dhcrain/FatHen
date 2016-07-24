@@ -52,6 +52,7 @@ with open ("sc_farmers_markets.csv", "w", newline="") as outfile:
             elif "Address" in item.text:
                 mrkt_address = item.text.split(":")[1].strip()
                 g = geocoder.google(mrkt_address)
+                print("housenumber {}, street_number {}, street {}, city {}, state {}, postal {}".format(g.housenumber, g.street_number, g.street, g.city, g.state, g.postal))
                 mrkt_addr = g.address
 
             # elif "Mailing" in item.text:
@@ -95,10 +96,9 @@ with open ("sc_farmers_markets.csv", "w", newline="") as outfile:
             except AttributeError:
                 market_iframe_url = ""
 
-            print("1")
         # print(market_name, contact_name, contact_email, facility_type, mrkt_county, mrkt_addr, programs_accepted, mrkt_phone, hrs_of_operation, seasons_of_operation, handicap_accessible, market_iframe_url)
 
-        csv_row = [market_name, contact_name, contact_email, fm_web, facility_type, mrkt_county, mrkt_addr, programs_accepted, mrkt_phone, mrkt_contact_all, hrs_of_operation, seasons_of_operation, handicap_accessible, market_iframe_url]
+        # csv_row = [market_name, contact_name, contact_email, fm_web, facility_type, mrkt_county, mrkt_addr, programs_accepted, mrkt_phone, mrkt_contact_all, hrs_of_operation, seasons_of_operation, handicap_accessible, market_iframe_url]
 
         writer = csv.writer(outfile, quoting=csv.QUOTE_MINIMAL)
         writer.writerow(csv_row)

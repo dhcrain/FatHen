@@ -6,8 +6,15 @@
 {% block head %}
     <style media="screen">
     .fm-hero {
-         background: url({{ object.vendor_banner_picture_url }});
+         background: linear-gradient(rgba(23, 23, 23, 0.45), rgba(23, 23, 23, 0.45)),
+                     url({{ object.vendor_banner_picture_url }});
          height: 15em;
+         background-repeat:no-repeat;
+         -webkit-background-size:cover;
+         -moz-background-size:cover;
+         -o-background-size:cover;
+         background-size:cover;
+         background-position:center;
     }
     </style>
 {% endblock %}
@@ -22,16 +29,27 @@
 <hr>
 <div class="row">
     <div class="small-4 columns">
-        <img src="{{ object.vendor_picture_url }}" alt="{{ object.vendor_name }} Profile Picture" />
+        {# "Profile" Picture #}
+        <img class="profile-picture" src="{{ object.vendor_picture_url }}" alt="{{ object.vendor_name }} Profile Picture" />
     </div>
     <div class="small-4 columns">
-        <h3>Avg Review info here</h3>
-        <p>Stars....</p>
-        {# Link for review plug in #}
-        <a href="{% url "review_create" content_type='vendor' object_id=vendor.pk %}">review this vendor</a>
+        {# Rating cirlce #}
+        {% total_review_average object 5 as stars %}
+        {% if stars %}
+            <span class="badge badge-large"><strong>{{ stars }}</strong></span>
+        {% else %}
+            <span class="badge badge-large"><strong>-</strong></span><br>
+        {% endif %}
     </div>
     <div class="small-4 columns">
-        <a class="large button success radius" href="{% url 'rating_vendor_create_view' object.vendor_slug %}">Add a Review</a>
+        {# Rating Button #}
+
+        {% user_has_reviewed object request.user as has_reviewed %}
+        {% if has_reviewed %}
+            <a class="large button disabled radius" href="#"><strong>Thanks for your review!</strong><br><small>You have already reviewed this Vendor</small></a>
+        {% else %}
+            <a class="large button success radius" href="{% url "review_create" content_type='vendor' object_id=vendor.pk %}">Add a Review</a>
+        {% endif %}
     </div>
 </div>
 <hr>
@@ -57,54 +75,41 @@
     <div class="small-7 columns boarder-right">
         <h2>REVIEWS........</h2>
         {# Start Review plug in code #}
-        {% total_review_average object 100 as percentage %}
-        <p>{{ percentage }}% of our users recommended this!</p>
-
-        {% total_review_average object 5 as stars %}
-        <p>This object got {{ stars }} out of 5 stars.</p>
-
-        <hr>
-        {% get_review_count object as review_count %}
-        <p>{{ review_count }} users have reviewed this so far.</p>
-        <hr>
-        {% user_has_reviewed object request.user as has_reviewed %}
-        {% if has_reviewed %}
-            <p>Thanks for your opinion!</p>
-        {% else %}
-            <a href="{% url "review_create" content_type='vendor' object_id=vendor.pk %}">"Review this book"</a>
-        {% endif %}
         <hr>
         {# End Review Plug in Info #}
         {% get_reviews object as reviews %}
         {% for review in reviews %}
             <div class="callout">
-                <p>{{ review.get_average_rating }}</p>
-                <p>{% if review.content %}
-                        {{ review.content|truncatewords:'70' }}
-                    {% else %}
-                        Reviewed without description.
-                    {% endif %}</p>
-                <a href="{% url "review_detail" pk=object.pk %}">Review details</a>
+                <div class="row">
+                    <div class="small-1 columns">
+                        <span class="badge"><strong>{{ review.get_average_rating }}</strong></span>
+                    </div>
+                    <div class="small-11 columns">
+                        {% if review.content %}
+                            {{ review.content|truncatewords:'70' }}
+                        {% else %}
+                            Reviewed without description.
+                        {% endif %}
+                        {{ review.user }}
+                        {{ review.creation_date }}
+                        <a class="float-right" href="{% url "review_detail" pk=object.pk %}">details</a>
+                    </div>
+                </div>
             </div>
         {% endfor %}
-<hr>
-        {% get_review_average object as review_average %}
-        <p>This object is rated by {{ review_average }}</p>
-<hr>
-        {% for review in rating_list %}
-            <div class="callout">
-                <span class="success badge"><strong>{{ review.rating }}</strong></span>
-                {{ review.rating_comment }}<br>
-                <small>{{ review.rating_user }}</small>
-                <small class="float-right">{{ review.rating_created }}</small>
-            </div>
-        {% endfor %}
+
     </div>
     <div class="small-5 columns">
         <p><strong>Contact: </strong>{{ object.vendor_contact_name }}<br>
         <strong>Phone: </strong>{{ object.vendor_phone }}<br>
         <small><strong>updated: </strong>{{ object.vendor_updated }}</small></p>
+        <hr>
+        {% get_review_count object as review_count %}
+        <p>{{ review_count }} users have reviewed this so far.</p>
+        {# Button for Vendor Owner to update the listing #}
         {% if request.user == object.vendor_user %}
+            <hr>
+            <p>Hello, {{ request.user }} you may edit your listing.</p>
             <a class="button" href="{% url 'vendor_update_view' object.vendor_slug %}">Update This Listing</a>
         {% endif %}
     </div>

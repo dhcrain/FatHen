@@ -4,6 +4,10 @@ button.radius, .button.radius {
 button.round, .button.round {
     border-radius: 1000px;
 }
+.button.disabled, .button[disabled] {
+    opacity: .75;
+    cursor: not-allowed;
+}
 .boarder-right {
     border-right: 1px solid #CACACA;
 }
@@ -13,10 +17,21 @@ button.round, .button.round {
 }
 .badge {
     font-size: 1.1em;
+    background: #4c9d2f;
+}
+.badge-large {
+    font-size: 3em;
 }
 .thumbnail {
     height: 3em;
 }
+.profile-picture {
+    height: 256px;
+    width: 256px;
+    position: relative;
+    top: -125px;
+    margin-bottom: -125px;
+}
 .fm-hero {
-    
+
 }

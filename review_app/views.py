@@ -1,3 +1,6 @@
+import operator
+from functools import reduce
+from django.db.models import Q
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import TemplateView, UpdateView, CreateView, DetailView, ListView
@@ -134,6 +137,22 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.profile
+
+
+# modified from https://www.calazan.com/adding-basic-search-to-your-django-site/
+class SearchListView(ListView):
+    model = FarmersMarket
+    paginate_by = 25
+    def get_queryset(self):
+        result = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_, (Q(fm_name__icontains=q) for q in query_list)) |
+                reduce(operator.and_, (Q(fm_description__icontains=q) for q in query_list))
+            )
+        return result
 
 
 class RegisterView(CreateView):
