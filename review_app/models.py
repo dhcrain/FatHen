@@ -4,6 +4,8 @@ from autoslug import AutoSlugField
 from localflavor.us.models import PhoneNumberField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.urlresolvers import reverse
+
 
 
 class Profile(models.Model):
@@ -77,6 +79,10 @@ class FarmersMarket(models.Model):
         else:
             return "../../static/review_app/img/greens.jpg"
 
+    def get_absolute_url(self):
+        return reverse('farmers_market_detail_view', kwargs={'fm_slug': self.fm_slug})
+
+
 
 class Vendor(models.Model):
     vendor_user = models.ForeignKey('auth.User')
@@ -104,6 +110,10 @@ class Vendor(models.Model):
             return self.vendor_picture.url
         else:
             return "http://www.muhisimbi.com/wp-content/uploads/2013/05/muhis_icon_market1.png"
+
+    def get_absolute_url(self):
+        return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
+
 
     @property
     def vendor_banner_picture_url(self):

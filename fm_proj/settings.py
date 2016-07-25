@@ -159,3 +159,5 @@ MEDIA_URL = '/media/'
 REVIEW_FORM_CHOICE_WIDGET = 'django.forms.widgets.RadioSelect'
 # Limit to 1 review per user per item REVIEW_FORM_CHOICE_WIDGET
 REVIEW_AVOID_MULTIPLE_REVIEWS = True
+# new redirect after review
+REVIEW_UPDATE_SUCCESS_URL = lambda review: review.reviewed_item.get_absolute_url()
