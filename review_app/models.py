@@ -111,16 +111,15 @@ class Vendor(models.Model):
         else:
             return "http://www.muhisimbi.com/wp-content/uploads/2013/05/muhis_icon_market1.png"
 
-    def get_absolute_url(self):
-        return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
-
-
     @property
     def vendor_banner_picture_url(self):
         if self.vendor_banner_picture:
             return self.vendor_banner_picture.url
         else:
             return "../../static/review_app/img/pea.jpg"
+
+    def get_absolute_url(self):
+        return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
 
 
 class Rating(models.Model):
@@ -135,6 +134,19 @@ class Rating(models.Model):
 
     def __str__(self):
         return str(self.rating_user)
+
+
+class Status(models.Model):
+    status_user = models.ForeignKey('auth.User')
+    status_vendor = models.ForeignKey(Vendor, null=True, blank=True)
+    status_fm = models.ForeignKey(FarmersMarket, null=True, blank=True)
+    status_present = models.BooleanField()
+    status_picture = models.ImageField(upload_to="status_images", blank=True)
+    status_comment = models.TextField(blank=True)
+    status_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.status_comment)
 
 
 @receiver(post_save, sender='auth.User')

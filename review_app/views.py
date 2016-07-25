@@ -76,7 +76,7 @@ class VendorDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         vendor_slug = self.kwargs.get('vendor_slug')
         vendor = Vendor.objects.get(vendor_slug=vendor_slug)
-        context['rating_list'] = Rating.objects.filter(rating_vendor=vendor)
+        context['status_list'] = Status.objects.filter(status_vendor=vendor)
         return context
 
 
@@ -143,6 +143,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 class SearchListView(ListView):
     model = FarmersMarket
     paginate_by = 25
+
     def get_queryset(self):
         result = super().get_queryset()
         query = self.request.GET.get('q')

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'review_app',
     'hvad',
     'review',
-    # 'user_media',
+    'user_media',
     'generic_positions',
 ]
 
