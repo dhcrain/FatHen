@@ -15,6 +15,9 @@ button.round, .button.round {
     color: white;
     padding-top: 1.75em;
 }
+.title-bar {
+    background: #e6e6e6;
+}
 .badge {
     font-size: 1.1em;
     background: #4c9d2f;

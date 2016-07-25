@@ -12,7 +12,14 @@
     </head>
     <body>
     {# nav bar #}
-    <div class="top-bar">
+        <div class="title-bar" >
+            <div class="title-bar-left"><!-- Content --></div>
+            <div class="title-bar-right"><!-- Content --></div>
+        </div>
+
+
+    <div data-sticky-container>
+    <div class="top-bar" data-sticky data-options="marginTop:0;" style="width:100%">
         <div class="top-bar-left">
             <ul class="dropdown menu" data-dropdown-menu>
                 <li class="menu-text">YELP?</li>
@@ -38,12 +45,14 @@
             </ul>
         </div>
     </div>
+    </div>
     {% block hero %}
     {% endblock %}
     <div class="container">
         <div class="row">
             {% block body %}
             {% endblock %}
+            {# main is used for django-review #}
             {% block main %}
             {% endblock %}
         </div>
