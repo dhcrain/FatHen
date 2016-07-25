@@ -108,7 +108,7 @@
         <p>{{ review_count }} users have reviewed this so far.</p>
         {# Button for Vendor Owner to update the listing #}
         {% if request.user == object.vendor_user %}
-            <hr>
+            <br>
             <p>Hello, {{ request.user }} you may edit your listing.</p>
             <a class="button" href="{% url 'vendor_update_view' object.vendor_slug %}">Update This Listing</a>
         {% endif %}
