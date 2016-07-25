@@ -44,14 +44,17 @@
         </div>
         <div class="small-6 columns">
             {# Rating Button #}
-            {% user_has_reviewed object request.user as has_reviewed %}
-            <div class="float-center">
-            {% if has_reviewed %}
-                <a class="large button disabled radius text-center" href="#"><strong>Thanks for your review!</strong><br><small>You have already reviewed this Farmers Market</small></a>
-            {% else %}
-                <a class="large button success radius text-center" href="{% url "review_create" content_type='farmersmarket' object_id=farmersmarket.pk %}">Add a Review</a>
+            {% if request.user.is_authenticated %}
+                {% user_has_reviewed object request.user as has_reviewed %}
+                <div class="float-center">
+                {% if has_reviewed %}
+                    <a class="large button disabled radius text-center" href="#"><strong>Thanks for your review!</strong><br><small>You have already reviewed this Farmers Market</small></a>
+                {% else %}
+                    <a class="large button success radius text-center" href="{% url "review_create" content_type='farmersmarket' object_id=farmersmarket.pk %}">Add a Review</a>
+                {% endif %}
+                {% else %}
+                    <a class="large button disabled radius text-center" href="#">Add a Review<br><small>Must Login to review.</small></a>
             {% endif %}
-
 
             {# Experimntal, review form in modal window #}
             <p><a data-open="exampleModal1">Click me for a modal</a></p>
