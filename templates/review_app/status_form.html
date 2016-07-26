@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1>Vendor Review</h1>
+    <form class="" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="success button large" type="submit" name="vendor_review" value="Submit Review">
+    </form>
+{% endblock %}

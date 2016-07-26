@@ -78,10 +78,52 @@
 <hr>
 <div class="row">
     <div class="small-7 columns boarder-right">
+        <div class="callout">
+            <h3>This week's Status Updates.</h3>
+            {# Experimntal, status form in modal window #}
+            {% if request.user == object.vendor_user %}
+                <a class="float-right button" data-open="statusModal">Status Create</a>
+                <div class="reveal" id="statusModal" data-reveal>
+                    {# {% include "review/review_form.html" %}#}
+                    <form class="" action="{% url 'vendor_status_create_view' object.vendor_slug %}" method="post">
+                        {% csrf_token %}
+                        {{ vendor_status_form.as_p }}
+                        <input class="button" type="submit" name="submit" value="Submit Status">
+                    </form>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+            <hr>
+            {% for status in status_list %}
+            <div class="row">
+                <div class="large-2 columns">
+                    {{ status.status_present }}
+                </div>
+                <div class="large-8 columns">
+                    <strong>{{ status.status_comment }}</strong>
+                    <small>{{ status.status_created|date:"D, M d" }}</small>
+                </div>
+                <div class="small-2 columns">
+                    {% if status.status_picture %}
+                        <img class="thumbnail" src="{{ status.status_picture }}" alt="" /><br>
+                    {% endif %}
+                </div>
+            </div>
+                <a data-open="statusDetailModal">details</a>
+                <div class="reveal" id="statusDetailModal" data-reveal>
+                    <p class="lead">{{ object.fm_name }}</p>
+                    <img class="" src="{{ status.status_picture }}" alt="" />
+                    <p>{{ status.status_comment}}</p>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
         <h2>REVIEWS........</h2>
-        {# Start Review plug in code #}
         <hr>
-        {# End Review Plug in Info #}
         {% get_reviews object as reviews %}
         {% for review in reviews %}
             <div class="callout">

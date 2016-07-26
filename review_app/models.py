@@ -148,6 +148,9 @@ class Status(models.Model):
     def __str__(self):
         return str(self.status_comment)
 
+    class Meta:
+        ordering = ['-status_created']
+
 
 @receiver(post_save, sender='auth.User')
 def create_user_profile(**kwargs):

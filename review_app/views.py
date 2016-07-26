@@ -1,3 +1,4 @@
+import datetime
 import operator
 from functools import reduce
 from django.db.models import Q
@@ -8,7 +9,8 @@ from django.views.generic import TemplateView, UpdateView, CreateView, DetailVie
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating
+from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating, Status
+from review_app.forms import StatusCreateForm
 # Create your views here.
 
 class IndexView(TemplateView):
@@ -34,8 +36,27 @@ class FarmersMarketDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         fm_slug = self.kwargs.get('fm_slug')
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
+        context['fm_status_form'] = StatusCreateForm()
         context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug)
+        one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
+        context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
         return context
+
+
+class FarmersMarketStatusCreateView(CreateView):
+    model = Status
+    form_class = StatusCreateForm
+
+    def form_valid(self, form, **kwargs):
+        status_form = form.save(commit=False)
+        fm_slug = self.kwargs.get('fm_slug')
+        status_form.status_user = self.request.user
+        status_form.status_fm = FarmersMarket.objects.get(fm_slug=fm_slug)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        fm_slug = self.kwargs.get('fm_slug')
+        return reverse('farmers_market_detail_view', args=(fm_slug,))
 
 
 class FarmersMarketCreateView(CreateView):
@@ -76,8 +97,25 @@ class VendorDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         vendor_slug = self.kwargs.get('vendor_slug')
         vendor = Vendor.objects.get(vendor_slug=vendor_slug)
+        context['vendor_status_form'] = StatusCreateForm()
         context['status_list'] = Status.objects.filter(status_vendor=vendor)
         return context
+
+
+class VendorStatusCreateView(CreateView):
+    model = Status
+    form_class = StatusCreateForm
+
+    def form_valid(self, form, **kwargs):
+        status_form = form.save(commit=False)
+        vendor_slug = self.kwargs.get('vendor_slug')
+        status_form.status_user = self.request.user
+        status_form.status_vendor = Vendor.objects.get(vendor_slug=vendor_slug)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        vendor_slug = self.kwargs.get('vendor_slug')
+        return reverse('vendor_detail_view', args=(vendor_slug,))
 
 
 class VendorCreateView(CreateView):
@@ -128,6 +166,18 @@ class RatingVendorCreateView(CreateView):
     def get_success_url(self):
         vendor_slug = self.kwargs.get('vendor_slug')
         return reverse('vendor_detail_view',args=(vendor_slug,))
+
+
+class StatusCreateView(CreateView):
+    model = Status
+    fields = ['status_vendor', 'status_fm', 'status_present', 'status_picture', 'status_comment']
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def form_valid(self, form):
+        status_form = form.save(commit=False)
+        status_form.status_user = self.request.user
+        return super().form_valid(form)
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
