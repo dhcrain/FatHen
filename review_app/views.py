@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating, Status
 from review_app.forms import StatusCreateForm
+from review.templatetags.review_tags import total_review_average
+from django.db.models import Case, When
 # Create your views here.
 
 class IndexView(TemplateView):
@@ -26,6 +28,21 @@ class FarmersMarketListView(ListView):
     model = FarmersMarket
     paginate_by = 25
 
+    def get_queryset(self, **kwargs):
+        rated = self.request.GET.get('rated')
+        sort = self.request.GET.get('sort')
+        if sort:
+            return FarmersMarket.objects.all().order_by(sort)
+        elif rated:
+            # http://stackoverflow.com/a/38390480/5119789
+            reviews = [(total_review_average(market), market.pk) for market in FarmersMarket.objects.all()]
+            pk_list = [mkt[1] for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)]
+            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
+            return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)
+        else:
+            return FarmersMarket.objects.all()
+
+
 
 class FarmersMarketDetailView(DetailView):
     model = FarmersMarket
@@ -35,9 +52,20 @@ class FarmersMarketDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         fm_slug = self.kwargs.get('fm_slug')
+        sort = self.request.GET.get('sort')
+        rated = self.request.GET.get('rated')
+        if sort:
+            context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).order_by(sort)
+        elif rated:
+            # http://stackoverflow.com/a/38390480/5119789
+            reviews = [(total_review_average(vendor), vendor.pk) for vendor in Vendor.objects.all()]
+            pk_list = [vendor[1] for vendor in sorted(reviews, key=lambda x: x[0], reverse=True)]
+            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
+            context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).filter(pk__in=pk_list).order_by(preserved)
+        else:
+            context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug)
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
         context['fm_status_form'] = StatusCreateForm()
-        context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug)
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
         return context

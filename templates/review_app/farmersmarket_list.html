@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load review_tags %}
 {% block title %}
-    Farmers
+    All Farmers Markets
 {% endblock %}
 {% block body %}
 
@@ -9,6 +9,12 @@
     <div class="row">
         {# Main Columun #}
         <div class="small-9 columns boarder-right">
+            Sort...
+            <div class="button-group">
+                <a href="{% url 'farmers_market_list_view' %}?rated=-average_rating" class="button">Highest Rated</a>
+                <a href="{% url 'farmers_market_list_view' %}?sort=-fm_updated" class="button">Recently Updated</a>
+                <a href="{% url 'farmers_market_list_view' %}" class="button">Alphabetical</a>
+            </div>
             {% for market in object_list %}
                 <div class="callout">
                     <div class="row">
