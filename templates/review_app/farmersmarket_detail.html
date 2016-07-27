@@ -78,24 +78,26 @@
     {# Content Row #}
     <div class="row">
         <div class="small-7 columns boarder-right">
+            {# Button for owner to create status updates #}
+            {% if request.user == object.fm_user %}
+                <a class="button" data-open="statusModal">Status Create</a>
+                <div class="reveal" id="statusModal" data-reveal>
+                    <form class="" action="{% url 'farmers_market_status_create_view' object.fm_slug %}" method="post">
+                        {% csrf_token %}
+                        {{ fm_status_form.as_p }}
+                        <input class="button" type="submit" name="submit" value="Submit Status">
+                    </form>
+                    <br>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+
+            {% if status_list %}
             <div class="callout">
+                {# Will show status updates from the previos 7 days #}
                 <h3>This week's Status Updates.</h3>
-                {# Experimntal, status form in modal window #}
-                {% if request.user == object.fm_user %}
-                    <a class="float-right button" data-open="statusModal">Status Create</a>
-                    <div class="reveal" id="statusModal" data-reveal>
-                        {# {% include "review/review_form.html" %}#}
-                        <form class="" action="{% url 'farmers_market_status_create_view' object.fm_slug %}" method="post">
-                            {% csrf_token %}
-                            {{ fm_status_form.as_p }}
-                            <input class="button" type="submit" name="submit" value="Submit Status">
-                        </form>
-                        <br>
-                        <button class="close-button" data-close aria-label="Close modal" type="button">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endif %}
                 <hr>
                 {% for status in status_list %}
                 <div class="row">
@@ -123,6 +125,7 @@
                     </div>
                 {% endfor %}
             </div>
+            {% endif %}
             <hr>
             <h3>Vendors you will see here.</h3>
             {% if vendor_list %}

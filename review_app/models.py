@@ -70,7 +70,7 @@ class FarmersMarket(models.Model):
         if self.fm_picture:
             return self.fm_picture.url
         else:
-            return "http://www.downtownmorganton.com/images/farmersmarket-icon.png"
+            return "../../static/review_app/img/farmersmarket-icon.png"
 
     @property
     def fm_banner_picture_url(self):
@@ -109,7 +109,7 @@ class Vendor(models.Model):
         if self.vendor_picture:
             return self.vendor_picture.url
         else:
-            return "http://www.muhisimbi.com/wp-content/uploads/2013/05/muhis_icon_market1.png"
+            return "../../static/review_app/img/vendor_icon.png"
 
     @property
     def vendor_banner_picture_url(self):
@@ -121,7 +121,7 @@ class Vendor(models.Model):
     def get_absolute_url(self):
         return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
 
-
+# Not in use
 class Rating(models.Model):
     # would like a way to limit it to one rating per user per Vendor/FarmersMarket
     rating_user = models.ForeignKey('auth.User')
