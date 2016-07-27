@@ -178,9 +178,9 @@ AWS_STORAGE_BUCKET_NAME = aws_bucket_name
 AWS_ACCESS_KEY_ID = aws_access_key_id
 AWS_SECRET_ACCESS_KEY = aws_secret_access_key
 
-print(AWS_STORAGE_BUCKET_NAME)
-print(AWS_ACCESS_KEY_ID)
-print(AWS_SECRET_ACCESS_KEY)
+# print(AWS_STORAGE_BUCKET_NAME)
+# print(AWS_ACCESS_KEY_ID)
+# print(AWS_SECRET_ACCESS_KEY)
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
 # it simple - just use this domain plus the path. (If this isn't set, things get complicated).
@@ -204,3 +204,11 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # from S3 import CallingFormat
 # AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
+
+# STATICFILES_LOCATION = 'static'
+# STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+# STATIC_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+
+# MEDIAFILES_LOCATION = 'media'
+# MEDIA_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+# DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
