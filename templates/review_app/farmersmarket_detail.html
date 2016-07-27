@@ -62,13 +62,16 @@
     {# info row #}
     <div class="row">
         <div class="small-6 columns">
-            <p><strong>Season of Operation:</strong> {{ object.fm_seasons_of_operation }}<br>
-                <strong>Facilty Type:</strong> {{ object.fm_facility_type }}<br>
-                <strong>Hours:</strong> {{ object.fm_hrs_of_operation }}<br></p>
+            <p>{{ object.fm_description }}</p>
         </div>
         <div class="small-6 columns">
-            <p><a class="secondary hollow button" href="{{ object.fm_website }}"><strong>Website</strong></a><br>
-            <strong>Programs Accpted:</strong> {{ object.fm_programs_accepted }}<br></p>
+            <p>
+                <strong>Season of Operation:</strong> {{ object.fm_seasons_of_operation }}<br>
+                <strong>Facilty Type:</strong> {{ object.fm_facility_type }}<br>
+                <strong>Hours:</strong> {{ object.fm_hrs_of_operation }}<br>
+                <strong>Programs Accpted:</strong> {{ object.fm_programs_accepted }}<br>
+                <a class="secondary hollow button" href="{{ object.fm_website }}"><strong>Website</strong></a>
+            </p>
         </div>
     </div>
     <hr>
