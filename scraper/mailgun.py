@@ -1,33 +1,18 @@
-import requests
-from bs4 import BeautifulSoup
-import geocoder
-import csv
-import datetime
+import boto
+import sys
+from boto.s3.key import Key
+
+aws_bucket_name = os.environ['aws_bucket']
+aws_access_key_id = os.environ['aws_access_key_id']
+aws_secret_access_key = os.environ['aws_secret_access_key']
+
+AWS_STORAGE_BUCKET_NAME = 'aws_bucket_name'
+AWS_ACCESS_KEY_ID = 'aws_access_key_id'
+AWS_SECRET_ACCESS_KEY = 'aws_secret_access_key'
 
 
-url = "https://agriculture.sc.gov/where-to-buy-local/community-based-farmers-markets/"
-content = requests.get(url).text
-souper = BeautifulSoup(content, "html.parser")
-results = souper.find_all("a", class_="link-wrapper")
-
-# print(results)
-
-for result in results:
-    fm_web = ""
-    market_url = result.attrs['href']
-    market_content = requests.get(market_url).text
-    market_souper = BeautifulSoup(market_content, "html.parser")
-    market_name = market_souper.find(class_="page-title-col").text.strip()
-    # can I chunk this out into smaller bits
-    market_info = market_souper.find(class_="main-content-col")
-    # print(market_info)
-    mrkt_info_p = market_info.find_all('p')
-    # print(mrkt_info_p)  # list of <p>
-    for item in mrkt_info_p:
-
-        if "Address" in item.text:
-            mrkt_address = item.text.split(":")[1].strip()
-            print(mrkt_address)
-            g = geocoder.google(mrkt_address)
-            print("housenumber {}, street_number {}, street {}, city {}, state {}, postal {}".format(g.housenumber, g.street_number, g.street, g.city, g.state, g.postal))
-            mrkt_addr = g.address
+conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+bucket = conn.get_bucket(BUCKET_NAME, validate=False)
+k = Key(bucket)
+k.key = 'barbaz'
+k.set_contents_from_filename('/tmp/barbaz.txt')
