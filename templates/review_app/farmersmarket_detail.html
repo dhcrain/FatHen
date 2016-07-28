@@ -84,9 +84,9 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th>High</th>
-                            <th></th>
                             <th>Low</th>
+                            <th></th>
+                            <th>High</th>
                             <th></th>
                             <th colspan="2">Percipition Chace</th>
                         </tr>
@@ -95,15 +95,16 @@
                             <td>{{ day.time|fromunix|date:"D" }}</td>
                             <td>{{ day.time|fromunix|date:"M j" }}</td>
                             <td>{{ day.summary }}</td>
-                            <td>{{ day.temperatureMax|floatformat:"0" }} °F</td>
-                            <td>at {{ day.temperatureMaxTime|fromunix|date:"f a" }}</td>
                             <td>{{ day.temperatureMin|floatformat:"0" }} °F</td>
-                            <td>at {{ day.temperatureMinTime|fromunix|date:"f a" }}</td>
+                            <td><small>at</small> {{ day.temperatureMinTime|fromunix|date:"f a" }}</td>
+                            <td>{{ day.temperatureMax|floatformat:"0" }} °F</td>
+                            <td><small>at</small> {{ day.temperatureMaxTime|fromunix|date:"f a" }}</td>
                             <td>{{ day.precipProbability|to_percent }}%</td>
                             <td>{{ day.precipType }}</td>
                         </tr>
                         {% endfor %}
                     </table>
+                    <small>Powered by <a href="http://forecast.io/">Forecast</a></small>
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -116,7 +117,7 @@
         <div class="small-7 columns boarder-right">
             {# Button for owner to create status updates #}
             {% if request.user == object.fm_user %}
-                <a class="button" data-open="statusModal">Status Create</a>
+                <a class="button" data-open="statusModal">Update Status</a>
                 <div class="reveal" id="statusModal" data-reveal>
                     <form class="" action="{% url 'farmers_market_status_create_view' object.fm_slug %}" method="post">
                         {% csrf_token %}
@@ -162,7 +163,6 @@
                 {% endfor %}
             </div>
             {% endif %}
-            <hr>
             <h3>Vendors you will see here.</h3>
             {% if vendor_list %}
             Sort...
@@ -178,7 +178,7 @@
                             <img class="thumbnail" src="{{ vendor.vendor_picture_url }}" alt="" />
                         </div>
                         <div class="large-10 columns">
-                            <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}">{{ vendor }}</a>
+                            <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}"><strong>{{ vendor }}</strong></a>
                             {% total_review_average vendor 5 as stars %}
                             {% if stars == 0 %}
                                 <span class="float-right">No reviews yet.</span>
@@ -196,7 +196,8 @@
 
         </div>
         <div class="small-5 columns">
-            <iframe src="{{ object.fm_iframe_url }}" width="" height=""></iframe>
+            {# Map #}
+            <iframe frameborder="0" style="border:0" src="{{ google_map }}" width="350px" height="250px" allowfullscreen></iframe>
             <p><strong>Address:</strong> <br>{{ object.fm_address }}<br>
             <strong>County:</strong> {{ object.fm_county }}<br>
             <strong>Phone:</strong> {{ object.fm_phone }}<br>

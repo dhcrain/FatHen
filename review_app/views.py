@@ -61,7 +61,6 @@ class FarmersMarketDetailView(DetailView):
         # if forecast:
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
         g = geocoder.google(location.fm_address)
-
         api_key = os.environ['forecast_api']
         lat = g.latlng[0]
         lng = g.latlng[1]
@@ -83,6 +82,10 @@ class FarmersMarketDetailView(DetailView):
         else:
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug)
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
+        google_api = os.environ['google_maps_api']
+        map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(google_api, mrkt.fm_address)
+        print(map_url)
+        context['google_map'] = map_url
         context['fm_status_form'] = StatusCreateForm()
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
