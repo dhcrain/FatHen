@@ -154,12 +154,6 @@
                         {% endif %}
                     </div>
 
-                    <form class="" action="{% url 'status_delete_view' status.pk %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" name="name" value="Delete Chrip">
-                    </form>
-                    <a class="btn btn-danger" href="{% url 'chirp_delete_view' chirp.pk %}">Delete</a>
-
                 </div>
                     <a data-open="statusDetailModal">details</a>
                     <div class="reveal" id="statusDetailModal" data-reveal>
