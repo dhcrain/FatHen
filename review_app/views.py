@@ -1,5 +1,8 @@
 import datetime
 import operator
+import requests
+import geocoder
+import os
 from functools import reduce
 from django.db.models import Q
 from django.shortcuts import render
@@ -54,6 +57,21 @@ class FarmersMarketDetailView(DetailView):
         fm_slug = self.kwargs.get('fm_slug')
         sort = self.request.GET.get('sort')
         rated = self.request.GET.get('rated')
+        forecast = self.request.GET.get('forecast')
+        # if forecast:
+        location = FarmersMarket.objects.get(fm_slug=fm_slug)
+        g = geocoder.google(location.fm_address)
+
+        api_key = os.environ['forecast_api']
+        lat = g.latlng[0]
+        lng = g.latlng[1]
+        # current_time = datetime.datetime.now()
+        print(api_key)
+        url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, lat, lng)
+        response = requests.get(url).json()
+        context['forecast_summary'] = response['daily']['summary']
+        context['forecast'] = response['daily']['data']
+
         if sort:
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).order_by(sort)
         elif rated:

@@ -8,6 +8,9 @@ button.round, .button.round {
     opacity: .75;
     cursor: not-allowed;
 }
+input.secondary.hollow.button {
+    font-weight: bold;
+}
 .boarder-right {
     border-right: 1px solid #CACACA;
 }

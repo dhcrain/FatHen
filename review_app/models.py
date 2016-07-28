@@ -28,7 +28,6 @@ class Profile(models.Model):
             return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
 
 
-
 class VendorType(models.Model):
     vendor_type = models.CharField(max_length=30)
 

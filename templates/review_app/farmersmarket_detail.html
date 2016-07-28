@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load review_tags %}
+{% load app_filters %}
 {% block title %}
     {{ object.fm_name }}
 {% endblock %}
@@ -69,9 +70,44 @@
                 <strong>Season of Operation:</strong> {{ object.fm_seasons_of_operation }}<br>
                 <strong>Facilty Type:</strong> {{ object.fm_facility_type }}<br>
                 <strong>Hours:</strong> {{ object.fm_hrs_of_operation }}<br>
-                <strong>Programs Accpted:</strong> {{ object.fm_programs_accepted }}<br>
+                <strong>Programs Accpted:</strong> {{ object.fm_programs_accepted }}</p>
                 <a class="secondary hollow button" href="{{ object.fm_website }}"><strong>Website</strong></a>
-            </p>
+                <input data-open="forecast" class="secondary hollow button" type="submit" name="forecast" value="7-Day Forecast">
+                {# <form class="" action="" method="get">#}
+                    {# <a data-open="forecast" class="secondary hollow button" name="forecast" type="submit" href="?forecast"><strong>7-day Forcast</strong></a>#}
+                {# </form>#}
+                <div class="large reveal" id="forecast" data-reveal>
+                    <h2>7-Day forecast for {{ object.fm_name }}</h2>
+                    <h3>{{ forecast_summary }}</h3>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>High</th>
+                            <th></th>
+                            <th>Low</th>
+                            <th></th>
+                            <th colspan="2">Percipition Chace</th>
+                        </tr>
+                        {% for day in forecast %}
+                        <tr>
+                            <td>{{ day.time|fromunix|date:"D" }}</td>
+                            <td>{{ day.time|fromunix|date:"M j" }}</td>
+                            <td>{{ day.summary }}</td>
+                            <td>{{ day.temperatureMax|floatformat:"0" }} °F</td>
+                            <td>at {{ day.temperatureMaxTime|fromunix|date:"f a" }}</td>
+                            <td>{{ day.temperatureMin|floatformat:"0" }} °F</td>
+                            <td>at {{ day.temperatureMinTime|fromunix|date:"f a" }}</td>
+                            <td>{{ day.precipProbability|to_percent }}%</td>
+                            <td>{{ day.precipType }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
         </div>
     </div>
     <hr>

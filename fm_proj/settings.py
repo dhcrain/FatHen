@@ -170,8 +170,6 @@ AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
         'Cache-Control': 'max-age=94608000',
     }
 
-
-
 aws_bucket_name = os.environ.get('aws_bucket_name')
 aws_access_key_id = os.environ['aws_access_key_id']
 aws_secret_access_key = os.environ['aws_secret_access_key']
@@ -180,9 +178,6 @@ AWS_STORAGE_BUCKET_NAME = aws_bucket_name
 AWS_ACCESS_KEY_ID = aws_access_key_id
 AWS_SECRET_ACCESS_KEY = aws_secret_access_key
 
-# print(AWS_STORAGE_BUCKET_NAME)
-# print(AWS_ACCESS_KEY_ID)
-# print(AWS_SECRET_ACCESS_KEY)
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
 # it simple - just use this domain plus the path. (If this isn't set, things get complicated).
