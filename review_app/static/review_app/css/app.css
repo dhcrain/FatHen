@@ -51,3 +51,7 @@ input.secondary.hollow.button {
 .fm-hero {
 
 }
+/* display rating radio buttons in a row */
+ul#id_category_4 li {
+    display: inline-block;
+}

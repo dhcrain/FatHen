@@ -49,10 +49,28 @@
                 <a class="large button disabled radius" href="#"><strong>Thanks for your review!</strong><br><small>You have already reviewed this Vendor</small></a>
             {% else %}
                 <a class="large button success radius" href="{% url "review_create" content_type='vendor' object_id=vendor.pk %}">Add a Review</a>
+
+
+                <p><a data-open="exampleModal1">review modal</a></p>
+
+
+                <div class="reveal" id="exampleModal1" data-reveal>
+                    <h3>Review {{ vendor.vendor_name }}</h3>
+                    <form method="post" action="{% url 'review_create' content_type='vendor' object_id=vendor.pk %}">
+                        {% csrf_token %}
+                        {{ review_form.as_p }}
+                        <input type="submit" value="Save" />
+                    </form>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
             {% endif %}
         {% else %}
             <a class="large button disabled radius text-center" href="#">Add a Review<br><small>Must Login to review.</small></a>
         {% endif %}
+
 
 
     </div>
@@ -78,9 +96,10 @@
 <hr>
 <div class="row">
     <div class="small-7 columns boarder-right">
-        {# Button for owner to create status updates #}
         {% if request.user == object.vendor_user %}
+        {# Button for owner to create status updates #}
         <a class="button" data-open="statusModal">Update Status</a>
+        {# Modal for status create #}
         <div class="reveal" id="statusModal" data-reveal>
             <form class="" action="{% url 'vendor_status_create_view' object.vendor_slug %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -114,9 +133,9 @@
                 </div>
             </div>
 
-            <a data-open="statusDetailModal">details</a>
+            <a data-open="statusDetailModal{{ status.pk }}">details</a>
             {# Status Detail Modal #}
-            <div class="reveal" id="statusDetailModal" data-reveal>
+            <div class="reveal" id="statusDetailModal{{ status.pk }}" data-reveal>
                 <p class="lead">{{ object.fm_name }}</p>
                 <br>
                 {% if status.status_picture %}

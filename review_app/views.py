@@ -16,6 +16,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating, Status
 from review_app.forms import StatusCreateForm
 from review.templatetags.review_tags import total_review_average
+from review.forms import ReviewForm
 from django.db.models import Case, When
 # Create your views here.
 
@@ -86,6 +87,7 @@ class FarmersMarketDetailView(DetailView):
         map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(google_api, mrkt.fm_address)
         context['google_map'] = map_url
         context['fm_status_form'] = StatusCreateForm()
+        context['review_form'] = ReviewForm(mrkt)
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
         return context
@@ -147,6 +149,7 @@ class VendorDetailView(DetailView):
         vendor = Vendor.objects.get(vendor_slug=vendor_slug)
         context['vendor_status_form'] = StatusCreateForm()
         context['status_list'] = Status.objects.filter(status_vendor=vendor)
+        context['review_form'] = ReviewForm(vendor)
         return context
 
 
@@ -241,7 +244,7 @@ class StatusCreateView(CreateView):
         return super().form_valid(form)
 
 class StatusDeleteView(DeleteView):
-    success_url = reverse_lazy("index_view")
+    success_url = reverse_lazy("index_view") #this needs to change...
 
     def get_queryset(self):
         return Status.objects.filter(status_user=self.request.user)

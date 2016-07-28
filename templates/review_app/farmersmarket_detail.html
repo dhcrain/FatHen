@@ -107,7 +107,7 @@
                         </tr>
                         {% endfor %}
                     </table>
-                    <small>Powered by <a href="http://forecast.io/">Forecast</a></small>
+                    <small class="text-center float-center">Powered by <a href="http://forecast.io/">Forecast</a></small>
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -118,9 +118,10 @@
     {# Content Row #}
     <div class="row">
         <div class="small-7 columns boarder-right">
-            {# Button for owner to create status updates #}
             {% if request.user == object.fm_user %}
+                {# Button for owner to create status updates #}
                 <a class="button" data-open="statusModal">Update Status</a>
+                {# Modal to create new status #}
                 <div class="reveal" id="statusModal" data-reveal>
                     <form class="" action="{% url 'farmers_market_status_create_view' object.fm_slug %}" method="post">
                         {% csrf_token %}
@@ -136,7 +137,7 @@
 
             {% if status_list %}
             <div class="callout">
-                {# Will show status updates from the previos 7 days #}
+                {# Will show status updates from the previous 7 days #}
                 <h3>This week's Status Updates.</h3>
                 <hr>
                 {% for status in status_list %}
@@ -155,8 +156,10 @@
                     </div>
 
                 </div>
-                    <a data-open="statusDetailModal">details</a>
-                    <div class="reveal" id="statusDetailModal" data-reveal>
+                    {# open modeal #}
+                    <a data-open="statusDetailModal{{ status.pk }}">details</a>
+                    {# status detail modal #}
+                    <div class="reveal" id="statusDetailModal{{ status.pk }}" data-reveal>
                         <p class="lead">{{ object.fm_name }}</p>
                         <img class="" src="{{ status.status_picture }}" alt="" />
                         <p>{{ status.status_comment}}</p>
@@ -181,16 +184,18 @@
                         <div class="large-2 columns">
                             <img class="list-thumb" src="{{ vendor.vendor_picture_url }}" alt="" />
                         </div>
-                        <div class="large-8 columns">
+                        <div class="large-7  columns">
                             <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}"><strong>{{ vendor }}</strong></a>
-                            <p>{{ vendor.vendor_type }}</p>
+                            {% if vendor.vendor_type %}
+                                <p>{{ vendor.vendor_type }}</p>
+                            {% endif %}
                         </div>
-                        <div class="small-2 columns">
+                        <div class="small-3 columns">
                             {% total_review_average vendor 5 as stars %}
                             {% if stars == 0 %}
-                            <span class="float-right">No reviews yet.</span>
+                                <span class="float-right">No reviews yet.</span>
                             {% else %}
-                            <span class="badge float-right"><strong>{{ stars }}</strong></span>
+                                <span class="badge float-right"><strong>{{ stars }}</strong></span>
                             {% endif %}
                         </div>
                     </div>
