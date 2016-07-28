@@ -64,8 +64,7 @@ class FarmersMarketDetailView(DetailView):
         api_key = os.environ['forecast_api']
         lat = g.latlng[0]
         lng = g.latlng[1]
-        # current_time = datetime.datetime.now()
-        print(api_key)
+        # current_time = datetime.datetime.now() # need time szone report
         url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, lat, lng)
         response = requests.get(url).json()
         context['forecast_summary'] = response['daily']['summary']
@@ -84,7 +83,6 @@ class FarmersMarketDetailView(DetailView):
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
         google_api = os.environ['google_maps_api']
         map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(google_api, mrkt.fm_address)
-        print(map_url)
         context['google_map'] = map_url
         context['fm_status_form'] = StatusCreateForm()
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)

@@ -122,18 +122,12 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
-# STATIC_URL = '/static/'
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles') # errors on
-# http://stackoverflow.com/questions/26829435/collectstatic-command-fails-when-whitenoise-is-enabled
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  #errors on user_media/css/img/Jcrop.gif
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 STATIC_URL = '/static/'
 
@@ -155,14 +149,6 @@ DATABASES['default'].update(db_from_env)
 MEDIA_ROOT = BASE_DIR
 MEDIA_URL = '/media/'
 
-# For django-review
-# this would use a RadioSelect instead of the default Select
-REVIEW_FORM_CHOICE_WIDGET = 'django.forms.widgets.RadioSelect'
-# Limit to 1 review per user per item REVIEW_FORM_CHOICE_WIDGET
-REVIEW_AVOID_MULTIPLE_REVIEWS = True
-# new redirect after review
-REVIEW_UPDATE_SUCCESS_URL = lambda review: review.reviewed_item.get_absolute_url()
-
 
 # Django-starages / AWS S3 / https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/
 AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
@@ -178,17 +164,18 @@ AWS_STORAGE_BUCKET_NAME = aws_bucket_name
 AWS_ACCESS_KEY_ID = aws_access_key_id
 AWS_SECRET_ACCESS_KEY = aws_secret_access_key
 
-
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
 # it simple - just use this domain plus the path. (If this isn't set, things get complicated).
 # This controls how the `static` template tag from `staticfiles` gets expanded, if you're using it.
 # We also use it in the next setting.
 AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(aws_bucket_name)
-
+print(aws_bucket_name)
 if aws_bucket_name:
+    print(aws_bucket_name)
+
     # This is used by the `static` template tag from `static`, if you're using that. Or if anything else
     # refers directly to STATIC_URL. So it's safest to always set it.
-    STATIC_URL = "https://{}/".format(AWS_S3_CUSTOM_DOMAIN)
+    STATIC_URL = 'https://{}/'.format(AWS_S3_CUSTOM_DOMAIN)
     AWS_S3_FILE_OVERWRITE = False
     # Tell the staticfiles app to use S3Boto storage when writing the collected static files (when
     # you run `collectstatic`).
@@ -198,13 +185,11 @@ if aws_bucket_name:
     # DEFAULT_FILE_STORAGE = 'libs.storages.S3Storage.S3Storage'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-# from S3 import CallingFormat
-# AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
 
-# STATICFILES_LOCATION = 'static'
-# STATICFILES_STORAGE = 'custom_storages.StaticStorage'
-# STATIC_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-
-# MEDIAFILES_LOCATION = 'media'
-# MEDIA_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
-# DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+# For django-review
+# this would use a RadioSelect instead of the default Select
+REVIEW_FORM_CHOICE_WIDGET = 'django.forms.widgets.RadioSelect'
+# Limit to 1 review per user per item REVIEW_FORM_CHOICE_WIDGET
+REVIEW_AVOID_MULTIPLE_REVIEWS = True
+# new redirect after review
+REVIEW_UPDATE_SUCCESS_URL = lambda review: review.reviewed_item.get_absolute_url()
