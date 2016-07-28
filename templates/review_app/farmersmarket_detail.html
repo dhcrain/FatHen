@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load review_tags %}
 {% load app_filters %}
+{% load tz %}
+
 {% block title %}
     {{ object.fm_name }}
 {% endblock %}
@@ -90,15 +92,16 @@
                             <th></th>
                             <th colspan="2">Percipition Chace</th>
                         </tr>
+
                         {% for day in forecast %}
                         <tr>
                             <td>{{ day.time|fromunix|date:"D" }}</td>
                             <td>{{ day.time|fromunix|date:"M j" }}</td>
                             <td>{{ day.summary }}</td>
                             <td>{{ day.temperatureMin|floatformat:"0" }} °F</td>
-                            <td><small>at</small> {{ day.temperatureMinTime|fromunix|date:"f a" }}</td>
+                            <td><small>at</small> {{ day.temperatureMinTime|fromunix|localtime|date:"f a" }}</td>
                             <td>{{ day.temperatureMax|floatformat:"0" }} °F</td>
-                            <td><small>at</small> {{ day.temperatureMaxTime|fromunix|date:"f a" }}</td>
+                            <td><small>at</small> {{ day.temperatureMaxTime|fromunix|localtime|date:"f a" }}</td>
                             <td>{{ day.precipProbability|to_percent }}%</td>
                             <td>{{ day.precipType }}</td>
                         </tr>
@@ -150,6 +153,13 @@
                             <img class="thumbnail" src="{{ status.status_picture }}" alt="" /><br>
                         {% endif %}
                     </div>
+
+                    <form class="" action="{% url 'status_delete_view' status.pk %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" name="name" value="Delete Chrip">
+                    </form>
+                    <a class="btn btn-danger" href="{% url 'chirp_delete_view' chirp.pk %}">Delete</a>
+
                 </div>
                     <a data-open="statusDetailModal">details</a>
                     <div class="reveal" id="statusDetailModal" data-reveal>
@@ -175,15 +185,18 @@
                 <div class="callout">
                     <div class="row">
                         <div class="large-2 columns">
-                            <img class="thumbnail" src="{{ vendor.vendor_picture_url }}" alt="" />
+                            <img class="list-thumb" src="{{ vendor.vendor_picture_url }}" alt="" />
                         </div>
-                        <div class="large-10 columns">
+                        <div class="large-8 columns">
                             <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}"><strong>{{ vendor }}</strong></a>
+                            <p>{{ vendor.vendor_type }}</p>
+                        </div>
+                        <div class="small-2 columns">
                             {% total_review_average vendor 5 as stars %}
                             {% if stars == 0 %}
-                                <span class="float-right">No reviews yet.</span>
+                            <span class="float-right">No reviews yet.</span>
                             {% else %}
-                                <span class="badge float-right"><strong>{{ stars }}</strong></span>
+                            <span class="badge float-right"><strong>{{ stars }}</strong></span>
                             {% endif %}
                         </div>
                     </div>

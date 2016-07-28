@@ -38,12 +38,12 @@ input.secondary.hollow.button {
 .badge-large {
     font-size: 3em;
 }
-.thumbnail {
-    height: 3em;
+.list-thumb {
+    /*height: 4rem;*/
+    max-width: 4rem;
 }
 .profile-picture {
-    height: 256px;
-    width: 256px;
+    width: 18rem;
     position: relative;
     top: -125px;
     margin-bottom: -125px;

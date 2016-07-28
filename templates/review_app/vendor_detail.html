@@ -72,31 +72,33 @@
         <strong>Found at these Farmers Markets: </strong><br>
         {% for fm in object.at_farmers_market.all %}
             <a href="{% url 'farmers_market_detail_view' fm.fm_slug %}">{{ fm }}</a><br>
-        {% endfor %}</p>
+        {% endfor %}
     </div>
 </div>
 <hr>
 <div class="row">
     <div class="small-7 columns boarder-right">
+        {# Button for owner to create status updates #}
+        {% if request.user == object.vendor_user %}
+        <a class="button" data-open="statusModal">Update Status</a>
+        <div class="reveal" id="statusModal" data-reveal>
+            <form class="" action="{% url 'vendor_status_create_view' object.vendor_slug %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ vendor_status_form.as_p }}
+                <input class="button" type="submit" name="submit" value="Submit Status">
+            </form>
+            <br>
+            <button class="close-button" data-close aria-label="Close modal" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
+        {% if status_list %}
         <div class="callout">
+            {# Will show status updates from the previous 7 days #}
             <h3>This week's Status Updates.</h3>
-            {# Experimntal, status form in modal window #}
-            {% if request.user == object.vendor_user %}
-                <a class="float-right button" data-open="statusModal">Status Create</a>
-                <div class="reveal" id="statusModal" data-reveal>
-                    {# {% include "review/review_form.html" %}#}
-                    <form class="" action="{% url 'vendor_status_create_view' object.vendor_slug %}" method="post">
-                        {% csrf_token %}
-                        {{ vendor_status_form.as_p }}
-                        <input class="button" type="submit" name="submit" value="Submit Status">
-                    </form>
-                    <button class="close-button" data-close aria-label="Close modal" type="button">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endif %}
-            <hr>
             {% for status in status_list %}
+            <hr>
             <div class="row">
                 <div class="large-2 columns">
                     {{ status.status_present }}
@@ -107,21 +109,37 @@
                 </div>
                 <div class="small-2 columns">
                     {% if status.status_picture %}
-                        <img class="thumbnail" src="{{ status.status_picture }}" alt="" /><br>
+                        <img class="list-thumb" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
                     {% endif %}
                 </div>
             </div>
-                <a data-open="statusDetailModal">details</a>
-                <div class="reveal" id="statusDetailModal" data-reveal>
-                    <p class="lead">{{ object.fm_name }}</p>
-                    <img class="" src="{{ status.status_picture }}" alt="" />
-                    <p>{{ status.status_comment}}</p>
-                    <button class="close-button" data-close aria-label="Close modal" type="button">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
+
+            <a data-open="statusDetailModal">details</a>
+            {# Status Detail Modal #}
+            <div class="reveal" id="statusDetailModal" data-reveal>
+                <p class="lead">{{ object.fm_name }}</p>
+                <br>
+                {% if status.status_picture %}
+                    <img class="" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
+                    <br>
+                {% endif %}
+                <p>{{ status.status_comment}}</p>
+                {# Delete Button #}
+                {% if request.user == object.vendor_user %}
+                <form class="" action="{% url 'status_delete_view' status.pk %}" method="post">
+                    {% csrf_token %}
+                    <input class="alert hollow button float-right" type="submit" name="name" value="Delete Status">
+                </form>
+                {% endif %}
+                {# Close Modal #}
+                <button class="close-button" data-close aria-label="Close modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %} {# end for status in status_list #}
         </div>
+        {% endif %} {# end if status_list #}
+
         <h2>REVIEWS........</h2>
         <hr>
         {% get_reviews object as reviews %}
@@ -144,7 +162,6 @@
                 </div>
             </div>
         {% endfor %}
-
     </div>
     <div class="small-5 columns">
         <p><strong>Contact: </strong>{{ object.vendor_contact_name }}<br>
@@ -158,9 +175,12 @@
             <br>
             <p>Hello, {{ request.user }} you may edit your listing.</p>
             <a class="button" href="{% url 'vendor_update_view' object.vendor_slug %}">Update This Listing</a>
+            <br>
+            <a class="alert hollow button" href="{% url 'vendor_delete_view' object.vendor_slug %}">Delete</a>
         {% endif %}
     </div>
 </div>
+
 
 
 {% endblock %}

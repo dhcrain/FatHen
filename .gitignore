@@ -7,4 +7,5 @@ __pycache__/
 db.sqlite3
 fm_images/
 vendor_images/
+status_images/
 .envrc

@@ -140,7 +140,7 @@ class Status(models.Model):
     status_vendor = models.ForeignKey(Vendor, null=True, blank=True)
     status_fm = models.ForeignKey(FarmersMarket, null=True, blank=True)
     status_present = models.BooleanField()
-    status_picture = models.ImageField(upload_to="status_images", blank=True)
+    status_picture = models.ImageField(upload_to="status_images", blank=True, null=True)
     status_comment = models.TextField(blank=True)
     status_created = models.DateTimeField(auto_now_add=True)
 

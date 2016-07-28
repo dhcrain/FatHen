@@ -7,7 +7,8 @@ from functools import reduce
 from django.db.models import Q
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.views.generic import TemplateView, UpdateView, CreateView, DetailView, ListView
+from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic import TemplateView, CreateView, DetailView, ListView
 # from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -199,6 +200,19 @@ class VendorUpdateView(UpdateView):
         return reverse('vendor_detail_view',args=(self.object.vendor_slug,))
 
 
+class VendorDeleteView(LoginRequiredMixin, DeleteView):
+    model = Vendor
+    slug_field = 'vendor_slug'
+    slug_url_kwarg = 'vendor_slug'
+    success_url = reverse_lazy('index_view')
+
+    def get_object(self, queryset=None):
+        vendor = super().get_object()
+        if not vendor.vendor_user == self.request.user:
+            raise Http404
+        return vendor
+
+
 class RatingVendorCreateView(CreateView):
     model = Rating
     fields = ['rating', 'rating_comment', 'rating_picture']
@@ -226,6 +240,16 @@ class StatusCreateView(CreateView):
         status_form.status_user = self.request.user
         return super().form_valid(form)
 
+class StatusDeleteView(DeleteView):
+    success_url = reverse_lazy("index_view")
+
+    def get_queryset(self):
+        return Status.objects.filter(status_user=self.request.user)
+
+
+    # def get_success_url(self):
+    #     pk = self.kwargs.get('pk')
+    #     return reverse('vendor_detail_view',args=(vendor_slug,))
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'profile.html'
