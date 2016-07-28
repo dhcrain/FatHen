@@ -6,18 +6,12 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% block title %}frmrsmrkt.com{% endblock %}</title>
-        <link rel="stylesheet" href="{% static "review_app/css/foundation.min.css" %}" />
-        <link rel="stylesheet" href="{% static "review_app/css/app.css" %}" />
+        <link rel="stylesheet" href="{% static 'review_app/css/foundation.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'review_app/css/app.css' %}" />
         {% block head %}{% endblock %}
     </head>
     <body>
     {# nav bar #}
-        <div class="title-bar" >
-            <div class="title-bar-left"><!-- Content --></div>
-            <div class="title-bar-right"><!-- Content --></div>
-        </div>
-
-
     <div data-sticky-container>
     <div class="top-bar" data-sticky data-options="marginTop:0;" style="width:100%">
         <div class="top-bar-left">
@@ -57,9 +51,9 @@
             {% endblock %}
         </div>
     </div>
-        <script src="{% static "review_app/js/vendor/jquery.js" %}"></script>
-        <script src="{% static "review_app/js/vendor/what-input.js" %}"></script>
-        <script src="{% static "review_app/js/vendor/foundation.min.js" %}"></script>
+        <script src="{% static 'review_app/js/vendor/jquery.js' %}"></script>
+        <script src="{% static 'review_app/js/vendor/what-input.js' %}"></script>
+        <script src="{% static 'review_app/js/vendor/foundation.min.js' %}"></script>
         <script>
           $(document).foundation();
         </script>

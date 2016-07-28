@@ -169,10 +169,8 @@ AWS_SECRET_ACCESS_KEY = aws_secret_access_key
 # This controls how the `static` template tag from `staticfiles` gets expanded, if you're using it.
 # We also use it in the next setting.
 AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(aws_bucket_name)
-print(aws_bucket_name)
-if aws_bucket_name:
-    print(aws_bucket_name)
 
+if aws_bucket_name:
     # This is used by the `static` template tag from `static`, if you're using that. Or if anything else
     # refers directly to STATIC_URL. So it's safest to always set it.
     STATIC_URL = 'https://{}/'.format(AWS_S3_CUSTOM_DOMAIN)
