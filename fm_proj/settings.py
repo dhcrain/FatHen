@@ -173,16 +173,19 @@ AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(aws_bucket_name)
 if aws_bucket_name:
     # This is used by the `static` template tag from `static`, if you're using that. Or if anything else
     # refers directly to STATIC_URL. So it's safest to always set it.
+
     # STATIC_URL = 'https://{}/'.format(AWS_S3_CUSTOM_DOMAIN)
+
     AWS_S3_FILE_OVERWRITE = False
     # Tell the staticfiles app to use S3Boto storage when writing the collected static files (when
     # you run `collectstatic`).
-    # STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
     # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
     # DEFAULT_FILE_STORAGE = 'libs.storages.S3Storage.S3Storage'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
+    STATICFILES_LOCATION = 'static'
 
 # For django-review
 # this would use a RadioSelect instead of the default Select
