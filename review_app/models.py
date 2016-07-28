@@ -69,14 +69,14 @@ class FarmersMarket(models.Model):
         if self.fm_picture:
             return self.fm_picture.url
         else:
-            return "../../static/review_app/img/farmersmarket-icon.png"
+            return "https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/farmersmarket-icon.png"
 
     @property
     def fm_banner_picture_url(self):
         if self.fm_banner_picture:
             return self.fm_banner_picture.url
         else:
-            return "../../static/review_app/img/greens.jpg"
+            return "https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/greens.jpg"
 
     def get_absolute_url(self):
         return reverse('farmers_market_detail_view', kwargs={'fm_slug': self.fm_slug})
@@ -108,14 +108,14 @@ class Vendor(models.Model):
         if self.vendor_picture:
             return self.vendor_picture.url
         else:
-            return "../../static/review_app/img/vendor_icon.png"
+            return "https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/vendor_icon.png"
 
     @property
     def vendor_banner_picture_url(self):
         if self.vendor_banner_picture:
             return self.vendor_banner_picture.url
         else:
-            return "../../static/review_app/img/pea.jpg"
+            return "https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/pea.jpg"
 
     def get_absolute_url(self):
         return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
