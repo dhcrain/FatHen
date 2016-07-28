@@ -1,18 +1,26 @@
-import boto
-import sys
-from boto.s3.key import Key
+{% extends "base.html" %}
 
-aws_bucket_name = os.environ['aws_bucket']
-aws_access_key_id = os.environ['aws_access_key_id']
-aws_secret_access_key = os.environ['aws_secret_access_key']
+{% block hero %}
+<div class="home-hero">
 
-AWS_STORAGE_BUCKET_NAME = 'aws_bucket_name'
-AWS_ACCESS_KEY_ID = 'aws_access_key_id'
-AWS_SECRET_ACCESS_KEY = 'aws_secret_access_key'
-
-
-conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
-bucket = conn.get_bucket(BUCKET_NAME, validate=False)
-k = Key(bucket)
-k.key = 'barbaz'
-k.set_contents_from_filename('/tmp/barbaz.txt')
+</div>
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="small-6 large-centered columns">
+            {% if user.is_authenticated %}
+            <p>Welcome, {{ request.user }} You are logged in</p>
+            {% else %}
+            <form class="" action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                {{ login_form.as_p }}
+                <input class="expanded button" type="submit" name="login" value="Login">
+            </form>
+            <br>
+            <hr>
+            <h2 class="text-center">OR</h2>
+            <a class="expanded button success" href="{% url 'register_view' %}"><b>Create an Account</b></a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
