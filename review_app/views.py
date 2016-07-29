@@ -59,18 +59,19 @@ class FarmersMarketDetailView(DetailView):
         fm_slug = self.kwargs.get('fm_slug')
         sort = self.request.GET.get('sort')
         rated = self.request.GET.get('rated')
-        forecast = self.request.GET.get('forecast')
+        one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
+        # forecast = self.request.GET.get('forecast')
         # if forecast:
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
         g = geocoder.google(location.fm_address)
         api_key = os.environ['forecast_api']
         lat = g.latlng[0]
         lng = g.latlng[1]
-        # current_time = datetime.datetime.now() # need time szone report
+        # current_time = datetime.datetime.now() # need time zone suport?
         url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, lat, lng)
         response = requests.get(url).json()
-        context['forecast_summary'] = response['daily']['summary']
-        context['forecast'] = response['daily']['data']
+        context['forecast_summary'] = response['daily']['summary']  # weekly summary
+        context['forecast'] = response['daily']['data']  # weekly forcast list
 
         if sort:
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).order_by(sort)
@@ -81,14 +82,13 @@ class FarmersMarketDetailView(DetailView):
             preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).filter(pk__in=pk_list).order_by(preserved)
         else:
-            context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug)
+            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) 
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
         google_api = os.environ['google_maps_api']
         map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(google_api, mrkt.fm_address)
         context['google_map'] = map_url
         context['fm_status_form'] = StatusCreateForm()
         context['review_form'] = ReviewForm(mrkt)
-        one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
         return context
 

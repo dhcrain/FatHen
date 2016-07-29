@@ -170,6 +170,7 @@
                 {% endfor %}
             </div>
             {% endif %}
+
             <h3>Vendors you will see here.</h3>
             {% if vendor_list %}
             Sort...
@@ -178,6 +179,7 @@
                 <a href="{% url 'farmers_market_detail_view' object.fm_slug %}?sort=-vendor_updated" class="button">Recently Updated</a>
                 <a href="{% url 'farmers_market_detail_view' object.fm_slug %}" class="button">Alphabetical</a>
             </div>
+
             {% for vendor in vendor_list %}
                 <div class="callout">
                     <div class="row">
@@ -185,10 +187,14 @@
                             <img class="list-thumb" src="{{ vendor.vendor_picture_url }}" alt="" />
                         </div>
                         <div class="large-7  columns">
-                            <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}"><strong>{{ vendor }}</strong></a>
+                            <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}"><h5>{{ vendor }}</h5></a>
                             {% if vendor.vendor_type %}
                                 <p>{{ vendor.vendor_type }}</p>
                             {% endif %}
+                            {% if vendor.get_recent_status.status_comment %}
+                                <p>{{ vendor.get_recent_status.status_comment }} : {{ vendor.get_recent_status.status_present }}</p>
+                            {% endif %}
+
                         </div>
                         <div class="small-3 columns">
                             {% total_review_average vendor 5 as stars %}

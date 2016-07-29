@@ -5,6 +5,7 @@ from localflavor.us.models import PhoneNumberField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.urlresolvers import reverse
+import datetime
 
 
 
@@ -102,6 +103,11 @@ class Vendor(models.Model):
 
     def __str__(self):
         return self.vendor_name
+
+    @property
+    def get_recent_status(self):
+        one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
+        return self.status_set.filter(status_created__gt=one_week).first()
 
     @property
     def vendor_picture_url(self):
