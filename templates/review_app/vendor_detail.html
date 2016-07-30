@@ -48,13 +48,10 @@
             {% if has_reviewed %}
                 <a class="large button disabled radius" href="#"><strong>Thanks for your review!</strong><br><small>You have already reviewed this Vendor</small></a>
             {% else %}
-                <a class="large button success radius" href="{% url "review_create" content_type='vendor' object_id=vendor.pk %}">Add a Review</a>
-
-
-                <p><a data-open="exampleModal1">review modal</a></p>
-
-
-                <div class="reveal" id="exampleModal1" data-reveal>
+                {# opens modal window #}
+                <a data-open="reviewModal" class="large button success radius" >Add a Review</a>
+                {# Review Modal #}
+                <div class="reveal" id="reviewModal" data-reveal>
                     <h3>Review {{ vendor.vendor_name }}</h3>
                     <form method="post" action="{% url 'review_create' content_type='vendor' object_id=vendor.pk %}">
                         {% csrf_token %}
@@ -65,14 +62,10 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
             {% endif %}
         {% else %}
             <a class="large button disabled radius text-center" href="#">Add a Review<br><small>Must Login to review.</small></a>
         {% endif %}
-
-
-
     </div>
 </div>
 <hr>

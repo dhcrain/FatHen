@@ -53,7 +53,20 @@
                 {% if has_reviewed %}
                     <a class="large button disabled radius text-center" href="#"><strong>Thanks for your review!</strong><br><small>You have already reviewed this Farmers Market</small></a>
                 {% else %}
-                    <a class="large button success radius text-center" href="{% url "review_create" content_type='farmersmarket' object_id=farmersmarket.pk %}">Add a Review</a>
+                {# opens modal window #}
+                <a data-open="reviewModal" class="large button success radius" >Add a Review</a>
+                {# Review Modal #}
+                <div class="reveal" id="reviewModal" data-reveal>
+                    <h3>Review {{ vendor.vendor_name }}</h3>
+                    <form method="post" action="{% url 'review_create' content_type='farmersmarket' object_id=farmersmarket.pk %}">
+                        {% csrf_token %}
+                        {{ review_form.as_p }}
+                        <input type="submit" value="Save" />
+                    </form>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 {% endif %}
             {% else %}
                     <a class="large button disabled radius text-center" href="#">Add a Review<br><small>Must Login to review.</small></a>
@@ -73,7 +86,9 @@
                 <strong>Facilty Type:</strong> {{ object.fm_facility_type }}<br>
                 <strong>Hours:</strong> {{ object.fm_hrs_of_operation }}<br>
                 <strong>Programs Accpted:</strong> {{ object.fm_programs_accepted }}</p>
-                <a class="secondary hollow button" href="{{ object.fm_website }}"><strong>Website</strong></a>
+                {% if object.fm_website %}
+                    <a class="secondary hollow button" href="{{ object.fm_website }}"><strong>Website</strong></a>
+                {% endif %}
                 <input data-open="forecast" class="secondary hollow button" type="submit" name="forecast" value="7-Day Forecast">
                 {# <form class="" action="" method="get">#}
                     {# <a data-open="forecast" class="secondary hollow button" name="forecast" type="submit" href="?forecast"><strong>7-day Forcast</strong></a>#}
