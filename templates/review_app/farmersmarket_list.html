@@ -49,10 +49,32 @@
                 <h5>Search for Farmers Markets</h5>
                 {# search #}
                 <form id="searchform" action="{% url 'search_list_view' %}" method="get" accept-charset="utf-8">
-                    <div class="">
-                        <input class="" id="searchbox" name="q" type="text" placeholder="Search for...">
-                        <button class="button" type="submit">Go!</button>
-                    </div>
+
+                <div class="switch">
+                    <input class="switch-input" id="RadioSwitch1" type="radio" checked name="search_type" value="fm_name">
+                    <label class="switch-paddle" for="RadioSwitch1">
+                        <span class="switch-text">Name</span>
+                    </label>
+                </div>
+
+
+                <div class="switch">
+                    <input class="switch-input" id="RadioSwitch2" type="radio" name="search_type" value="fm_address">
+                    <label class="switch-paddle" for="RadioSwitch2">
+                        <span class="switch-text">Location</span>
+                    </label>
+                </div>
+                <div class="switch">
+                    <input class="switch-input" id="RadioSwitch3" type="radio" name="search_type" value="fm_programs_accepted">
+                    <label class="switch-paddle" for="RadioSwitch3">
+                        <span class="switch-text">Programs Accepted</span>
+                    </label>
+                </div>
+
+                <div class="">
+                    <input class="" id="searchbox" name="q" type="text" placeholder="Search for...">
+                    <button class="button" type="submit">Go!</button>
+                </div>
                 </form>
             </div>
         </div>
