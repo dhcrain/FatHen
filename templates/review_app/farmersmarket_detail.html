@@ -105,7 +105,7 @@
                             <th></th>
                             <th>High</th>
                             <th></th>
-                            <th colspan="2">Percipition Chace</th>
+                            <th colspan="2">Percipition Chance</th>
                         </tr>
 
                         {% for day in forecast %}
@@ -188,30 +188,21 @@
 
             <h3>Vendors you will see here.</h3>
             {% if vendor_list %}
-            Sort...
-            <div class="button-group">
-                <a href="{% url 'farmers_market_detail_view' object.fm_slug %}?rated=-average_rating" class="button">Highest Rated</a>
-                <a href="{% url 'farmers_market_detail_view' object.fm_slug %}?sort=-vendor_updated" class="button">Recently Updated</a>
-                <a href="{% url 'farmers_market_detail_view' object.fm_slug %}" class="button">Alphabetical</a>
-            </div>
-{{ vendor_list.get_recent_status.status_present}}
-            {% for vendor in vendor_list %}
-                {% if vendor.get_recent_status.status_present == True %}
-                    <h4>Will be here this week</h4>
-                    {% include "review_app/includes/vendor_list.html" %}
-                {% elif vendor.get_recent_status.status_present == False %}
-                    <h4>Will not be here this week</h4>
-                    {% include "review_app/includes/vendor_list.html" %}
-                {% else %}
-                    <h4>Have not responded</h4>
-                    {% include "review_app/includes/vendor_list.html" %}
-                {% endif %}
-            {% endfor %}
+                Sort...
+                <div class="button-group">
+                    <a href="{% url 'farmers_market_detail_view' object.fm_slug %}?rated=-average_rating" class="button">Highest Rated</a>
+                    <a href="{% url 'farmers_market_detail_view' object.fm_slug %}?sort=-vendor_updated" class="button">Recently Updated</a>
+                    <a href="{% url 'farmers_market_detail_view' object.fm_slug %}" class="button">Alphabetical</a>
+                </div>
 
-            {# No vendors listed #}
-            {% else %}
-                <br>
-                <a class="button" href="{% url 'vendor_create_view' %}">No Vendors for this Famerms Market, Plase add some.</a>
+                {% for vendor in vendor_list %}
+                    {% include "review_app/includes/vendor_list.html" %}
+                {% endfor %}
+
+                {# No vendors listed #}
+                {% else %}
+                    <br>
+                    <a class="button" href="{% url 'vendor_create_view' %}">No Vendors for this Famerms Market, Plase add some.</a>
             {% endif %}
 
         </div>
