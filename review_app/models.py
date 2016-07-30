@@ -65,6 +65,9 @@ class FarmersMarket(models.Model):
     def __str__(self):
         return self.fm_name
 
+    class Meta:
+        ordering = ['fm_name']
+
     @property
     def fm_picture_url(self):
         if self.fm_picture:
@@ -103,6 +106,12 @@ class Vendor(models.Model):
 
     def __str__(self):
         return self.vendor_name
+
+
+    @property
+    def get_vendor_order_by(self):
+        one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
+        return self.status_set.filter(status_created__gt=one_week).order_by("status_present")
 
     @property
     def get_recent_status(self):

@@ -1,0 +1,26 @@
+{% load review_tags %}
+
+<div class="callout">
+    <div class="row">
+        <div class="large-2 columns">
+            <img class="list-thumb" src="{{ vendor.vendor_picture_url }}" alt="" />
+        </div>
+        <div class="large-7  columns">
+            <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}"><h5>{{ vendor }}</h5></a>
+            {% if vendor.vendor_type %}
+                <p>{{ vendor.vendor_type }}</p>
+            {% endif %}
+            {% if vendor.get_recent_status.status_comment %}
+                <p>{{ vendor.get_recent_status.status_comment }} : {{ vendor.get_recent_status.status_present }}</p>
+            {% endif %}
+        </div>
+        <div class="small-3 columns">
+            {% total_review_average vendor 5 as stars %}
+            {% if stars == 0 %}
+                <span class="float-right">No reviews yet.</span>
+            {% else %}
+                <span class="badge float-right"><strong>{{ stars }}</strong></span>
+            {% endif %}
+        </div>
+    </div>
+</div>

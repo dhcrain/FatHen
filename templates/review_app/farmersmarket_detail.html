@@ -194,34 +194,21 @@
                 <a href="{% url 'farmers_market_detail_view' object.fm_slug %}?sort=-vendor_updated" class="button">Recently Updated</a>
                 <a href="{% url 'farmers_market_detail_view' object.fm_slug %}" class="button">Alphabetical</a>
             </div>
-
+{{ vendor_list.get_recent_status.status_present}}
             {% for vendor in vendor_list %}
-                <div class="callout">
-                    <div class="row">
-                        <div class="large-2 columns">
-                            <img class="list-thumb" src="{{ vendor.vendor_picture_url }}" alt="" />
-                        </div>
-                        <div class="large-7  columns">
-                            <a href="{% url 'vendor_detail_view' vendor.vendor_slug %}"><h5>{{ vendor }}</h5></a>
-                            {% if vendor.vendor_type %}
-                                <p>{{ vendor.vendor_type }}</p>
-                            {% endif %}
-                            {% if vendor.get_recent_status.status_comment %}
-                                <p>{{ vendor.get_recent_status.status_comment }} : {{ vendor.get_recent_status.status_present }}</p>
-                            {% endif %}
-
-                        </div>
-                        <div class="small-3 columns">
-                            {% total_review_average vendor 5 as stars %}
-                            {% if stars == 0 %}
-                                <span class="float-right">No reviews yet.</span>
-                            {% else %}
-                                <span class="badge float-right"><strong>{{ stars }}</strong></span>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+                {% if vendor.get_recent_status.status_present == True %}
+                    <h4>Will be here this week</h4>
+                    {% include "review_app/includes/vendor_list.html" %}
+                {% elif vendor.get_recent_status.status_present == False %}
+                    <h4>Will not be here this week</h4>
+                    {% include "review_app/includes/vendor_list.html" %}
+                {% else %}
+                    <h4>Have not responded</h4>
+                    {% include "review_app/includes/vendor_list.html" %}
+                {% endif %}
             {% endfor %}
+
+            {# No vendors listed #}
             {% else %}
                 <br>
                 <a class="button" href="{% url 'vendor_create_view' %}">No Vendors for this Famerms Market, Plase add some.</a>

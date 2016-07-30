@@ -8,6 +8,12 @@ button.round, .button.round {
     opacity: .75;
     cursor: not-allowed;
 }
+.button {
+    background-color: #5E5262;
+}
+input:checked~.switch-paddle {
+    background: #5E5262;
+}
 input.secondary.hollow.button {
     font-weight: bold;
 }
@@ -59,4 +65,21 @@ input.secondary.hollow.button {
 /* display rating radio buttons in a row */
 ul#id_category_4 li {
     display: inline-block;
+}
+/* Nav Bar */
+.menu-logo {
+    margin: 0;
+    padding-top: -10px;
+}
+.top-bar, .top-bar ul {
+    background-color: #5E5262;
+}
+.top-bar a {
+    color: #F5F5F5;
+}
+.top-bar a:hover {
+    color: #f3715b;
+}
+.menu-text {
+    color: #F5F5F5;
 }
