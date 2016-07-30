@@ -59,14 +59,22 @@ class FarmersMarketDetailView(DetailView):
         fm_slug = self.kwargs.get('fm_slug')
         sort = self.request.GET.get('sort')
         rated = self.request.GET.get('rated')
-        one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
-        # forecast = self.request.GET.get('forecast')
+        forecast = self.request.GET.get('forecast')
         # if forecast:
+
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
+        print(location.fm_address)
+
+        # google_geocode_api = os.environ['google_geocode_api']
+        # geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?address={}&key={}".format(location.fm_address, google_geocode_api)
+        # geocode_data = requests.get(geocode_url).text
+        # print(geocode_data)
+
         g = geocoder.google(location.fm_address)
-        api_key = os.environ['forecast_api']
+
         lat = g.latlng[0]
         lng = g.latlng[1]
+        api_key = os.environ['forecast_api']
         # current_time = datetime.datetime.now() # need time zone suport?
         url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, lat, lng)
         response = requests.get(url).json()
@@ -82,13 +90,14 @@ class FarmersMarketDetailView(DetailView):
             preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).filter(pk__in=pk_list).order_by(preserved)
         else:
-            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) 
+            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug)
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
         google_api = os.environ['google_maps_api']
         map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(google_api, mrkt.fm_address)
         context['google_map'] = map_url
         context['fm_status_form'] = StatusCreateForm()
         context['review_form'] = ReviewForm(mrkt)
+        one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
         return context
 
@@ -271,12 +280,16 @@ class SearchListView(ListView):
     def get_queryset(self):
         result = super().get_queryset()
         query = self.request.GET.get('q')
+        search_type = self.request.GET.get('search_type')
+        print(search_type)
         if query:
             query_list = query.split()
-            result = result.filter(
-                reduce(operator.and_, (Q(fm_name__icontains=q) for q in query_list)) |
-                reduce(operator.and_, (Q(fm_description__icontains=q) for q in query_list))
-            )
+            if search_type == 'fm_name':
+                result = result.filter(reduce(operator.and_, (Q(fm_name__icontains=q) for q in query_list)))
+            if search_type == 'fm_address':
+                result = result.filter(reduce(operator.and_, (Q(fm_address__icontains=q) for q in query_list)))
+            if search_type == 'fm_programs_accepted':
+                result = result.filter(reduce(operator.and_, (Q(fm_programs_accepted__icontains=q) for q in query_list)))
         return result
 
 
