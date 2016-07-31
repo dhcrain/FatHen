@@ -4,12 +4,12 @@ import requests
 import geocoder
 import os
 from functools import reduce
-from django.db.models import Q
-from django.shortcuts import render
+from django.db.models import Case, When, Q
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic import TemplateView, CreateView, DetailView, ListView
-# from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -17,7 +17,6 @@ from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating
 from review_app.forms import StatusCreateForm
 from review.templatetags.review_tags import total_review_average
 from review.forms import ReviewForm
-from django.db.models import Case, When
 # Create your views here.
 
 class IndexView(TemplateView):
@@ -64,7 +63,7 @@ class FarmersMarketDetailView(DetailView):
         # if forecast:
 
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
-        print(location.fm_address)
+        # print(location.fm_address)
 
         # google_geocode_api = os.environ['google_geocode_api']
         # geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?address={}&key={}".format(location.fm_address, google_geocode_api)
@@ -96,7 +95,17 @@ class FarmersMarketDetailView(DetailView):
             context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug).filter(status__status_present=False)
 
             # context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
-            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
+            vendor_list = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
+            paginator = Paginator(vendor_list, 25) # Show 25 vendors per page
+            page = self.request.GET.get('page')
+            try:
+                context['vendor_list'] = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                context['vendor_list'] = paginator.page(1)
+            except EmptyPage:
+                # If page is out of range (e.g. 9999), deliver last page of results.
+                context['vendor_list'] = paginator.page(paginator.num_pages)
 
 
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
@@ -132,6 +141,15 @@ class FarmersMarketCreateView(CreateView):
               'fm_website', 'fm_facility_type', 'fm_county', 'fm_address',
               'fm_programs_accepted', 'fm_phone', 'fm_hrs_of_operation',
               'fm_seasons_of_operation', 'fm_handicap_accessible', 'fm_picture', 'fm_banner_picture']
+
+    def form_valid(self, form):
+        fm_form = form.save(commit=False)
+        fm_form.fm_user = self.request.user
+        fm_address = form.cleaned_data['fm_address']
+        g = geocoder.google(fm_address)
+        fm_form.fm_lat = g.latlng[0]
+        fm_form.fm_long = g.latlng[1]
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))

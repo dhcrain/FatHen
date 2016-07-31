@@ -200,7 +200,26 @@
                     <br>
                     <a class="button" href="{% url 'vendor_create_view' %}">No Vendors for this Famerms Market, Plase add some.</a>
             {% endif %}
-
+            {# pagination #}
+            <ul class="pagination text-center" role="navigation" aria-label="Pagination">
+                {% if vendor_list.has_previous %}
+                    <li class="pagination-previous"><a href="?page={{ vendor_list.previous_page_number }}">Previous</a></li>
+                {% else %}
+                    <li class="pagination-previous disabled">Previous <span class="show-for-sr">page</span></li>
+                {% endif %}
+                {% for linkpage in vendor_list.paginator.page_range  %}
+                    {% if linkpage == vendor_list.number %}
+                        <li class="current"><span class="show-for-sr">You're on page</span>{{ linkpage }}</li>
+                    {% else %}
+                        <li><a href="?page={{ linkpage }}" aria-label="Page {{ linkpage }}">{{ linkpage }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if vendor_list.has_next %}
+                    <li class="pagination-next"><a href="?page={{ vendor_list.next_page_number }}">Next</a></li>
+                {% else %}
+                    <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
+                {% endif %}
+            </ul>
         </div>
         <div class="small-5 columns">
             {# Map #}
