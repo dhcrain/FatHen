@@ -167,6 +167,10 @@ class FarmersMarketUpdateView(UpdateView):
     def form_valid(self, form):
         fm_form = form.save(commit=False)
         fm_form.fm_user = self.request.user
+        fm_address = form.cleaned_data['fm_address']
+        g = geocoder.google(fm_address)
+        fm_form.fm_lat = g.latlng[0]
+        fm_form.fm_long = g.latlng[1]
         return super().form_valid(form)
 
     def get_success_url(self):
