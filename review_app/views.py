@@ -45,14 +45,6 @@ class FarmersMarketListView(ListView):
             preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
             return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)
         else:
-            for fm in FarmersMarket.objects.all():
-
-                g = geocoder.google(fm.fm_address)
-                print(fm, g.latlng)
-                import time
-                time.sleep(.15)
-                FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
-
             return FarmersMarket.objects.all()
 
 
@@ -71,21 +63,18 @@ class FarmersMarketDetailView(DetailView):
         forecast = self.request.GET.get('forecast')
         # if forecast:
 
+        # can hopefully take one once all lat.lngs are in db, need to tell it where to get new in from in the weather api
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
-        # print(location.fm_address)
-
-        # google_geocode_api = os.environ['google_geocode_api']
-        # geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?address={}&key={}".format(location.fm_address, google_geocode_api)
-        # geocode_data = requests.get(geocode_url).text
-        # print(geocode_data)
-
         g = geocoder.google(location.fm_address)
 
         lat = g.latlng[0]
         lng = g.latlng[1]
+        print(location.fm_name, g.latlng)
+        FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
+
         api_key = os.environ['forecast_api']
         # current_time = datetime.datetime.now() # need time zone suport?
-        url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, lat, lng)
+        url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, location.fm_lat, location.fm_long)
         response = requests.get(url).json()
         context['forecast_summary'] = response['daily']['summary']  # weekly summary
         context['forecast'] = response['daily']['data']  # weekly forcast list
