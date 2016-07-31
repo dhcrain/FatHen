@@ -46,12 +46,12 @@ class FarmersMarketListView(ListView):
             return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)
         else:
             for fm in FarmersMarket.objects.all():
-                if not fm.fm_lat:
-                    g = geocoder.google(fm.fm_address)
-                    print(fm, g.latlng)
-                    import time
-                    time.sleep(.5)
-                    FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
+
+                g = geocoder.google(fm.fm_address)
+                print(fm, g.latlng)
+                import time
+                time.sleep(.25)
+                FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
 
             return FarmersMarket.objects.all()
 
