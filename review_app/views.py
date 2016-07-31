@@ -44,6 +44,13 @@ class FarmersMarketListView(ListView):
             preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
             return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)
         else:
+            for fm in FarmersMarket.objects.all():
+                g = geocoder.google(fm.fm_address)
+                print(fm, g.latlng)
+                import time
+                time.sleep(1)
+                FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
+
             return FarmersMarket.objects.all()
 
 
