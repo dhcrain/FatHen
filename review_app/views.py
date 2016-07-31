@@ -50,7 +50,7 @@ class FarmersMarketListView(ListView):
                 g = geocoder.google(fm.fm_address)
                 print(fm, g.latlng)
                 import time
-                time.sleep(.25)
+                time.sleep(.15)
                 FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
 
             return FarmersMarket.objects.all()
