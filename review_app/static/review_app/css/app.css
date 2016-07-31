@@ -59,6 +59,9 @@ input.secondary.hollow.button {
     top: -125px;
     margin-bottom: -125px;
 }
+.status-picture {
+    max-height: 30rem;
+}
 .fm-hero {
 
 }

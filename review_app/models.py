@@ -158,7 +158,7 @@ class Status(models.Model):
     NO = 'No'
     NO_RESPONSE = 'No Response'
     present_choices = ((YES, 'Yes'), (NO, 'No'), (NO_RESPONSE, "No Response"))
-    status_present = models.CharField(max_length=10, choices=present_choices, default=NO_RESPONSE)
+    status_present = models.CharField(max_length=11, choices=present_choices, default=NO_RESPONSE)
     status_picture = models.ImageField(upload_to="status_images", blank=True, null=True)
     status_comment = models.TextField(blank=True)
     status_created = models.DateTimeField(auto_now_add=True)

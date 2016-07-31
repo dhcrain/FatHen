@@ -1,0 +1,46 @@
+{% if status_list %}
+<div class="callout">
+    {# Will show status updates from the previous 7 days #}
+    <h3>This week's Status Updates.</h3>
+    {% for status in status_list %}
+    <hr>
+    <div class="row">
+        <div class="large-2 columns">
+            <p>{% if status.status_present == 'Yes' %}✔️{% else %}✖️{% endif %} Comming this week?</p>
+        </div>
+        <div class="large-8 columns">
+            <strong>{{ status.status_comment }}</strong><br>
+            <small>{{ status.status_created|date:"D, M d" }}</small>
+        </div>
+        <div class="small-2 columns">
+            {% if status.status_picture %}
+                <img class="list-thumb" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
+            {% endif %}
+            <a data-open="statusDetailModal{{ status.pk }}">details</a>
+        </div>
+    </div>
+
+    {# Status Detail Modal #}
+    <div class="reveal" id="statusDetailModal{{ status.pk }}" data-reveal>
+        <p class="lead">{{ object.fm_name }}{{ object.vendor_name }}</p>
+        <br>
+        {% if status.status_picture %}
+            <img class="float-center status-picture" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
+            <br>
+        {% endif %}
+        <p>{{ status.status_comment}}</p>
+        {# Delete Button #}
+        {% if request.user == object.vendor_user %}
+        <form class="" action="{% url 'status_delete_view' status.pk %}" method="post">
+            {% csrf_token %}
+            <input class="alert hollow button float-right" type="submit" name="name" value="Delete Status">
+        </form>
+        {% endif %}
+        {# Close Modal #}
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %} {# end for status in status_list #}
+</div>
+{% endif %} {# end if status_list #}
