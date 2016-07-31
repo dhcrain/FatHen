@@ -65,12 +65,11 @@ class FarmersMarketDetailView(DetailView):
 
         # can hopefully take one once all lat.lngs are in db, need to tell it where to get new in from in the weather api
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
-        g = geocoder.google(location.fm_address)
-
-        lat = g.latlng[0]
-        lng = g.latlng[1]
-        print(location.fm_name, g.latlng)
-        FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
+        # g = geocoder.google(location.fm_address)
+        # lat = g.latlng[0]
+        # lng = g.latlng[1]
+        # print(location.fm_name, g.latlng)
+        # FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
 
         api_key = os.environ['forecast_api']
         # current_time = datetime.datetime.now() # need time zone suport?
@@ -78,7 +77,7 @@ class FarmersMarketDetailView(DetailView):
         response = requests.get(url).json()
         context['forecast_summary'] = response['daily']['summary']  # weekly summary
         context['forecast'] = response['daily']['data']  # weekly forcast list
-
+        context['forecast_iframe_url'] = "http://forecast.io/embed/#lat={}&lon={}&name={}".format(location.fm_lat, location.fm_long, location.fm_name)
         if sort:
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).order_by(sort)
         elif rated:

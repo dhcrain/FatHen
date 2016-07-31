@@ -1,1 +1,1 @@
-web: gunicorn fm_proj.wsgi 
+web: gunicorn fm_proj.wsgi --log-file -

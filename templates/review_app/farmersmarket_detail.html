@@ -94,35 +94,14 @@
                     {# <a data-open="forecast" class="secondary hollow button" name="forecast" type="submit" href="?forecast"><strong>7-day Forcast</strong></a>#}
                 {# </form>#}
                 <div class="large reveal" id="forecast" data-reveal>
-                    <h2>7-Day forecast for {{ object.fm_name }}</h2>
-                    <h3>{{ forecast_summary }}</h3>
-                    <table>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Low</th>
-                            <th></th>
-                            <th>High</th>
-                            <th></th>
-                            <th colspan="2">Percipition Chance</th>
-                        </tr>
+                    {# <h2>7-Day forecast for {{ object.fm_name }}</h2>#}
+                    <iframe id="forecast_embed" type="text/html" frameborder="0" height="245" width="100%" src="{{ forecast_iframe_url }}"> </iframe>
 
-                        {% for day in forecast %}
-                        <tr>
-                            <td>{{ day.time|fromunix|date:"D" }}</td>
-                            <td>{{ day.time|fromunix|date:"M j" }}</td>
-                            <td>{{ day.summary }}</td>
-                            <td>{{ day.temperatureMin|floatformat:"0" }} °F</td>
-                            <td><small>at</small> {{ day.temperatureMinTime|fromunix|localtime|date:"f a" }}</td>
-                            <td>{{ day.temperatureMax|floatformat:"0" }} °F</td>
-                            <td><small>at</small> {{ day.temperatureMaxTime|fromunix|localtime|date:"f a" }}</td>
-                            <td>{{ day.precipProbability|to_percent }}%</td>
-                            <td>{{ day.precipType }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                    <small class="text-center float-center">Powered by <a href="http://forecast.io/">Forecast</a></small>
+                    <h3>{{ forecast_summary }}</h3>
+
+
+
+
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
