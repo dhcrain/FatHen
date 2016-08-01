@@ -73,11 +73,10 @@ class FarmersMarketDetailView(DetailView):
         # FarmersMarket.objects.update(fm_lat=g.latlng[0], fm_long=g.latlng[1])
 
         api_key = os.environ['forecast_api']
-        # current_time = datetime.datetime.now() # need time zone suport?
         url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, location.fm_lat, location.fm_long)
         response = requests.get(url).json()
         context['forecast_summary'] = response['daily']['summary']  # weekly summary
-        context['forecast'] = response['daily']['data']  # weekly forcast list
+        # context['forecast'] = response['daily']['data']  # weekly forcast list
         context['forecast_iframe_url'] = "http://forecast.io/embed/#lat={}&lon={}&name={}".format(location.fm_lat, location.fm_long, location.fm_name)
         if sort:
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).order_by(sort)
@@ -114,6 +113,7 @@ class FarmersMarketDetailView(DetailView):
         context['review_form'] = ReviewForm(mrkt)
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
+        context['num_likes'] = location.fm_likes.count()
         return context
 
 
@@ -178,7 +178,7 @@ class FarmersMarketUpdateView(UpdateView):
 class ProfileFMLikeUpdateView(View):
 
     def post(self, request, fm_slug, pk):
-        # get user profile from request
+        vendor_like = self.request.POST.get('vendor_like')
         profile = Profile.objects.get(id=pk)
         profile.profile_fm_like.add(FarmersMarket.objects.get(fm_slug=fm_slug))
         return HttpResponseRedirect('/fm/' + fm_slug)
@@ -187,8 +187,12 @@ class ProfileFMLikeUpdateView(View):
 class ProfileVendorLikeView(View):
 
     def post(self, request, vendor_slug, pk):
+        vendor_like = self.request.POST.get('vendor_like')
         profile = Profile.objects.get(id=pk)
-        profile.profile_vendor_like.add(Vendor.objects.get(vendor_slug=vendor_slug))
+        if vendor_like == 'Like':
+            profile.profile_vendor_like.add(Vendor.objects.get(vendor_slug=vendor_slug))
+        else:
+            profile.profile_vendor_like.remove(Vendor.objects.get(vendor_slug=vendor_slug))
         return HttpResponseRedirect('/vendor/' + vendor_slug)
 
 
@@ -204,6 +208,7 @@ class VendorDetailView(DetailView):
         context['vendor_status_form'] = StatusCreateForm()
         context['status_list'] = Status.objects.filter(status_vendor=vendor)
         context['review_form'] = ReviewForm(vendor)
+        context['num_likes'] = vendor.vendor_likes.count()
         return context
 
 

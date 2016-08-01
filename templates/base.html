@@ -12,8 +12,15 @@
     </head>
     <body>
     {# nav bar #}
+
+
+<div class="title-bar top-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
+  <button class="menu-icon" type="button" data-toggle></button>
+  <div class="title-bar-title">Menu</div>
+</div>
+
     <div data-sticky-container>
-    <div class="top-bar" data-sticky data-options="marginTop:0;" style="width:100%">
+    <div class="top-bar" data-sticky data-options="marginTop:0;" style="width:100%" id="example-menu">
         <div class="top-bar-left">
             <ul class="dropdown menu" data-dropdown-menu>
                 <li class="menu-logo"><img src="{% static "review_app/img/fathen_cir.gif" %}" alt="FatHen.co" /></li>

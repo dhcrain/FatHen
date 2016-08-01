@@ -46,11 +46,14 @@
             {% endif %}
         </div>
         <div class="small-6 columns">
-
-
+            Count of likes: {{ num_likes }}<br>
             <form class="" action="{% url 'profile_fm_like_update_view' object.fm_slug request.user.pk %}" method="post">
-                {% csrf_token %}
-                <input type="submit" name="fm_like" value="Like">
+            {% csrf_token %}
+                {% if object in request.user.profile.profile_fm_like.all %}
+                    <input type="submit" name="fm_like" value="Unlike">
+                {% else %}
+                    <input type="submit" name="fm_like" value="Like">
+                {% endif %}
             </form>
             <br>
 
@@ -80,7 +83,7 @@
                 </div>
                 {% endif %}
             {% else %}
-                    <a class="large button disabled radius text-center" href="#">Add a Review<br><small>Must Login to review.</small></a>
+                <a class="large button disabled radius text-center" href="#">Add a Review<br><small>Must Login to review.</small></a>
             {% endif %}
             </div>
         </div>
