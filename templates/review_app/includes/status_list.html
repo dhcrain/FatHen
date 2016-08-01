@@ -30,7 +30,7 @@
         {% endif %}
         <p>{{ status.status_comment}}</p>
         {# Delete Button #}
-        {% if request.user == object.vendor_user %}
+        {% if request.user == object.vendor_user or object.fm_user  %}
         <form class="" action="{% url 'status_delete_view' status.pk %}" method="post">
             {% csrf_token %}
             <input class="alert hollow button float-right" type="submit" name="name" value="Delete Status">

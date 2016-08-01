@@ -52,7 +52,7 @@
                 {% csrf_token %}
                 <input type="submit" name="fm_like" value="Like">
             </form>
-
+            <br>
 
 
 
@@ -123,7 +123,7 @@
                 <a class="button" data-open="statusModal">Update Status</a>
                 {# Modal to create new status #}
                 <div class="reveal" id="statusModal" data-reveal>
-                    <form class="" action="{% url 'farmers_market_status_create_view' object.fm_slug %}" method="post">
+                    <form class="" action="{% url 'farmers_market_status_create_view' object.fm_slug %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ fm_status_form.as_p }}
                         <input class="button" type="submit" name="submit" value="Submit Status">

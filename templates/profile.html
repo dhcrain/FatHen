@@ -2,22 +2,31 @@
 
 {% block title %}{{ user }}'s Profile{% endblock %}
 {% block body %}
-    <form class="" action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-    </form>
-    <h1>Profile</h1>
+    <div class="row">
+        <h1>Profile</h1>
+        <div class="small-6 columns">
+            <p>User: {{ object.profile_user}}</p>
+            <p>User type: {{ object.user_type }}</p>
+        </div>
+        <div class="small-6 columns">
+            <img src="{{ object.profile_picture.url }}" alt="" />
+        </div>
+    </div>
     <br>
-    <hr>
-    <p>User: {{ object.profile_user}}</p>
-    <p>User type: {{ object.user_type }}</p>
-    <p>Pic? {{ object.profile_picture }}</p>
-
 <hr>
-    {{ object.profile_fm_like.all }}
-<hr>
+    <h4>Fav FM</h4>
     {% for fm in object.profile_fm_like.all %}
         {{ fm.fm_name }}
     {% endfor %}
 <hr>
+    <h4>Fav Vendors</h4>
+    {% for fm in object.profile_vendor_like.all %}
+        {{ fm.vendor_name }}
+    {% endfor %}
+<hr>
+    <form class="" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="button" type="submit" name="submit" value="Update Profile">
+    </form>
 {% endblock %}

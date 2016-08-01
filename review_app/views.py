@@ -305,10 +305,13 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'profile.html'
     fields = ['user_type', 'profile_picture']
-    success_url = reverse_lazy("index_view")
+    success_url = reverse_lazy('profile_view')
 
     def get_object(self, queryset=None):
         return self.request.user.profile
+
+    # def get_success_url(self):
+    #     return reverse('vendor_detail_view',args=(self.object.vendor_slug,))
 
 
 # modified from https://www.calazan.com/adding-basic-search-to-your-django-site/

@@ -40,5 +40,6 @@ urlpatterns = [
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/status$', VendorStatusCreateView.as_view(), name='vendor_status_create_view'),
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/update$', VendorUpdateView.as_view(), name='vendor_update_view'),
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/delete$', VendorDeleteView.as_view(), name='vendor_delete_view'),
-
+    # API URLs 
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

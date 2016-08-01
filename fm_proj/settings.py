@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     'review_app',
     'hvad',
     'review',
-    # 'user_media',
     'generic_positions',
     'storages',
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -194,3 +194,11 @@ REVIEW_FORM_CHOICE_WIDGET = 'django.forms.widgets.RadioSelect'
 REVIEW_AVOID_MULTIPLE_REVIEWS = True
 # new redirect after review
 REVIEW_UPDATE_SUCCESS_URL = lambda review: review.reviewed_item.get_absolute_url()
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
