@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block hero %}
+<div class="">
+
+</div>
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="small-6 large-centered columns">
+
+            <form class="" action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="expanded button" type="submit" name="like" value="Like">
+            </form>
+            
+        </div>
+    </div>
+{% endblock %}

@@ -9,26 +9,6 @@ import datetime
 
 
 
-class Profile(models.Model):
-    FARMERS_MARKET = 'Farmers Market'
-    VENDOR = 'Vendor'
-    REVIEWER = 'Reviewer'
-    user_type_choices = ((FARMERS_MARKET, 'Farmers Market'), (VENDOR, 'Vendor'), (REVIEWER, 'Reviewer'))
-    profile_user = models.OneToOneField('auth.User')
-    user_type = models.CharField(max_length=15, choices=user_type_choices)
-    profile_picture = models.ImageField(upload_to="profile_images", blank=True)
-
-    def __str__(self):
-        return str(self.profile_user)
-
-    @property
-    def profile_picture_url(self):
-        if self.profile_picture:
-            return self.profile_picture.url
-        else:
-            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
-
-
 class VendorType(models.Model):
     vendor_type = models.CharField(max_length=30)
 
@@ -137,19 +117,29 @@ class Vendor(models.Model):
     def get_absolute_url(self):
         return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
 
-# Not in use
-class Rating(models.Model):
-    # would like a way to limit it to one rating per user per Vendor/FarmersMarket
-    rating_user = models.ForeignKey('auth.User')
-    rating_vendor = models.ForeignKey(Vendor, null=True, blank=True)
-    rating_fm = models.ForeignKey(FarmersMarket, null=True, blank=True)
-    rating_picture = models.ImageField(upload_to="rating_images", blank=True)
-    rating = models.PositiveIntegerField() # choices? 1-5?
-    rating_comment = models.TextField()
-    rating_created = models.DateTimeField(auto_now_add=True)
+
+
+class Profile(models.Model):
+    FARMERS_MARKET = 'Farmers Market'
+    VENDOR = 'Vendor'
+    REVIEWER = 'Reviewer'
+    user_type_choices = ((FARMERS_MARKET, 'Farmers Market'), (VENDOR, 'Vendor'), (REVIEWER, 'Reviewer'))
+    profile_user = models.OneToOneField('auth.User')
+    user_type = models.CharField(max_length=15, choices=user_type_choices)
+    profile_picture = models.ImageField(upload_to="profile_images", blank=True)
+    profile_fm_like = models.ManyToManyField(FarmersMarket, blank=True, related_name='fm_likes')
+    profile_vendor_like = models.ManyToManyField(Vendor, blank=True, related_name='vendor_likes')
+
 
     def __str__(self):
-        return str(self.rating_user)
+        return str(self.profile_user)
+
+    @property
+    def profile_picture_url(self):
+        if self.profile_picture:
+            return self.profile_picture.url
+        else:
+            return "http://www.sessionlogs.com/media/icons/defaultIcon.png"
 
 
 class Status(models.Model):

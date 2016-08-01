@@ -2,11 +2,22 @@
 
 {% block title %}{{ user }}'s Profile{% endblock %}
 {% block body %}
+    <form class="" action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+    </form>
     <h1>Profile</h1>
     <br>
     <hr>
-    <p>{{ object.profile_user}}</p>
-    <p>{{ object.user_type }}</p>
-    <p>{{ object.profile_picture }}</p>
+    <p>User: {{ object.profile_user}}</p>
+    <p>User type: {{ object.user_type }}</p>
+    <p>Pic? {{ object.profile_picture }}</p>
 
+<hr>
+    {{ object.profile_fm_like.all }}
+<hr>
+    {% for fm in object.profile_fm_like.all %}
+        {{ fm.fm_name }}
+    {% endfor %}
+<hr>
 {% endblock %}

@@ -1,13 +1,17 @@
 from django.contrib import admin
-from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating, Status
+from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Status
 # Register your models here.
 
 
 admin.site.register(Profile)
 admin.site.register(VendorType)
 admin.site.register(Vendor)
-# admin.site.register(Rating)
-admin.site.register(Status)
+
+
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('status_comment', 'status_user', 'status_vendor', 'status_fm', 'status_present')
+
+admin.site.register(Status, StatusAdmin)
 
 
 class FarmersMarketAdmin(admin.ModelAdmin):

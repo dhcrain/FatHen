@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from review_app.views import IndexView, ProfileView, StatusCreateView, StatusDeleteView, RegisterView, SearchListView, FarmersMarketListView, FarmersMarketDetailView, FarmersMarketStatusCreateView, FarmersMarketCreateView, FarmersMarketUpdateView, VendorDetailView, VendorStatusCreateView, VendorCreateView, VendorUpdateView, VendorDeleteView, RatingVendorCreateView
+from review_app.views import IndexView, ProfileView, StatusCreateView, StatusDeleteView, RegisterView, SearchListView, FarmersMarketListView, FarmersMarketDetailView, FarmersMarketStatusCreateView, FarmersMarketCreateView, FarmersMarketUpdateView, ProfileFMLikeUpdateView, VendorDetailView, VendorStatusCreateView, VendorCreateView, VendorUpdateView, VendorDeleteView
 
 urlpatterns = [
     url(r'^review/', include('review.urls')),
@@ -34,11 +34,11 @@ urlpatterns = [
     url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/$', FarmersMarketDetailView.as_view(), name='farmers_market_detail_view'),
     url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/status/$', FarmersMarketStatusCreateView.as_view(), name='farmers_market_status_create_view'),
     url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/update/$', FarmersMarketUpdateView.as_view(), name='farmers_market_update_view'),
+    url(r'^fm/(?P<fm_slug>[A-Za-z0-9_\-]+)/like/(?P<pk>\d+)$', ProfileFMLikeUpdateView.as_view(), name='profile_fm_like_update_view'),
     url(r'^vendor/add/$', VendorCreateView.as_view(), name='vendor_create_view'),
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/$', VendorDetailView.as_view(), name='vendor_detail_view'),
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/status$', VendorStatusCreateView.as_view(), name='vendor_status_create_view'),
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/update$', VendorUpdateView.as_view(), name='vendor_update_view'),
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/delete$', VendorDeleteView.as_view(), name='vendor_delete_view'),
-    url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/rate$', RatingVendorCreateView.as_view(), name='rating_vendor_create_view'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -46,6 +46,17 @@
             {% endif %}
         </div>
         <div class="small-6 columns">
+
+
+            <form class="" action="{% url 'profile_fm_like_update_view' object.fm_slug request.user.pk %}" method="post">
+                {% csrf_token %}
+                <input type="submit" name="fm_like" value="Like">
+            </form>
+
+
+
+
+
             {# Rating Button #}
             {% if request.user.is_authenticated %}
                 {% user_has_reviewed object request.user as has_reviewed %}
@@ -96,12 +107,7 @@
                 <div class="large reveal" id="forecast" data-reveal>
                     {# <h2>7-Day forecast for {{ object.fm_name }}</h2>#}
                     <iframe id="forecast_embed" type="text/html" frameborder="0" height="245" width="100%" src="{{ forecast_iframe_url }}"> </iframe>
-
                     <h3>{{ forecast_summary }}</h3>
-
-
-
-
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>

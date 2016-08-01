@@ -13,7 +13,7 @@ from django.views.generic import TemplateView, CreateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Rating, Status
+from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Status
 from review_app.forms import StatusCreateForm
 from review.templatetags.review_tags import total_review_average
 from review.forms import ReviewForm
@@ -174,6 +174,34 @@ class FarmersMarketUpdateView(UpdateView):
         return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))
 
 
+class ProfileFMLikeUpdateView(UpdateView):
+    model = Profile
+    fields = ['profile_fm_like']
+    template_name = 'review_app/fm_like.html'
+
+    # def get_form(self, form_class=None):
+    #     form = super().get_form()
+    #     form.fields["profile_fm_like"].queryset = self.request.user.profile.profile_fm_like.all()
+    #     return form
+
+    # def get_object(self, query_set=None):
+    #     return self.request.user.profile
+
+    def form_valid(self, form, **kwargs):
+        like_form = form.save(commit=False)
+        slug = self.kwargs.get('fm_slug')
+        # like_form.profile_user = self.request.user    # no need to update the user
+        like_form.profile_fm_like.add = FarmersMarket.objects.get(fm_slug=slug)
+        # like_form.save()     # Needed?
+        # form.save_m2m()      # needed?
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        slug = self.kwargs.get('fm_slug')
+        return reverse('farmers_market_detail_view',args=(slug,))
+
+
+
 class VendorDetailView(DetailView):
     model = Vendor
     slug_field = 'vendor_slug'
@@ -252,22 +280,6 @@ class VendorDeleteView(LoginRequiredMixin, DeleteView):
         return vendor
 
 
-class RatingVendorCreateView(CreateView):
-    model = Rating
-    fields = ['rating', 'rating_comment', 'rating_picture']
-
-    def form_valid(self, form):
-        vendor_review_form = form.save(commit=False)
-        vendor_review_form.rating_user = self.request.user
-        vendor_slug = self.kwargs.get('vendor_slug')
-        vendor_review_form.rating_vendor = Vendor.objects.get(vendor_slug=vendor_slug)
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        vendor_slug = self.kwargs.get('vendor_slug')
-        return reverse('vendor_detail_view',args=(vendor_slug,))
-
-
 class StatusCreateView(CreateView):
     model = Status
     fields = ['status_vendor', 'status_fm', 'status_present', 'status_picture', 'status_comment']
@@ -279,12 +291,12 @@ class StatusCreateView(CreateView):
         status_form.status_user = self.request.user
         return super().form_valid(form)
 
+
 class StatusDeleteView(DeleteView):
     success_url = reverse_lazy("index_view") #this needs to change...
 
     def get_queryset(self):
         return Status.objects.filter(status_user=self.request.user)
-
 
     # def get_success_url(self):
     #     pk = self.kwargs.get('pk')
