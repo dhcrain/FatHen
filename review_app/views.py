@@ -4,6 +4,7 @@ import requests
 import geocoder
 import os
 from functools import reduce
+from django.http import HttpResponseRedirect
 from django.db.models import Case, When, Q
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -177,11 +178,18 @@ class FarmersMarketUpdateView(UpdateView):
 class ProfileFMLikeUpdateView(View):
 
     def post(self, request, fm_slug, pk):
-        from django.http import HttpResponseRedirect
         # get user profile from request
         profile = Profile.objects.get(id=pk)
         profile.profile_fm_like.add(FarmersMarket.objects.get(fm_slug=fm_slug))
         return HttpResponseRedirect('/fm/' + fm_slug)
+
+
+class ProfileVendorLikeView(View):
+
+    def post(self, request, vendor_slug, pk):
+        profile = Profile.objects.get(id=pk)
+        profile.profile_vendor_like.add(Vendor.objects.get(vendor_slug=vendor_slug))
+        return HttpResponseRedirect('/vendor/' + vendor_slug)
 
 
 class VendorDetailView(DetailView):

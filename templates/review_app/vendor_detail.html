@@ -42,6 +42,18 @@
         {% endif %}
     </div>
     <div class="small-4 columns">
+        Count of likes: {{ object.profile_set }}<br>
+
+        {% if request.user.profile.profile_vendor_like %}
+            yes, you like this. How can I unlike this?
+        {% else %}
+            <form class="" action="{% url 'profile_vendor_like_view' object.vendor_slug request.user.pk %}" method="post">
+                {% csrf_token %}
+                <input type="submit" name="vendor_like" value="Like">
+            </form>
+        {% endif %}
+        <br>
+
         {# Rating Button #}
         {% if request.user.is_authenticated %}
             {% user_has_reviewed object request.user as has_reviewed %}
