@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.views.generic.edit import UpdateView, DeleteView
-from django.views.generic import TemplateView, CreateView, DetailView, ListView
+from django.views.generic import View, TemplateView, CreateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -89,7 +89,7 @@ class FarmersMarketDetailView(DetailView):
         else:
             context['vendor_list_present'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug).filter(status__status_present="Yes")
             context['vendor_list_no'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug).filter(status__status_present="No")
-            context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug).filter(status__status_present=False)
+            context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug).filter(status__status_present=None)
 
             # context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
             vendor_list = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
@@ -174,32 +174,14 @@ class FarmersMarketUpdateView(UpdateView):
         return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))
 
 
-class ProfileFMLikeUpdateView(UpdateView):
-    model = Profile
-    fields = ['profile_fm_like']
-    template_name = 'review_app/fm_like.html'
+class ProfileFMLikeUpdateView(View):
 
-    # def get_form(self, form_class=None):
-    #     form = super().get_form()
-    #     form.fields["profile_fm_like"].queryset = self.request.user.profile.profile_fm_like.all()
-    #     return form
-
-    # def get_object(self, query_set=None):
-    #     return self.request.user.profile
-
-    def form_valid(self, form, **kwargs):
-        like_form = form.save(commit=False)
-        slug = self.kwargs.get('fm_slug')
-        # like_form.profile_user = self.request.user    # no need to update the user, should already get the right profile to update
-        like_form.profile_fm_like.add = FarmersMarket.objects.get(fm_slug=slug)
-        # like_form.save()     # Needed?
-        # form.save_m2m()      # needed?
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        slug = self.kwargs.get('fm_slug')
-        return reverse('farmers_market_detail_view',args=(slug,))
-
+    def post(self, request, fm_slug, pk):
+        from django.http import HttpResponseRedirect
+        # get user profile from request
+        profile = Profile.objects.get(id=pk)
+        profile.profile_fm_like.add(FarmersMarket.objects.get(fm_slug=fm_slug))
+        return HttpResponseRedirect('/fm/' + fm_slug)
 
 
 class VendorDetailView(DetailView):
@@ -309,9 +291,6 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.profile
-
-    # def get_success_url(self):
-    #     return reverse('vendor_detail_view',args=(self.object.vendor_slug,))
 
 
 # modified from https://www.calazan.com/adding-basic-search-to-your-django-site/

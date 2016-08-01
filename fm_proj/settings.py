@@ -195,6 +195,7 @@ REVIEW_AVOID_MULTIPLE_REVIEWS = True
 # new redirect after review
 REVIEW_UPDATE_SUCCESS_URL = lambda review: review.reviewed_item.get_absolute_url()
 
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
