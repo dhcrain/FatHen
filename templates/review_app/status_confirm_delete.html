@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1>Status Delete</h1>
+    <h2>Can not be undone!</h2>
+    <form class="" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="alert button large" type="submit" name="vendor_delete" value="Are you sure you want to Delete this?">
+    </form>
+{% endblock %}

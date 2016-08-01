@@ -190,7 +190,7 @@ class ProfileFMLikeUpdateView(UpdateView):
     def form_valid(self, form, **kwargs):
         like_form = form.save(commit=False)
         slug = self.kwargs.get('fm_slug')
-        # like_form.profile_user = self.request.user    # no need to update the user
+        # like_form.profile_user = self.request.user    # no need to update the user, should already get the right profile to update
         like_form.profile_fm_like.add = FarmersMarket.objects.get(fm_slug=slug)
         # like_form.save()     # Needed?
         # form.save_m2m()      # needed?
@@ -292,15 +292,15 @@ class StatusCreateView(CreateView):
         return super().form_valid(form)
 
 
-class StatusDeleteView(DeleteView):
-    success_url = reverse_lazy("index_view") #this needs to change...
+class StatusDeleteView(LoginRequiredMixin, DeleteView):
+    success_url = reverse_lazy("index_view")
 
     def get_queryset(self):
         return Status.objects.filter(status_user=self.request.user)
 
-    # def get_success_url(self):
-    #     pk = self.kwargs.get('pk')
-    #     return reverse('vendor_detail_view',args=(vendor_slug,))
+    def get_success_url(self):
+        return self.object.get_status_object.get_absolute_url()
+
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'profile.html'

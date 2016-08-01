@@ -161,6 +161,15 @@ class Status(models.Model):
     class Meta:
         ordering = ['-status_created']
 
+    @property
+    def get_status_object(self):
+        if self.status_vendor:
+            return self.status_vendor
+        elif self.status_fm:
+            return self.status_fm
+
+
+
 
 @receiver(post_save, sender='auth.User')
 def create_user_profile(**kwargs):
