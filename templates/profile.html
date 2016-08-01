@@ -14,15 +14,41 @@
     </div>
     <br>
 <hr>
-    <h4>Fav FM</h4>
-    {% for fm in object.profile_fm_like.all %}
-        {{ fm.fm_name }}<br>
+<h4>Fav FM</h4>
+<div class="row" data-equalizer data-equalize-on="medium">
+    {% for item in object.profile_fm_like.all %}
+        <div class="medium-4 large-3 columns">
+            <div class="callout" data-equalizer-watch>
+                <div class="row">
+                    <div class="small-4 columns">
+                        <img src="{{ item.fm_picture_url}}" alt="{{ item.fm_name }} Picture" />
+                    </div>
+                    <div class="small-8 columns">
+                        <a href="{% url 'farmers_market_detail_view' item.fm_slug %}">{{ item.fm_name }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endfor %}
+    </div>
 <hr>
     <h4>Fav Vendors</h4>
-    {% for fm in object.profile_vendor_like.all %}
-        {{ fm.vendor_name }}<br>
-    {% endfor %}
+    <div class="row" data-equalizer data-equalize-on="medium">
+        {% for item in object.profile_vendor_like.all %}
+            <div class="medium-4 large-3 columns">
+                <div class="callout" data-equalizer-watch>
+                    <div class="row">
+                        <div class="small-4 columns">
+                            <img src="{{ item.vendor_picture_url}}" alt="{{ item.vendor_name }} Picture" />
+                        </div>
+                        <div class="small-8 columns">
+                            <a href="{% url 'vendor_detail_view' item.vendor_slug %}">{{ item.vendor_name }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 <hr>
     <form class="" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
