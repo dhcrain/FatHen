@@ -308,6 +308,15 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return self.request.user.profile
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(profile_user=self.request.user)
+        fm_favs = profile.profile_fm_like.all()
+        vendor_favs = profile.profile_vendor_like.all()
+        one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
+        context['status_list'] = Status.objects.filter(Q(status_vendor__in=vendor_favs) | Q(status_fm__in=fm_favs)).filter(status_created__gt=one_week)
+
+        return context
 
 # modified from https://www.calazan.com/adding-basic-search-to-your-django-site/
 class SearchListView(ListView):

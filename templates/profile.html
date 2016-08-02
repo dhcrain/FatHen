@@ -2,63 +2,107 @@
 
 {% block title %}{{ user }}'s Profile{% endblock %}
 {% block body %}
-    <div class="row">
-        <h1>Profile</h1>
-        <div class="medium-3 columns boarder-right">
-            <img class="profile-thumb" src="{{ object.profile_picture_url }}" alt="" />
-        </div>
-        <div class="medium-9 columns">
-            <p>User: {{ object.profile_user}}</p>
-            <p>User type: {{ object.user_type }}</p>
-        </div>
-    </div>
-    <br>
-<hr>
-<h4>Fav FM</h4>
-{% if object.profile_fm_like.all %}
-<div class="row" data-equalizer data-equalize-on="medium">
-    {% for item in object.profile_fm_like.all %}
-        <div class="medium-4 large-3 columns">
-            <div class="callout" data-equalizer-watch>
-                <div class="row">
-                    <div class="small-4 columns">
-                        <img src="{{ item.fm_picture_url}}" alt="{{ item.fm_name }} Picture" />
-                    </div>
-                    <div class="small-8 columns">
-                        <a href="{% url 'farmers_market_detail_view' item.fm_slug %}">{{ item.fm_name }}</a>
-                    </div>
+
+<div class="row">
+    <h1>Welocome {{ request.user }}</h1>
+    <div class="medium-4 columns boarder-right">
+        <img class="" src="{{ object.profile_picture_url }}" alt="" />
+        <p>User: {{ object.profile_user}}</p>
+        <p>User type: {{ object.user_type }}</p>
+        <hr>
+        {% if object.profile_fm_like.all %}
+            <h4>Fav FM</h4>
+            {% for item in object.profile_fm_like.all %}
+                <div class="callout">
+                    <img src="{{ item.fm_picture_url}}" alt="{{ item.fm_name }} Picture" />
+                    <a href="{% url 'farmers_market_detail_view' item.fm_slug %}">{{ item.fm_name }}</a>
                 </div>
-            </div>
-        </div>
-    {% endfor %}
-</div>
-{% else %}
-    <h3 class="text-center">You don't have any Famers Markets Favorited</h3>
-    <a class="button float-center" href="{% url 'farmers_market_list_view' %}">Find Some</a>
-{% endif %}
-<hr>
-    <h4>Favorite Vendors</h4>
-{% if object.profile_vendor_like.all %}{
-    <div class="row" data-equalizer data-equalize-on="medium">
+            {% endfor %}
+        {% else %}
+            <h3 class="">You don't have any Farmers Markets Favorited</h3>
+            <a class="" href="{% url 'farmers_market_list_view' %}">Find Some</a>
+        {% endif %}
+
+        <hr>
+        <h4>Favorite Vendors</h4>
+        {% if object.profile_vendor_like.all %}
         {% for item in object.profile_vendor_like.all %}
-            <div class="medium-4 large-3 columns">
-                <div class="callout" data-equalizer-watch>
-                    <div class="row">
-                        <div class="small-4 columns">
-                            <img src="{{ item.vendor_picture_url}}" alt="{{ item.vendor_name }} Picture" />
-                        </div>
-                        <div class="small-8 columns">
-                            <a href="{% url 'vendor_detail_view' item.vendor_slug %}">{{ item.vendor_name }}</a>
-                        </div>
-                    </div>
+        <div class="callout">
+            <img src="{{ item.vendor_picture_url}}" alt="{{ item.vendor_name }} Picture" />
+            <a href="{% url 'vendor_detail_view' item.vendor_slug %}">{{ item.vendor_name }}</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <h3 class="text-center">You don't have any Vendors Favorited</h3>
+        <a class="button float-center" href="{% url 'farmers_market_list_view' %}">Find Some</a>
+    {% endif %}
+    </div> {# end medium-4 #}
+    <div class="medium-8 columns">
+        {% if status_list %}
+        <h3>This week's Status Updates.</h3>
+            {# Will show status updates from the previous 7 days #}
+            {% for status in status_list %}
+            <div class="callout">
+            <div class="row">
+                {% if status.status_fm.fm_name %}
+                    <a href="{% url 'farmers_market_detail_view' status.status_fm.fm_slug %}"><h4>{{ status.status_fm.fm_name }}</h4></a>
+                {% endif %}
+                {% if status.status_vendor.vendor_name %}
+                    <a href="{% url 'vendor_detail_view' status.status_vendor.vendor_slug %}"><h4>{{ status.status_vendor.vendor_name }}</h4></a>
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="large-2 columns">
+                    <p>{% if status.status_present == 'Yes' %}✔️{% else %}✖️{% endif %} Coming this week?</p>
+                </div>
+                <div class="large-8 columns">
+                    <strong>{{ status.status_comment }}</strong><br>
+                    <small>{{ status.status_created|date:"D, M d" }}</small>
+                </div>
+                <div class="small-2 columns">
+                    {% if status.status_picture %}
+                        <img class="list-thumb" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
+                    {% endif %}
+                    <a data-open="statusDetailModal{{ status.pk }}">details</a>
                 </div>
             </div>
-        {% endfor %}
-    </div>
-{% else %}
-    <h3 class="text-center">You don't have any Vendors Favorited</h3>
-    <a class="button float-center" href="{% url 'farmers_market_list_view' %}">Find Some</a>
-{% endif %}
+
+
+            {# Status Detail Modal #}
+            <div class="reveal" id="statusDetailModal{{ status.pk }}" data-reveal>
+                <p class="lead">{{ status.status_fm.fm_name }}{{ status.status_vendor.vendor_name }}</p>
+                <hr>
+                {% if status.status_picture %}
+                    <img class="float-center status-picture" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
+                    <hr>
+                {% endif %}
+                <div class="callout">
+                    <p>{{ status.status_comment}}</p>
+                </div>
+                <small>{{ status.status_created }}</small>
+                {# Delete Button #}
+                {% if request.user == object.vendor_user or request.user == object.fm_user  %}
+                <form class="" action="{% url 'status_delete_view' status.pk %}" method="post">
+                    {% csrf_token %}
+                    <input class="alert hollow button float-right" type="submit" name="name" value="Delete Status">
+                </form>
+                {% endif %}
+                {# Close Modal #}
+                <button class="close-button" data-close aria-label="Close modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %} {# end for status in status_list #}
+        </div>
+        {% endif %} {# end if status_list #}
+
+    </div> {# end medium-8 #}
+</div> {# end row #}
+
+<hr>
+
+
+
 <hr>
     <form class="" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}

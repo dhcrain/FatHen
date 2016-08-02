@@ -50,18 +50,18 @@
             {# Rating/Favorite Button #}
             {% if request.user.is_authenticated %}
                 {% if num_likes %}
-                {{ object.fm_name }} has {{ num_likes }} favorite <br>
+                    {{ object.fm_name }} has {{ num_likes }} favorite <br>
                 {% endif %}
                 <form class="" action="{% url 'profile_fm_like_update_view' object.fm_slug request.user.pk %}" method="post">
                     {% csrf_token %}
                     {% if object in request.user.profile.profile_fm_like.all %}
-                    <button type="submit" class="success button postfix" name="fm_like" value="Unfavorite">
-                        <i class="fa fa-star" aria-hidden="true"></i> Unfavorite
-                    </button>
+                        <button type="submit" class="success button postfix" name="fm_like" value="Unfavorite">
+                            <i class="fa fa-star" aria-hidden="true"></i> Unfavorite
+                        </button>
                     {% else %}
-                    <button type="submit" class="success button postfix" name="fm_like" value="Favorite">
-                        <i class="fa fa-star" aria-hidden="true"></i> Favorite
-                    </button>
+                        <button type="submit" class="success button postfix" name="fm_like" value="Favorite">
+                            <i class="fa fa-star" aria-hidden="true"></i> Favorite
+                        </button>
                     {% endif %}
                 </form>
                 <br>
@@ -192,7 +192,7 @@
                     <br>
                     <a class="button" href="{% url 'vendor_create_view' %}">No Vendors for this Famerms Market, Plase add some.</a>
                 {% else %}
-                    <p>Log in to add new Vendors<br>  
+                    <p>Log in to add new Vendors<br>
                     <a class="button" href="{% url 'login' %}">Login</a><br>
                     <a class="button success" href="{% url 'register_view' %}">Create Account</a></p>
                 {% endif %}
