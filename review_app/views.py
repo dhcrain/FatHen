@@ -117,7 +117,7 @@ class FarmersMarketDetailView(DetailView):
         return context
 
 
-class FarmersMarketStatusCreateView(CreateView):
+class FarmersMarketStatusCreateView(LoginRequiredMixin, CreateView):
     model = Status
     form_class = StatusCreateForm
 
@@ -133,7 +133,7 @@ class FarmersMarketStatusCreateView(CreateView):
         return reverse('farmers_market_detail_view', args=(fm_slug,))
 
 
-class FarmersMarketCreateView(CreateView):
+class FarmersMarketCreateView(LoginRequiredMixin, CreateView):
     model = FarmersMarket
     fields = ['fm_name', 'fm_description', 'fm_contact_name', 'fm_contact_email',
               'fm_website', 'fm_facility_type', 'fm_county', 'fm_address',
@@ -153,7 +153,7 @@ class FarmersMarketCreateView(CreateView):
         return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))
 
 
-class FarmersMarketUpdateView(UpdateView):
+class FarmersMarketUpdateView(LoginRequiredMixin, UpdateView):
     model = FarmersMarket
     slug_field = 'fm_slug'
     slug_url_kwarg = 'fm_slug'
@@ -175,21 +175,24 @@ class FarmersMarketUpdateView(UpdateView):
         return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))
 
 
-class ProfileFMLikeUpdateView(View):
+class ProfileFMLikeUpdateView(LoginRequiredMixin, View):
 
     def post(self, request, fm_slug, pk):
-        vendor_like = self.request.POST.get('vendor_like')
+        fm_like = self.request.POST.get('fm_like')
         profile = Profile.objects.get(id=pk)
-        profile.profile_fm_like.add(FarmersMarket.objects.get(fm_slug=fm_slug))
+        if fm_like == 'Favorite':
+            profile.profile_fm_like.add(FarmersMarket.objects.get(fm_slug=fm_slug))
+        else:
+            profile.profile_fm_like.remove(FarmersMarket.objects.get(fm_slug=fm_slug))
         return HttpResponseRedirect('/fm/' + fm_slug)
 
 
-class ProfileVendorLikeView(View):
+class ProfileVendorLikeView(LoginRequiredMixin, View):
 
     def post(self, request, vendor_slug, pk):
         vendor_like = self.request.POST.get('vendor_like')
         profile = Profile.objects.get(id=pk)
-        if vendor_like == 'Like':
+        if vendor_like == 'Favorite':
             profile.profile_vendor_like.add(Vendor.objects.get(vendor_slug=vendor_slug))
         else:
             profile.profile_vendor_like.remove(Vendor.objects.get(vendor_slug=vendor_slug))
@@ -212,7 +215,7 @@ class VendorDetailView(DetailView):
         return context
 
 
-class VendorStatusCreateView(CreateView):
+class VendorStatusCreateView(LoginRequiredMixin, CreateView):
     model = Status
     form_class = StatusCreateForm
 
@@ -228,7 +231,7 @@ class VendorStatusCreateView(CreateView):
         return reverse('vendor_detail_view', args=(vendor_slug,))
 
 
-class VendorCreateView(CreateView):
+class VendorCreateView(LoginRequiredMixin, CreateView):
     model = Vendor
     slug_field = 'vendor_slug'
     slug_url_kwarg = 'vendor_slug'
@@ -245,7 +248,7 @@ class VendorCreateView(CreateView):
         return reverse('vendor_detail_view',args=(self.object.vendor_slug,))
 
 
-class VendorUpdateView(UpdateView):
+class VendorUpdateView(LoginRequiredMixin, UpdateView):
     model = Vendor
     slug_field = 'vendor_slug'
     slug_url_kwarg = 'vendor_slug'
@@ -275,7 +278,7 @@ class VendorDeleteView(LoginRequiredMixin, DeleteView):
         return vendor
 
 
-class StatusCreateView(CreateView):
+class StatusCreateView(LoginRequiredMixin, CreateView):
     model = Status
     fields = ['status_vendor', 'status_fm', 'status_present', 'status_picture', 'status_comment']
     slug_field = 'slug'

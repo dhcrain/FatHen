@@ -42,13 +42,19 @@
         {% endif %}
     </div>
     <div class="small-4 columns">
-        Count of likes: {{ num_likes }}<br>
+        {% if num_likes %}
+            {{ object.vendor_name }} has {{ num_likes }} favorite <br>
+        {% endif %}
         <form class="" action="{% url 'profile_vendor_like_view' object.vendor_slug request.user.pk %}" method="post">
         {% csrf_token %}
             {% if object in request.user.profile.profile_vendor_like.all %}
-                <input type="submit" name="vendor_like" value="Unlike">
+                <button type="submit" class="success button postfix" name="vendor_like" value="Unfavorite">
+                    <i class="fa fa-star" aria-hidden="true"></i> Unfavorite
+                </button>
             {% else %}
-                <input type="submit" name="vendor_like" value="Like">
+                <button type="submit" class="success button postfix" name="vendor_like" value="Favorite">
+                    <i class="fa fa-star" aria-hidden="true"></i> Favorite
+                </button>
             {% endif %}
         </form>
         <br>

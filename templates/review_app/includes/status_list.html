@@ -23,14 +23,14 @@
     {# Status Detail Modal #}
     <div class="reveal" id="statusDetailModal{{ status.pk }}" data-reveal>
         <p class="lead">{{ object.fm_name }}{{ object.vendor_name }}</p>
-        <br>
+        <hr>
         {% if status.status_picture %}
             <img class="float-center status-picture" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
-            <br>
+            <hr>
         {% endif %}
         <p>{{ status.status_comment}}</p>
         {# Delete Button #}
-        {% if request.user == object.vendor_user or object.fm_user  %}
+        {% if request.user == object.vendor_user or request.user == object.fm_user  %}
         <form class="" action="{% url 'status_delete_view' status.pk %}" method="post">
             {% csrf_token %}
             <input class="alert hollow button float-right" type="submit" name="name" value="Delete Status">

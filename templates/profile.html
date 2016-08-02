@@ -4,17 +4,18 @@
 {% block body %}
     <div class="row">
         <h1>Profile</h1>
-        <div class="small-6 columns">
+        <div class="medium-3 columns boarder-right">
+            <img class="profile-thumb" src="{{ object.profile_picture_url }}" alt="" />
+        </div>
+        <div class="medium-9 columns">
             <p>User: {{ object.profile_user}}</p>
             <p>User type: {{ object.user_type }}</p>
-        </div>
-        <div class="small-6 columns">
-            <img src="{{ object.profile_picture_url }}" alt="" />
         </div>
     </div>
     <br>
 <hr>
 <h4>Fav FM</h4>
+{% if object.profile_fm_like.all %}
 <div class="row" data-equalizer data-equalize-on="medium">
     {% for item in object.profile_fm_like.all %}
         <div class="medium-4 large-3 columns">
@@ -30,9 +31,14 @@
             </div>
         </div>
     {% endfor %}
-    </div>
+</div>
+{% else %}
+    <h3 class="text-center">You don't have any Famers Markets Favorited</h3>
+    <a class="button float-center" href="{% url 'farmers_market_list_view' %}">Find Some</a>
+{% endif %}
 <hr>
-    <h4>Fav Vendors</h4>
+    <h4>Favorite Vendors</h4>
+{% if object.profile_vendor_like.all %}{
     <div class="row" data-equalizer data-equalize-on="medium">
         {% for item in object.profile_vendor_like.all %}
             <div class="medium-4 large-3 columns">
@@ -49,6 +55,10 @@
             </div>
         {% endfor %}
     </div>
+{% else %}
+    <h3 class="text-center">You don't have any Vendors Favorited</h3>
+    <a class="button float-center" href="{% url 'farmers_market_list_view' %}">Find Some</a>
+{% endif %}
 <hr>
     <form class="" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}

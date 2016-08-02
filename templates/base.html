@@ -8,16 +8,16 @@
         <title>{% block title %}FatHen.co{% endblock %}</title>
         <link rel="stylesheet" href="{% static 'review_app/css/foundation.min.css' %}" />
         <link rel="stylesheet" href="{% static 'review_app/css/app.css' %}" />
+        <script src="https://use.fontawesome.com/d267bba531.js"></script>
         {% block head %}{% endblock %}
     </head>
     <body>
     {# nav bar #}
-
-
-<div class="title-bar top-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
-  <button class="menu-icon" type="button" data-toggle></button>
-  <div class="title-bar-title">Menu</div>
-</div>
+    {# allows for mobile menu #}
+    <div class="title-bar top-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
+      <button class="menu-icon" type="button" data-toggle></button>
+      <div class="title-bar-title">Menu</div>
+    </div>
 
     <div data-sticky-container>
     <div class="top-bar" data-sticky data-options="marginTop:0;" style="width:100%" id="example-menu">
@@ -26,17 +26,19 @@
                 <li class="menu-logo"><img src="{% static "review_app/img/fathen_cir.gif" %}" alt="FatHen.co" /></li>
                 <li><a href="{% url 'index_view' %}">Home</a></li>
                 <li><a href="{% url 'farmers_market_list_view' %}">List of FM's</a></li>
-                <li><a href="{% url 'farmers_market_create_view' %}">Add a FM</a></li>
-                <li><a href="{% url 'vendor_create_view' %}">Add Vendor</a></li>
                 {% if user.is_authenticated %}
+                    <li><a href="{% url 'farmers_market_create_view' %}">Add a FM</a></li>
+                    <li><a href="{% url 'vendor_create_view' %}">Add Vendor</a></li>
                 {% else %}
                     <li><a href="{% url 'register_view' %}">Create Account</a></li>
                 {% endif %}
             </ul>
         </div>
         <div class="top-bar-right">
-            <ul class="menu">
+            <ul class="dropdown menu" data-dropdown-menu>
                 {% if user.is_authenticated %}
+                <li class="menu-logo"><img src="{% static "review_app/img/block.png" %}" alt="FatHen.co" /></li>
+
                     <li class="menu-text">Welcome {{ user }}</li>
                     <li><a href="{% url 'profile_view' %}">Profile</a></li>
                     <li><a href="{% url 'logout' %}?next={% url 'index_view' %}">Logout</a></li>

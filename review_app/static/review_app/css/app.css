@@ -86,3 +86,9 @@ ul#id_category_4 li {
 .menu-text {
     color: #F5F5F5;
 }
+.helptext {
+    font-size: smaller;
+}
+.profile-thumb {
+    max-width: 14rem;
+}

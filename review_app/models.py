@@ -71,19 +71,19 @@ class FarmersMarket(models.Model):
 
 class Vendor(models.Model):
     vendor_user = models.ForeignKey('auth.User')
-    at_farmers_market = models.ManyToManyField("FarmersMarket")
-    vendor_name = models.CharField(max_length=100)
+    at_farmers_market = models.ManyToManyField("FarmersMarket", verbose_name='Located here')
+    vendor_name = models.CharField(max_length=100, verbose_name='Vendor Name')
     # https://pypi.python.org/pypi/django-autoslug
     vendor_slug = AutoSlugField(populate_from='vendor_name', unique=True, editable=True)
-    vendor_description = models.TextField(blank=True)
-    vendor_picture = models.ImageField(upload_to="vendor_images", blank=True)
-    vendor_banner_picture = models.ImageField(upload_to="vendor_images", blank=True)
-    vendor_contact_name = models.CharField(max_length=50)
-    vendor_contact_email = models.EmailField()
-    vendor_website = models.URLField(blank=True)
+    vendor_description = models.TextField(blank=True, verbose_name='Description')
+    vendor_picture = models.ImageField(upload_to="vendor_images", blank=True, verbose_name='Profile Picture')
+    vendor_banner_picture = models.ImageField(upload_to="vendor_images", blank=True, verbose_name='Banner Picture')
+    vendor_contact_name = models.CharField(max_length=50, verbose_name='Contact Name')
+    vendor_contact_email = models.EmailField(verbose_name='Email')
+    vendor_website = models.URLField(blank=True, verbose_name='Website')
     # https://pypi.python.org/pypi/django-localflavor
-    vendor_phone = PhoneNumberField(blank=True)
-    vendor_type = models.ForeignKey(VendorType, blank=True, null=True)
+    vendor_phone = PhoneNumberField(blank=True, verbose_name='Phone')
+    vendor_type = models.ForeignKey(VendorType, blank=True, null=True, verbose_name='Catergory')
     vendor_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
