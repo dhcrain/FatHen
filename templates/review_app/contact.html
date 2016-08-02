@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1>contact</h1>
+
+    <form class="" action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" name="contact" value="Send Mail">
+    </form>
+
+{% endblock %}

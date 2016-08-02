@@ -16,3 +16,10 @@ class StatusCreateForm(forms.ModelForm):
         help_texts = {
             'status_present': _('Tell your customers if you will be there.'),
         }
+
+class ContactForm(forms.Form):
+
+    name = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
+    subject = forms.CharField(required=True)
+    message = forms.CharField(widget=forms.Textarea)

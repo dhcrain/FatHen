@@ -8,14 +8,16 @@ from django.http import HttpResponseRedirect
 from django.db.models import Case, When, Q
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.mail import send_mail
+from fm_proj.settings import EMAIL_HOST_USER
 from django.shortcuts import render
 from django.views.generic.edit import UpdateView, DeleteView
-from django.views.generic import View, TemplateView, CreateView, DetailView, ListView
+from django.views.generic import View, TemplateView, CreateView, DetailView, ListView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Status
-from review_app.forms import StatusCreateForm
+from review_app.forms import StatusCreateForm, ContactForm
 from review.templatetags.review_tags import total_review_average
 from review.forms import ReviewForm
 # Create your views here.
@@ -184,7 +186,7 @@ class ProfileFMLikeUpdateView(LoginRequiredMixin, View):
             profile.profile_fm_like.add(FarmersMarket.objects.get(fm_slug=fm_slug))
         else:
             profile.profile_fm_like.remove(FarmersMarket.objects.get(fm_slug=fm_slug))
-        return HttpResponseRedirect('/fm/' + fm_slug)
+        return HttpResponseRedirect(reverse('farmers_market_detail_view', args=(fm_slug,)))
 
 
 class ProfileVendorLikeView(LoginRequiredMixin, View):
@@ -196,7 +198,7 @@ class ProfileVendorLikeView(LoginRequiredMixin, View):
             profile.profile_vendor_like.add(Vendor.objects.get(vendor_slug=vendor_slug))
         else:
             profile.profile_vendor_like.remove(Vendor.objects.get(vendor_slug=vendor_slug))
-        return HttpResponseRedirect('/vendor/' + vendor_slug)
+        return HttpResponseRedirect(reverse('vendor_detail_view', args=(vendor_slug,)))
 
 
 class VendorDetailView(DetailView):
@@ -315,7 +317,6 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         vendor_favs = profile.profile_vendor_like.all()
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(Q(status_vendor__in=vendor_favs) | Q(status_fm__in=fm_favs)).filter(status_created__gt=one_week)
-
         return context
 
 # modified from https://www.calazan.com/adding-basic-search-to-your-django-site/
@@ -337,6 +338,25 @@ class SearchListView(ListView):
             if search_type == 'fm_programs_accepted':
                 result = result.filter(reduce(operator.and_, (Q(fm_programs_accepted__icontains=q) for q in query_list)))
         return result
+
+
+class ContactView(FormView):
+    form_class = ContactForm
+    template_name = 'review_app/contact.html'
+    success_url = reverse_lazy('index_view')
+
+    def form_valid(self, form):
+        message = "{name} / {email} said: ".format(
+            name=form.cleaned_data.get('name'),
+            email=form.cleaned_data.get('email'))
+        message += "\n\n{0}".format(form.cleaned_data.get('message'))
+        send_mail(
+            subject=form.cleaned_data.get('subject').strip(),
+            message=message,
+            from_email=form.cleaned_data.get('email'),
+            recipient_list=['fathen.co@gmail.com'],
+        )
+        return super().form_valid(form)
 
 
 class RegisterView(CreateView):

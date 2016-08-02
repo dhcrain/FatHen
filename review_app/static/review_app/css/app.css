@@ -53,6 +53,13 @@ input.secondary.hollow.button {
     /*height: 4rem;*/
     max-width: 4rem;
 }
+.tiny-thumb {
+    /*height: 4rem;*/
+    max-width: 1.2rem;
+}
+.fav-ul {
+    list-style: none;
+}
 .profile-picture {
     width: 18rem;
     position: relative;

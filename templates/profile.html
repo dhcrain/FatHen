@@ -4,38 +4,43 @@
 {% block body %}
 
 <div class="row">
-    <h1>Welocome {{ request.user }}</h1>
+    <h1>Welcome {{ request.user }}</h1>
     <div class="medium-4 columns boarder-right">
-        <img class="" src="{{ object.profile_picture_url }}" alt="" />
-        <p>User: {{ object.profile_user}}</p>
+        <img class="list-thumb thumbnail float-right" src="{{ object.profile_picture_url }}" alt="" />
         <p>User type: {{ object.user_type }}</p>
+        <a href="#edit_profile">edit profile</a>
         <hr>
+
         {% if object.profile_fm_like.all %}
-            <h4>Fav FM</h4>
+            <h4>Favorite FM</h4>
+            <ul class="fav-ul">
             {% for item in object.profile_fm_like.all %}
-                <div class="callout">
-                    <img src="{{ item.fm_picture_url}}" alt="{{ item.fm_name }} Picture" />
+                <li>
+                    <img class="tiny-thumb" src="{{ item.fm_picture_url}}" alt="{{ item.fm_name }} Picture" />
                     <a href="{% url 'farmers_market_detail_view' item.fm_slug %}">{{ item.fm_name }}</a>
-                </div>
+                </li>
             {% endfor %}
+        </ul>
         {% else %}
             <h3 class="">You don't have any Farmers Markets Favorited</h3>
             <a class="" href="{% url 'farmers_market_list_view' %}">Find Some</a>
         {% endif %}
 
-        <hr>
+        <br>
         <h4>Favorite Vendors</h4>
         {% if object.profile_vendor_like.all %}
-        {% for item in object.profile_vendor_like.all %}
-        <div class="callout">
-            <img src="{{ item.vendor_picture_url}}" alt="{{ item.vendor_name }} Picture" />
-            <a href="{% url 'vendor_detail_view' item.vendor_slug %}">{{ item.vendor_name }}</a>
-        </div>
-        {% endfor %}
-    {% else %}
-        <h3 class="text-center">You don't have any Vendors Favorited</h3>
-        <a class="button float-center" href="{% url 'farmers_market_list_view' %}">Find Some</a>
-    {% endif %}
+        <ul class="fav-ul">
+            {% for item in object.profile_vendor_like.all %}
+                <li>
+                    <img class="tiny-thumb" src="{{ item.vendor_picture_url}}" alt="{{ item.vendor_name }} Picture" />
+                    <a href="{% url 'vendor_detail_view' item.vendor_slug %}">{{ item.vendor_name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <h3 class="text-center">You don't have any Vendors Favorited</h3>
+            <a class="button float-center" href="{% url 'farmers_market_list_view' %}">Find Some</a>
+        {% endif %}
     </div> {# end medium-4 #}
     <div class="medium-8 columns">
         {% if status_list %}
@@ -44,12 +49,23 @@
             {% for status in status_list %}
             <div class="callout">
             <div class="row">
-                {% if status.status_fm.fm_name %}
-                    <a href="{% url 'farmers_market_detail_view' status.status_fm.fm_slug %}"><h4>{{ status.status_fm.fm_name }}</h4></a>
-                {% endif %}
-                {% if status.status_vendor.vendor_name %}
-                    <a href="{% url 'vendor_detail_view' status.status_vendor.vendor_slug %}"><h4>{{ status.status_vendor.vendor_name }}</h4></a>
-                {% endif %}
+                <div class="small-2 columns">
+                    {% if status.status_fm.fm_name %}
+                        <img class="list-thumb" src="{{ status.status_fm.fm_picture_url }}" alt="" />
+                    {% endif %}
+                    {% if status.status_vendor.vendor_name %}
+                        <img class="list-thumb" src="{{ status.status_vendor.vendor_picture_url }}" alt="" />
+                    {% endif %}
+                </div>
+                <div class="small-10 columns">
+                    {% if status.status_fm.fm_name %}
+                        <a href="{% url 'farmers_market_detail_view' status.status_fm.fm_slug %}"><h4>{{ status.status_fm.fm_name }}</h4></a>
+                    {% endif %}
+                    {% if status.status_vendor.vendor_name %}
+                        <a href="{% url 'vendor_detail_view' status.status_vendor.vendor_slug %}"><h4>{{ status.status_vendor.vendor_name }}</h4></a>
+                    {% endif %}
+                    <small class="float-right">{{ status.status_created|date:"D, M d" }}</small>
+                </div>
             </div>
             <div class="row">
                 <div class="large-2 columns">
@@ -57,7 +73,7 @@
                 </div>
                 <div class="large-8 columns">
                     <strong>{{ status.status_comment }}</strong><br>
-                    <small>{{ status.status_created|date:"D, M d" }}</small>
+
                 </div>
                 <div class="small-2 columns">
                     {% if status.status_picture %}
@@ -66,6 +82,7 @@
                     <a data-open="statusDetailModal{{ status.pk }}">details</a>
                 </div>
             </div>
+        </div>
 
 
             {# Status Detail Modal #}
@@ -74,7 +91,6 @@
                 <hr>
                 {% if status.status_picture %}
                     <img class="float-center status-picture" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
-                    <hr>
                 {% endif %}
                 <div class="callout">
                     <p>{{ status.status_comment}}</p>
@@ -93,17 +109,13 @@
                 </button>
             </div>
             {% endfor %} {# end for status in status_list #}
-        </div>
         {% endif %} {# end if status_list #}
 
     </div> {# end medium-8 #}
 </div> {# end row #}
 
 <hr>
-
-
-
-<hr>
+    <a id='edit_profile'></a>
     <form class="" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
