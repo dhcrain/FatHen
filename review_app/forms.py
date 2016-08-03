@@ -38,3 +38,6 @@ class UserCreationEmailForm(UserCreationForm):
         validators=[validate_email],
         help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.")
     )
+    class Meta:
+        model = User
+        fields = ("username", "password1", "password2")
