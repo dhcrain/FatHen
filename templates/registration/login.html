@@ -3,9 +3,11 @@
 {% block body %}
     <div class="row">
         <div class="small-6 large-centered columns">
+            <br>
             {% if user.is_authenticated %}
             <p>Welcome, {{ request.user }} You are logged in</p>
             {% else %}
+            <h2>Please Login</h2>
             <form class="" action="{% url 'login' %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}

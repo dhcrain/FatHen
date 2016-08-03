@@ -14,6 +14,9 @@
 .login input.expanded.button {
     background-color: #F3715B;
 }
+.login input.expanded.button:hover {
+    background-color: #c25a48;
+}
 button.radius, .button.radius {
     border-radius: 3px;
 }
@@ -88,6 +91,9 @@ input.secondary.hollow.button {
 }
 /* display rating radio buttons in a row */
 ul#id_category_4 li {
+    display: inline-block;
+}
+ul#id_category_1 li {
     display: inline-block;
 }
 /* Nav Bar */

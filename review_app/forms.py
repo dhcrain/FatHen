@@ -1,3 +1,6 @@
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.core.validators import validate_email
 from django import forms
 from review_app.models import Status
 from django.utils.translation import ugettext_lazy as _
@@ -23,3 +26,15 @@ class ContactForm(forms.Form):
     email = forms.EmailField(required=True)
     subject = forms.CharField(required=True)
     message = forms.CharField(widget=forms.Textarea)
+
+
+# https://djangosnippets.org/snippets/3043/
+class UserCreationEmailForm(UserCreationForm):
+    # we are using email as username so override label and validators
+    username = forms.CharField(
+        label = "Email:",
+        max_length = 30,
+        required = True,
+        validators=[validate_email],
+        help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.")
+    )

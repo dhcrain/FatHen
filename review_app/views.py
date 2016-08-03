@@ -17,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Status
-from review_app.forms import StatusCreateForm, ContactForm
+from review_app.forms import StatusCreateForm, ContactForm, UserCreationEmailForm
 from review.templatetags.review_tags import total_review_average
 from review.forms import ReviewForm
 # Create your views here.
@@ -368,5 +368,27 @@ class AboutTemplateView(TemplateView):
 
 class RegisterView(CreateView):
     model = User
-    form_class = UserCreationForm
+    form_class = UserCreationEmailForm
     success_url = reverse_lazy("login")
+
+    def form_valid(self, form):
+            # we are using email as username so let's copy it also to email field
+            user = form.save(commit=False)
+            user.email = user.username
+            user.save()
+            return super().form_valid(form)
+
+#########
+# def register_user(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect('/')
+#
+#     args = {}
+#     args.update(csrf(request))
+#
+#     args['form'] = UserCreationForm()
+#
+#     return render_to_response('stories/register.html', args)

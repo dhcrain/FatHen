@@ -78,7 +78,7 @@
                     <form method="post" action="{% url 'review_create' content_type='farmersmarket' object_id=farmersmarket.pk %}">
                         {% csrf_token %}
                         {{ review_form.as_p }}
-                        <input type="submit" value="Save" />
+                        <input class="button" type="submit" value="Save" />
                     </form>
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
