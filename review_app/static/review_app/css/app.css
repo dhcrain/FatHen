@@ -39,9 +39,6 @@ input.secondary.hollow.button {
     background-size:cover;
     background-position:center;
 }
-.title-bar {
-    background: #e6e6e6;
-}
 .badge {
     font-size: 1.1em;
     background: #4c9d2f;
@@ -49,13 +46,14 @@ input.secondary.hollow.button {
 .badge-large {
     font-size: 3em;
 }
+.tiny-thumb {
+    max-width: 1.2rem;
+}
 .list-thumb {
-    /*height: 4rem;*/
     max-width: 4rem;
 }
-.tiny-thumb {
-    /*height: 4rem;*/
-    max-width: 1.2rem;
+.profile-thumb {
+    max-width: 14rem;
 }
 .fav-ul {
     list-style: none;
@@ -93,9 +91,25 @@ ul#id_category_4 li {
 .menu-text {
     color: #F5F5F5;
 }
+.title-bar {
+    background: #e6e6e6;
+}
+footer {
+    background-color: #5e5262;
+}
+footer a {
+    color: #F5F5F5;
+    padding-right: 16px;
+}
+.footer-text {
+    color: #F5F5F5;
+}
+footer a:hover {
+    color: #f3715b;
+}
+p.text-right.footer-text {
+    margin-right: 16px;
+}
 .helptext {
     font-size: smaller;
-}
-.profile-thumb {
-    max-width: 14rem;
 }

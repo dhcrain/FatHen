@@ -116,6 +116,7 @@ class FarmersMarketDetailView(DetailView):
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
         context['num_likes'] = location.fm_likes.count()
+        context['asdf'] = User.objects.get(username='asdf') # default 'owner' of all fm/v
         return context
 
 
@@ -214,6 +215,7 @@ class VendorDetailView(DetailView):
         context['status_list'] = Status.objects.filter(status_vendor=vendor)
         context['review_form'] = ReviewForm(vendor)
         context['num_likes'] = vendor.vendor_likes.count()
+        context['asdf'] = User.objects.get(username='asdf') # default 'owner' of all fm/v
         return context
 
 
@@ -346,9 +348,10 @@ class ContactView(FormView):
     success_url = reverse_lazy('index_view')
 
     def form_valid(self, form):
-        message = "{name} / {email} said: ".format(
+        message = "{name} / {email} / {user} said: ".format(
             name=form.cleaned_data.get('name'),
-            email=form.cleaned_data.get('email'))
+            email=form.cleaned_data.get('email'),
+            user=self.request.user)
         message += "\n\n{0}".format(form.cleaned_data.get('message'))
         send_mail(
             subject=form.cleaned_data.get('subject').strip(),
@@ -357,6 +360,10 @@ class ContactView(FormView):
             recipient_list=['fathen.co@gmail.com'],
         )
         return super().form_valid(form)
+
+
+class AboutTemplateView(TemplateView):
+    pass
 
 
 class RegisterView(CreateView):

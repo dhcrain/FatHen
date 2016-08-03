@@ -8,7 +8,9 @@
     <div class="medium-4 columns boarder-right">
         <img class="list-thumb thumbnail float-right" src="{{ object.profile_picture_url }}" alt="" />
         <p>User type: {{ object.user_type }}</p>
-        <a href="#edit_profile">edit profile</a>
+        <a href="{% url 'farmers_market_create_view' %}">Add a Farmers Market</a><br>
+        <a href="{% url 'vendor_create_view' %}">Add Vendor</a><br>
+        <a href="#edit_profile">Edit Profile</a>
         <hr>
 
         {% if object.profile_fm_like.all %}
@@ -50,6 +52,7 @@
             <div class="callout">
             <div class="row">
                 <div class="small-2 columns">
+                    {# fm/v pic #}
                     {% if status.status_fm.fm_name %}
                         <img class="list-thumb" src="{{ status.status_fm.fm_picture_url }}" alt="" />
                     {% endif %}
@@ -58,13 +61,13 @@
                     {% endif %}
                 </div>
                 <div class="small-10 columns">
+                    {# Name #}
                     {% if status.status_fm.fm_name %}
                         <a href="{% url 'farmers_market_detail_view' status.status_fm.fm_slug %}"><h4>{{ status.status_fm.fm_name }}</h4></a>
                     {% endif %}
                     {% if status.status_vendor.vendor_name %}
                         <a href="{% url 'vendor_detail_view' status.status_vendor.vendor_slug %}"><h4>{{ status.status_vendor.vendor_name }}</h4></a>
                     {% endif %}
-                    <small class="float-right">{{ status.status_created|date:"D, M d" }}</small>
                 </div>
             </div>
             <div class="row">
@@ -72,14 +75,14 @@
                     <p>{% if status.status_present == 'Yes' %}✔️{% else %}✖️{% endif %} Coming this week?</p>
                 </div>
                 <div class="large-8 columns">
-                    <strong>{{ status.status_comment }}</strong><br>
-
+                    <strong>{{ status.status_comment }}</strong>
                 </div>
                 <div class="small-2 columns">
                     {% if status.status_picture %}
                         <img class="list-thumb" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
                     {% endif %}
-                    <a data-open="statusDetailModal{{ status.pk }}">details</a>
+                    <a class="float-right" data-open="statusDetailModal{{ status.pk }}">details</a>
+                    <small class="float-right">{{ status.status_created|date:"D, M d" }}</small>
                 </div>
             </div>
         </div>
@@ -88,7 +91,7 @@
             {# Status Detail Modal #}
             <div class="reveal" id="statusDetailModal{{ status.pk }}" data-reveal>
                 <p class="lead">{{ status.status_fm.fm_name }}{{ status.status_vendor.vendor_name }}</p>
-                <hr>
+
                 {% if status.status_picture %}
                     <img class="float-center status-picture" src="{{ status.status_picture.url }}" alt="Status Picture" /><br>
                 {% endif %}
@@ -96,13 +99,7 @@
                     <p>{{ status.status_comment}}</p>
                 </div>
                 <small>{{ status.status_created }}</small>
-                {# Delete Button #}
-                {% if request.user == object.vendor_user or request.user == object.fm_user  %}
-                <form class="" action="{% url 'status_delete_view' status.pk %}" method="post">
-                    {% csrf_token %}
-                    <input class="alert hollow button float-right" type="submit" name="name" value="Delete Status">
-                </form>
-                {% endif %}
+
                 {# Close Modal #}
                 <button class="close-button" data-close aria-label="Close modal" type="button">
                     <span aria-hidden="true">&times;</span>

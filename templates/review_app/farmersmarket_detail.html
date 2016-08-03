@@ -229,7 +229,10 @@
             <small><strong>updated:</strong> {{ object.fm_updated }}</small></p>  {# |timesince #}
 
             {% if request.user == object.fm_user %}
+                <p>Hello, {{ request.user }} you may edit your listing.</p>
                 <a class="button" href="{% url 'farmers_market_update_view' object.fm_slug %}">Update This Listing</a>
+            {% elif request.user != asdf %}
+                <a class="button hollow" href="{% url 'contact_view' %}">Claim this listing</a>
             {% endif %}
             <br>
             <hr>

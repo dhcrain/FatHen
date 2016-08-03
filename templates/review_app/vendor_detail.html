@@ -164,6 +164,9 @@
             <a class="button" href="{% url 'vendor_update_view' object.vendor_slug %}">Update This Listing</a>
             <br>
             <a class="alert hollow button" href="{% url 'vendor_delete_view' object.vendor_slug %}">Delete</a>
+            {% elif request.user != asdf %}
+                <a class="button hollow" href="{% url 'contact_view' %}">Claim this listing</a>
+
         {% endif %}
     </div>
 </div>
