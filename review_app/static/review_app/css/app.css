@@ -108,8 +108,9 @@ ul#id_category_4 li {
     color: #F5F5F5;
 }
 .title-bar {
-    background: #e6e6e6;
+    background: #F3715B;
 }
+/* Footer */
 footer {
     background-color: #5e5262;
 }
@@ -126,6 +127,7 @@ footer a:hover {
 p.text-right.footer-text {
     margin-right: 16px;
 }
+/* Form Help text */
 .helptext {
     font-size: smaller;
 }
