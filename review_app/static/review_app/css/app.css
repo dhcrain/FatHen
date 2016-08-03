@@ -1,3 +1,19 @@
+.login {
+    background-color: rgba(94, 82, 98, 0.95);
+    margin: 1rem;
+    padding: 2rem;
+    color: #F5F5F5;
+}
+.login label {
+    color: white;
+}
+.login-outer {
+    margin-top: 4rem;
+    margin-left: -5rem;
+}
+.login input.expanded.button {
+    background-color: #F3715B;
+}
 button.radius, .button.radius {
     border-radius: 3px;
 }
