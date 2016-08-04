@@ -146,49 +146,53 @@
 
             <h3>Vendors you will see here.</h3>
             {% if vendor_list %}
-                Sort...
                 <div class="button-group">
                     <a href="{% url 'farmers_market_detail_view' object.fm_slug %}?rated=-average_rating" class="button">Highest Rated</a>
                     <a href="{% url 'farmers_market_detail_view' object.fm_slug %}?sort=-vendor_updated" class="button">Recently Updated</a>
                     <a href="{% url 'farmers_market_detail_view' object.fm_slug %}" class="button">Alphabetical</a>
                 </div>
 
-                <hr>
                 {% if vendor_list_present %}
-                    <h3>Yes, We will be there!</h3>
+                    <h4>Yes, We will be there!</h4>
                     {% for vendor in vendor_list_present %}
-                    {{ vendor_list_present }}
                         {% include "review_app/includes/vendor_list.html" %}
                     {% endfor %}
-                    <hr>
                 {% endif %}
 
                 {% if vendor_list_no %}
-                    <h3>We will miss this week.</h3>
+                    <h4>We will miss this week.</h4>
                     {% for vendor in vendor_list_no %}
                         {% include "review_app/includes/vendor_list.html" %}
                     {% endfor %}
-                    <hr>
+                {% endif %}
+
+                {% if vendor_list_nr_status %}
+                {# <h4>No Response</h>#}
+                    {% for vendor in vendor_list_nr_status %}
+                        {% include "review_app/includes/vendor_list.html" %}
+                    {% endfor %}
+                    <br>
                 {% endif %}
 
                 {% if vendor_list_nr %}
-                <h3>No Response</h3>
+                {# <h3>No Response</h3>#}
                     {% for vendor in vendor_list_nr %}
                         {% include "review_app/includes/vendor_list.html" %}
                     {% endfor %}
                     <hr>
                 {% endif %}
+
                 {% comment %}
 
                 <h1>OLD</h1>
-                {% endcomment %}
                 {% for vendor in vendor_list %}
                     {# {{ vendor.status_set.status_present }}#}
                     {# {% if vendor.status_set.status_present == NO_RESPONSE %}yes {% else %} no{% endif %}#}
                     {% include "review_app/includes/vendor_list.html" %}
                 {% endfor %}
+                {% endcomment %}
 
-                {# No vendors listed #}
+            {# No vendors listed #}
             {% else %}
                 {% if request.user.is_authenticated %}
                     <br>

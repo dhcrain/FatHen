@@ -172,7 +172,6 @@ AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(aws_bucket_name)
 if aws_bucket_name:
     # This is used by the `static` template tag from `static`, if you're using that. Or if anything else
     # refers directly to STATIC_URL. So it's safest to always set it.
-
     # STATIC_URL = 'https://{}/'.format(AWS_S3_CUSTOM_DOMAIN)
 
     AWS_S3_FILE_OVERWRITE = False

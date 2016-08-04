@@ -87,9 +87,10 @@ class FarmersMarketDetailView(DetailView):
             preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).filter(pk__in=pk_list).order_by(preserved)
         else:
-            context['vendor_list_present'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="Yes")
-            context['vendor_list_no'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No")
-            context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present=None)
+            context['vendor_list_present'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="Yes").distinct()
+            context['vendor_list_no'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No").distinct()
+            context['vendor_list_nr_status'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No Response").distinct()
+            context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present=None).distinct()
 
             context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
             # vendor_list = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')

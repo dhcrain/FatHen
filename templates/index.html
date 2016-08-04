@@ -4,7 +4,9 @@
 {% block hero %}
 <div class="home-hero">
     <div class="bounce">
+        <a href="#top-fm">
         <i class="fa fa-chevron-circle-down fa-5" aria-hidden="true"></i>
+        </a>
     </div>
 </div> {# End Hero #}
 {% endblock %}
@@ -15,6 +17,7 @@
             <div class="login">
                 {% if user.is_authenticated %}
                 <h3>Welcome, {{ request.user }}</h3>
+                <a class="button" href="{% url 'profile_view' %}">Head over to your Profile Page to see all your Favorites.</a>
                 {% else %}
                 <form class="" action="{% url 'login' %}" method="post">
                     {% csrf_token %}
@@ -23,13 +26,13 @@
                 </form>
                 <h2 class="text-center">OR</h2>
                 <a class="expanded button success" href="{% url 'register_view' %}"><strong>Create an Account</strong></a>
+                {% endif %}
             </div> {# end login #}
         </div> {# end login outer #}
-        {% endif %}
     </div> {# end med-5 #}
     <div class="medium-7 columns">
         <div class="index-fm-outer">
-            <div class="index-fm-inner">
+            <div class="index-fm-inner"><hr><a id='top-fm'></a>
                 <h1>Top Farmers Markets</h1>
                 <a class="expanded button success" href="{% url 'farmers_market_list_view' %}">
                     <strong>See more details about all farmers markets<br>
@@ -45,7 +48,7 @@
                         <span class="badge"><strong>{{ stars }}</strong></span>
                         {% endif %}<br>
                         {% endfor %}
-                        <hr>
+
                         {# pagination #}
                         <ul class="pagination text-center" role="navigation" aria-label="Pagination">
                             {% if page_obj.has_previous %}
@@ -64,7 +67,6 @@
                         </ul>
                     </div>
                 </div>
-                <a id='top-fm'></a>
             </div> {# end med-7 #}
         </div> {# end row #}
 {% endblock %}

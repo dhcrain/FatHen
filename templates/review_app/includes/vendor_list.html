@@ -12,7 +12,12 @@
             {% endif %}
             {% if vendor.get_recent_status.status_comment %}
                 <p>{{ vendor.get_recent_status.status_comment }}<br>
-                    {% if vendor.get_recent_status.status_present == 'Yes' %}✔️{% else %}✖️{% endif %} Coming this week?</p>
+                    {% if vendor.get_recent_status.status_present == 'Yes' %}
+                    ✔️ Coming this week?</p>
+                    {% elif vendor.get_recent_status.status_present == 'No Response' %}
+                    {% else %}
+                    ✖️ Coming this week?</p>
+                    {% endif %}
             {% endif %}
         </div>
         <div class="small-3 columns">
