@@ -173,7 +173,7 @@ ul#id_category_1 li {
     display: inline-block;
 }
 /* Nav Bar */
-.menu-logo {
+li.menu-logo {
     margin: 0;
     padding-top: -10px;
 }

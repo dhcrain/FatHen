@@ -361,7 +361,7 @@ class ContactView(FormView):
 
 
 class AboutTemplateView(TemplateView):
-    pass
+    template_name = "about.html"
 
 
 class RegisterView(CreateView):
@@ -375,18 +375,3 @@ class RegisterView(CreateView):
             user.email = user.username
             user.save()
             return super().form_valid(form)
-
-#########
-# def register_user(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect('/')
-#
-#     args = {}
-#     args.update(csrf(request))
-#
-#     args['form'] = UserCreationForm()
-#
-#     return render_to_response('stories/register.html', args)

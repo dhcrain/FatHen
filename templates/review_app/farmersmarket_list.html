@@ -8,8 +8,7 @@
     <h1>All farmers markets</h1>
     <div class="row">
         {# Main Columun #}
-        <div class="small-9 columns boarder-right">
-            Sort...
+        <div class="medium-9 columns boarder-right">
             <div class="button-group">
                 <a href="{% url 'farmers_market_list_view' %}?rated=-average_rating" class="button">Highest Rated</a>
                 <a href="{% url 'farmers_market_list_view' %}?sort=-fm_updated" class="button">Recently Updated</a>
@@ -41,9 +40,33 @@
                     </div>
                 </div>
             {% endfor %}
-        </div>
+
+            <br>
+            {# pagination #}
+            <ul class="pagination text-center" role="navigation" aria-label="Pagination">
+                {% if page_obj.has_previous %}
+                    <li class="pagination-previous"><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% else %}
+                    <li class="pagination-previous disabled">Previous <span class="show-for-sr">page</span></li>
+                {% endif %}
+                {% for linkpage in paginator.page_range  %}
+                    {% if linkpage == page_obj.number %}
+                        <li class="current"><span class="show-for-sr">You're on page</span>{{ linkpage }}</li>
+                    {% else %}
+                        <li><a href="?page={{ linkpage }}" aria-label="Page {{ linkpage }}">{{ linkpage }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="pagination-next"><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                {% else %}
+                    <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
+                {% endif %}
+            </ul>
+            <br>
+
+        </div> {# end med-9 #}
         {# SideBar column #}
-        <div class="small-3 columns" data-sticky-container>
+        <div class="medium-3 columns" data-sticky-container>
             <div class="sticky" data-sticky data-margin-top="5">
                 <h5>Search for farmers markets</h5>
                 {# search #}
@@ -75,28 +98,8 @@
                     <button class="button" type="submit">Go!</button>
                 </div>
                 </form>
-            </div>
-        </div>
-    </div>
-    {# pagination #}
-    <ul class="pagination text-center" role="navigation" aria-label="Pagination">
-        {% if page_obj.has_previous %}
-            <li class="pagination-previous"><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-        {% else %}
-            <li class="pagination-previous disabled">Previous <span class="show-for-sr">page</span></li>
-        {% endif %}
-        {% for linkpage in paginator.page_range  %}
-            {% if linkpage == page_obj.number %}
-                <li class="current"><span class="show-for-sr">You're on page</span>{{ linkpage }}</li>
-            {% else %}
-                <li><a href="?page={{ linkpage }}" aria-label="Page {{ linkpage }}">{{ linkpage }}</a></li>
-            {% endif %}
-        {% endfor %}
-        {% if page_obj.has_next %}
-            <li class="pagination-next"><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
-        {% else %}
-            <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
-        {% endif %}
-    </ul>
+            </div> {# end stickey #}
+        </div> {# end med-3 #}
+    </div> {# end row #}
 
 {% endblock %}
