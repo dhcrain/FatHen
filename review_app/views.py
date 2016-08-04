@@ -87,22 +87,22 @@ class FarmersMarketDetailView(DetailView):
             preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).filter(pk__in=pk_list).order_by(preserved)
         else:
-            context['vendor_list_present'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug).filter(status__status_present="Yes")
-            context['vendor_list_no'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug).filter(status__status_present="No")
-            context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug).filter(status__status_present=None)
+            context['vendor_list_present'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="Yes")
+            context['vendor_list_no'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No")
+            context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present=None)
 
-            # context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
-            vendor_list = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
-            paginator = Paginator(vendor_list, 25) # Show 25 vendors per page
-            page = self.request.GET.get('page')
-            try:
-                context['vendor_list'] = paginator.page(page)
-            except PageNotAnInteger:
-                # If page is not an integer, deliver first page.
-                context['vendor_list'] = paginator.page(1)
-            except EmptyPage:
-                # If page is out of range (e.g. 9999), deliver last page of results.
-                context['vendor_list'] = paginator.page(paginator.num_pages)
+            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
+            # vendor_list = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
+            # paginator = Paginator(vendor_list, 25) # Show 25 vendors per page
+            # page = self.request.GET.get('page')
+            # try:
+            #     context['vendor_list'] = paginator.page(page)
+            # except PageNotAnInteger:
+            #     # If page is not an integer, deliver first page.
+            #     context['vendor_list'] = paginator.page(1)
+            # except EmptyPage:
+            #     # If page is out of range (e.g. 9999), deliver last page of results.
+            #     context['vendor_list'] = paginator.page(paginator.num_pages)
 
 
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)

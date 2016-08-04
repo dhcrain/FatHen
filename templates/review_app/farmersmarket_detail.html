@@ -155,7 +155,6 @@
 
                 <hr>
                 {% if vendor_list_present %}
-                {# !!! Also brings in 'No Response' !!! #}
                     <h3>Yes, We will be there!</h3>
                     {% for vendor in vendor_list_present %}
                         {% include "review_app/includes/vendor_list.html" %}
@@ -171,20 +170,22 @@
                     <hr>
                 {% endif %}
 
-                {# {% if vendor_list_nr %}#}
+                {% if vendor_list_nr %}
                 <h3>No Response</h3>
                     {% for vendor in vendor_list_nr %}
                         {% include "review_app/includes/vendor_list.html" %}
                     {% endfor %}
                     <hr>
-                {# {% endif %}#}
+                {% endif %}
+                {% comment %}
 
                 <h1>OLD</h1>
                 {% for vendor in vendor_list %}
                     {{ vendor.status_set.status_present }}
-                    {% if vendor.status_set.status_present == NO_RESPONSE %}yes {% else %} no{% endif %}
+                    {# {% if vendor.status_set.status_present == NO_RESPONSE %}yes {% else %} no{% endif %}#}
                     {% include "review_app/includes/vendor_list.html" %}
                 {% endfor %}
+                {% endcomment %}
 
                 {# No vendors listed #}
             {% else %}
@@ -197,6 +198,8 @@
                     <a class="button success" href="{% url 'register_view' %}">Create Account</a></p>
                 {% endif %}
             {% endif %}
+            {% comment %}
+
             {# pagination #}
             <ul class="pagination text-center" role="navigation" aria-label="Pagination">
                 {% if vendor_list.has_previous %}
@@ -217,6 +220,7 @@
                     <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
                 {% endif %}
             </ul>
+            {% endcomment %}
         </div>
         <div class="small-5 columns">
             {# Map #}
