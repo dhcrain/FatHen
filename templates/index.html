@@ -1,24 +1,69 @@
 {% extends "base.html" %}
+{% load review_tags %}
+
 {% block hero %}
 <div class="home-hero">
-    <div class="row">
-        <div class="medium-5 small-10 columns login-outer">
-            <div class="login">
-                {% if user.is_authenticated %}
-                    <p>Welcome, {{ request.user }} You are logged in</p>
-                {% else %}
-                    <form class="" action="{% url 'login' %}" method="post">
-                        {% csrf_token %}
-                        {{ login_form.as_p }}
-                        <input class="expanded button" type="submit" name="login" value="Login">
-                    </form>
-                    <h2 class="text-center">OR</h2>
-                    <a class="expanded button success" href="{% url 'register_view' %}"><b>Create an Account</b></a>
-                {% endif %}
-            </div>
-        </div>
+    <div class="bounce">
+        <i class="fa fa-chevron-circle-down fa-5" aria-hidden="true"></i>
     </div>
-</div>
+</div> {# End Hero #}
 {% endblock %}
 {% block body %}
+<div class="row">
+    <div class="medium-5 small-10 columns">
+        <div class="login-outer">
+            <div class="login">
+                {% if user.is_authenticated %}
+                <h3>Welcome, {{ request.user }}</h3>
+                {% else %}
+                <form class="" action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    {{ login_form.as_p }}
+                    <strong><input class="expanded button" type="submit" name="login" value="Login"></strong>
+                </form>
+                <h2 class="text-center">OR</h2>
+                <a class="expanded button success" href="{% url 'register_view' %}"><strong>Create an Account</strong></a>
+            </div> {# end login #}
+        </div> {# end login outer #}
+        {% endif %}
+    </div> {# end med-5 #}
+    <div class="medium-7 columns">
+        <div class="index-fm-outer">
+            <div class="index-fm-inner">
+                <h1>Top Farmers Markets</h1>
+                <a class="expanded button success" href="{% url 'farmers_market_list_view' %}">
+                    <strong>See more details about all farmers markets<br>
+                        Or search by name, location, or programs accepted</strong></a>
+                        {% for market in object_list %}
+                        <a href="{% url 'farmers_market_detail_view' fm_slug=market.fm_slug %}">
+                            <strong>{{ market.fm_name }}</strong>
+                        </a>
+                        {% total_review_average market 5 as stars %}
+                        {% if stars == 0 %}
+                        <span class="badge">-</span>
+                        {% else %}
+                        <span class="badge"><strong>{{ stars }}</strong></span>
+                        {% endif %}<br>
+                        {% endfor %}
+                        <hr>
+                        {# pagination #}
+                        <ul class="pagination text-center" role="navigation" aria-label="Pagination">
+                            {% if page_obj.has_previous %}
+                            <li class="pagination-previous"><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                            <li class="pagination-previous disabled">Previous <span class="show-for-sr">page</span></li>
+                            {% endif %}
+
+                            <li>Page {{ page_obj.number }} of {{ paginator.num_pages }}</li>
+
+                            {% if page_obj.has_next %}
+                            <li class="pagination-next"><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div> {# end med-7 #}
+        </div> {# end row #}
 {% endblock %}
