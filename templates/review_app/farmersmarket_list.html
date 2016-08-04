@@ -30,7 +30,7 @@
                             {% if stars == 0 %}
                                 <p>No reviews yet.</p>
                             {% else %}
-                                <span class="badge"><strong>{{ stars }}</strong></span>
+                                <span class="badge"><strong>{{ stars|floatformat:1 }}</strong></span>
                             {% endif %}
                         </div>
                         {# FM Address #}

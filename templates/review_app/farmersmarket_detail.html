@@ -40,7 +40,7 @@
             {# Rating cirlce #}
             {% total_review_average object 5 as stars %}
             {% if stars %}
-                <span class="badge badge-large"><strong>{{ stars|truncatechars:2 }}</strong></span>
+                <span class="badge badge-large"><strong>{{ stars|floatformat:1 }}</strong></span>
             {% else %}
                 <span class="badge badge-large"><strong>-</strong></span><br>
             {% endif %}
@@ -182,8 +182,8 @@
                     <hr>
                 {% endif %}
 
-                {% comment %}
 
+                {% comment %}
                 <h1>OLD</h1>
                 {% for vendor in vendor_list %}
                     {# {{ vendor.status_set.status_present }}#}
@@ -247,7 +247,7 @@
             <hr>
             {# Start Review plug in code #}
             <h3>Reviews!</h3>
-            <p>This Farmers Market got {{ stars }} out of 5 stars.</p>
+            <p>This Farmers Market got {{ stars|floatformat:2 }} out of 5 stars.</p>
             {% get_review_count object as review_count %}
             <p>{{ review_count }} reviews</p>
             <hr>

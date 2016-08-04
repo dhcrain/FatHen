@@ -25,7 +25,7 @@
             {% if stars == 0 %}
                 <span class="float-right">No reviews yet.</span>
             {% else %}
-                <span class="badge float-right"><strong>{{ stars }}</strong></span>
+                <span class="badge float-right"><strong>{{ stars|floatformat:1 }}</strong></span>
             {% endif %}
         </div>
     </div>
