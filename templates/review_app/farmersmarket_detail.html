@@ -157,6 +157,7 @@
                 {% if vendor_list_present %}
                     <h3>Yes, We will be there!</h3>
                     {% for vendor in vendor_list_present %}
+                    {{ vendor_list_present }}
                         {% include "review_app/includes/vendor_list.html" %}
                     {% endfor %}
                     <hr>
@@ -180,12 +181,12 @@
                 {% comment %}
 
                 <h1>OLD</h1>
+                {% endcomment %}
                 {% for vendor in vendor_list %}
-                    {{ vendor.status_set.status_present }}
+                    {# {{ vendor.status_set.status_present }}#}
                     {# {% if vendor.status_set.status_present == NO_RESPONSE %}yes {% else %} no{% endif %}#}
                     {% include "review_app/includes/vendor_list.html" %}
                 {% endfor %}
-                {% endcomment %}
 
                 {# No vendors listed #}
             {% else %}
