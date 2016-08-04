@@ -40,7 +40,7 @@
             {# Rating cirlce #}
             {% total_review_average object 5 as stars %}
             {% if stars %}
-                <span class="badge badge-large"><strong>{{ stars }}</strong></span>
+                <span class="badge badge-large"><strong>{{ stars|truncatechars:2 }}</strong></span>
             {% else %}
                 <span class="badge badge-large"><strong>-</strong></span><br>
             {% endif %}
