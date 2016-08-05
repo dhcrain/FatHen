@@ -42,6 +42,7 @@
         {% endif %}
     </div>
     <div class="small-4 columns">
+        {% if request.user.is_authenticated %}
         <form class="" action="{% url 'profile_vendor_like_view' object.vendor_slug request.user.pk %}" method="post">
         {% csrf_token %}
             {% if object in request.user.profile.profile_vendor_like.all %}
@@ -54,7 +55,7 @@
                 </button>
             {% endif %}
         </form>
-
+        {% endif %}
         {% if num_likes %}
             {{ num_likes }} have favorited {{ object.vendor_name }}<br>
         {% endif %}
