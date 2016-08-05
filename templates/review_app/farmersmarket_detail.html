@@ -49,9 +49,6 @@
 
             {# Rating/Favorite Button #}
             {% if request.user.is_authenticated %}
-                {% if num_likes %}
-                    {{ object.fm_name }} has {{ num_likes }} favorite <br>
-                {% endif %}
                 <form class="" action="{% url 'profile_fm_like_update_view' object.fm_slug request.user.pk %}" method="post">
                     {% csrf_token %}
                     {% if object in request.user.profile.profile_fm_like.all %}
@@ -64,6 +61,10 @@
                         </button>
                     {% endif %}
                 </form>
+
+                {% if num_likes %}
+                    {{ num_likes }} have favorited {{ object.fm_name }}<br>
+                {% endif %}
                 <br>
                 {% user_has_reviewed object request.user as has_reviewed %}
                 <div class="float-center">

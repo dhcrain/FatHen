@@ -42,9 +42,6 @@
         {% endif %}
     </div>
     <div class="small-4 columns">
-        {% if num_likes %}
-            {{ object.vendor_name }} has {{ num_likes }} favorite <br>
-        {% endif %}
         <form class="" action="{% url 'profile_vendor_like_view' object.vendor_slug request.user.pk %}" method="post">
         {% csrf_token %}
             {% if object in request.user.profile.profile_vendor_like.all %}
@@ -57,8 +54,11 @@
                 </button>
             {% endif %}
         </form>
-        <br>
 
+        {% if num_likes %}
+            {{ num_likes }} have favorited {{ object.vendor_name }}<br>
+        {% endif %}
+        <br>
         {# Rating Button #}
         {% if request.user.is_authenticated %}
             {% user_has_reviewed object request.user as has_reviewed %}

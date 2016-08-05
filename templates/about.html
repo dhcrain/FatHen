@@ -8,19 +8,90 @@
     <div class="row">
         <br>
         <div class="medium-4 columns">
-            <img class="float-center" src="{% static "review_app/img/dhcrain-headshot.jpg" %}" alt="" />
+            <img class="davis-pic" src="{% static "review_app/img/dhcrain-headshot.jpg" %}" alt="" />
+            <br>
+            <br>
+            <p>
+                Fat Hen is a project by Davis Crain as his final project for The
+                Iron Yard Backend Engineering class in Greenville, SC. <br>
+                You can learn more about Davis at <a href="http://dhcrain.com/">dhcrain.com</a>
+            </p>
         </div>
         <div class="medium-8 columns">
-                <h2>About Fat Hen and Davis Crain</h2>
+                <h2 class="text-center">About Fat Hen</h2>
             <div class="row">
                 <div class="medium-6 columns">
+                    <h4>Feature Set:</h4>
                     <ul>
-                        <li>about FatHen.co</li>
+                        <li><strong>Non Logged in users can</strong></li>
+                        <ul>
+                            <li>Search for farmers market</li>
+                            <li>See what vendors are at each farmers market</li>
+                            <li>See the 7 day forecast for farmers markets locations</li>
+                            <li>Read reviews and status updates</li>
+                            <li>Contact me to claim listings or for any reason.</li>
+                        </ul>
+                        <li><strong>Logged In users can (all the above plus….)</strong></li>
+                        <ul>
+                            <li>Review a farmers market - Comment and rate 1 to 5</li>
+                            <li>Review a vendor - comment and rate 1 to 5</li>
+                            <li>Favorite a farmers market</li>
+                            <li>Favorite a vendor</li>
+                            <li>Add vendors and farmers markets</li>
+                        </ul>
+                        <ul>
+                            <li><strong>Profile page with:</strong></li>
+                            <ul>
+                                <li>List of favorite farmers markets</li>
+                                <li>List of favorite vendors</li>
+                                <li>Culminated status statuses of vendors and farmers markets, chronologically.</li>
+                            </ul>
+                        </ul>
+                        <li><strong>Farmers Market Owners can:</strong></li>
+                        <ul>
+                            <li>Update status with picture</li>
+                            <li>Claim if they will have the market this week</li>
+                            <li>Update information</li>
+                            <li>Update pictures</li>
+                            <li>Add vendors</li>
+                        </ul>
+                        <li><strong>Vendor Owners can:</strong></li>
+                        <ul>
+                            <li>Update status with picture</li>
+                            <li>Claim if they will be present at the market</li>
+                            <li>Update information</li>
+                            <li>Update pictures</li>
+                        </ul>
+                        <li>All farmers markets in South Carolina from <a href="https://agriculture.sc.gov/where-to-buy-local/community-based-farmers-markets/">South Carolina Dept. of Agriculture</a></li>
+                        <li>Vendors at <a href="http://www.saturdaymarketlive.com/">TD Saturday Market</a> & <a href="http://travelersrestfarmersmarket.com/">Travelers Rest Farmers Market</a> from their websites.</li>
                     </ul>
                 </div>
                 <div class="medium-6 columns">
+                    <h4>Long Term Wish List:</h4>
                     <ul>
-                        <li>About Davis</li>
+                        <li>Mobile! responsive web site and/or App</li>
+                        <li>Weekly email of status updates to users of favorites</li>
+                        <li>Link to social media for vendors to be able to dual post</li>
+                        <li>Send a text to vendors to check in for the week</li>
+                        <li>Search for a farmers market by Zip code radius</li>
+                        <li>Display all farmers markets on a map</li>
+                        <li>Expand to other states, NC first</li>
+                        <li>OAuth - Sign in with Google, Facebook, and Twitter</li>
+                    </ul>
+                    <h4>Technology Used:</h4>
+                    <ul>
+                        <li>Django 1.9.7</li>
+                        <li>Python 3.5.1</li>
+                        <li>Django REST API</li>
+                        <li>Heroku</li>
+                        <li>PostgreSQL</li>
+                        <li>AWS S3 - Static assets and media uploads</li>
+                        <li>Django-review for the reviews and averaging of scores.
+                        <small>I would not use this next time, it can make it challenging to work with the data.</small></li>
+                        <li><a href="https://developer.forecast.io/">forecast.io</a> API - for 7 day forecast at farmers market locations</li>
+                        <li>Google Maps API embed</li>
+                        <li>Foundation CSS framework</li>
+                        <li>FontAwesome</li>
                     </ul>
                 </div>
             </div>
