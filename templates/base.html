@@ -60,8 +60,9 @@
             {% endblock %}
         </div>
     </div>
-    <!-- Footer that is hidden before 'sticky' is ready and appears at the bottom of the page onload -->
-<footer style="visibility:hidden;">
+<!-- Footer that is hidden before 'sticky' is ready and appears at the bottom of the page onload -->
+{# <footer style="visibility:hidden;">#} {# causing wierd behavior on log in form. #}
+<footer>
 <div class="row">
     <br>
     <div class="medium-12 columns">
@@ -90,7 +91,7 @@
         <script src="{% static 'review_app/js/vendor/jquery.js' %}"></script>
         <script src="{% static 'review_app/js/vendor/what-input.js' %}"></script>
         <script src="{% static 'review_app/js/vendor/foundation.min.js' %}"></script>
-        <script src="{% static 'review_app/js/app.js' %}"></script>
+        {# <script src="{% static 'review_app/js/app.js' %}"></script>#}
         <script>
           $(document).foundation();
         </script>

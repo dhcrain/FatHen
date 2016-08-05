@@ -10,6 +10,7 @@
     </div>
 </div> {# End Hero #}
 {% endblock %}
+
 {% block body %}
 <div class="row">
     <div class="medium-5 small-10 columns">
@@ -22,10 +23,10 @@
                 <form class="" action="{% url 'login' %}" method="post">
                     {% csrf_token %}
                     {{ login_form.as_p }}
-                    <strong><input class="expanded button" type="submit" name="login" value="Login"></strong>
+                    <input class="expanded button" type="submit" name="login" value="Login">
                 </form>
                 <h2 class="text-center">OR</h2>
-                <a class="expanded button success" href="{% url 'register_view' %}"><strong>Create an Account</strong></a>
+                <a class="expanded button success" href="{% url 'register_view' %}">Create an Account</a>
                 {% endif %}
             </div> {# end login #}
         </div> {# end login outer #}
