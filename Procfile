@@ -1,1 +1,1 @@
-web: gunicorn fm_proj.wsgi --log-file - --workers=10
+web: gunicorn fm_proj.wsgi --log-file - --workers=2
