@@ -45,11 +45,12 @@ urlpatterns = [
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/update$', VendorUpdateView.as_view(), name='vendor_update_view'),
     url(r'^vendor/(?P<vendor_slug>[A-Za-z0-9_\-]+)/delete$', VendorDeleteView.as_view(), name='vendor_delete_view'),
     # API URLs
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/farmers_markets/$', FarmersMarketListAPIView.as_view(), name='farmers-market-list'),
     url(r'^api/farmers_markets/(?P<pk>\d+)/$', FarmersMarketRetrieveAPIView.as_view(), name='farmers-market-detail'),
     url(r'^api/vendors/$', VendorListAPIView.as_view(), name='vendor-list'),
     url(r'^api/vendors/(?P<pk>\d+)/$', VendorRetrieveAPIView.as_view(), name='vendor-detail'),
+    url(r'^api/docs/', include('rest_framework_docs.urls')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

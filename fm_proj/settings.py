@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'generic_positions',
     'storages',
     'rest_framework',
+    'rest_framework_docs',
 ]
 
 MIDDLEWARE_CLASSES = [

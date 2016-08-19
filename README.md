@@ -1,6 +1,8 @@
 # FatHen.co
 Visit Fat Hen on [fathen.co](http://www.fathen.co/)
 
+[REST API docs](http://www.fathen.co/api/docs/)
+
 Fat Hen is a project by Davis Crain as his final project for The Iron Yard Backend Engineering class in Greenville, SC.
 
 You can learn more about Davis at [dhcrain.com](https://dhcrain.com/).
