@@ -7,7 +7,7 @@ import datetime
 start_time = datetime.datetime.now()
 print(start_time)
 
-with open ("sc_farmers_markets.csv", "w", newline="") as outfile:
+with open("sc_farmers_markets.csv", "w", newline="") as outfile:
 
     url = "https://agriculture.sc.gov/where-to-buy-local/community-based-farmers-markets/"
     content = requests.get(url).text
@@ -41,7 +41,6 @@ with open ("sc_farmers_markets.csv", "w", newline="") as outfile:
                 #         fm_web = contact[5]
                 #     except IndexError:
                 #         fm_web = contact
-
 
             elif "Facility Type:" in item.text:
                 facility_type = item.text.split(":")[1].strip()
@@ -98,7 +97,7 @@ with open ("sc_farmers_markets.csv", "w", newline="") as outfile:
 
         # print(market_name, contact_name, contact_email, facility_type, mrkt_county, mrkt_addr, programs_accepted, mrkt_phone, hrs_of_operation, seasons_of_operation, handicap_accessible, market_iframe_url)
 
-        # csv_row = [market_name, contact_name, contact_email, fm_web, facility_type, mrkt_county, mrkt_addr, programs_accepted, mrkt_phone, mrkt_contact_all, hrs_of_operation, seasons_of_operation, handicap_accessible, market_iframe_url]
+        csv_row = [market_name, contact_name, contact_email, fm_web, facility_type, mrkt_county, mrkt_addr, programs_accepted, mrkt_phone, mrkt_contact_all, hrs_of_operation, seasons_of_operation, handicap_accessible, market_iframe_url]
 
         writer = csv.writer(outfile, quoting=csv.QUOTE_MINIMAL)
         writer.writerow(csv_row)

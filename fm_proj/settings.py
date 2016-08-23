@@ -122,8 +122,6 @@ USE_L10N = True
 
 USE_TZ = False
 
-
-
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Static files (CSS, JavaScript, Images)
@@ -212,7 +210,6 @@ REST_FRAMEWORK = {
         'user': '1000/day'
     }
 }
-
 
 EMAIL_HOST_USER = 'fathen.co@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['email_password']

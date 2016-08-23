@@ -12,5 +12,4 @@ def tr_vendor_import(apps, schema_editor):
 
     raise Exception("2 yay")
 
-
 migrations.RunPython(tr_vendor_import),

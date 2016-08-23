@@ -4,6 +4,7 @@ import os
 YOUR_API_KEY = os.environ['mailgun_secret_api']
 print(YOUR_API_KEY)
 
+
 def send_simple_message():
     email = requests.post(
         "https://api.mailgun.net/v3/frmrsmrkt.com/messages",

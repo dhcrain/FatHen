@@ -7,7 +7,7 @@ import time
 start_time = datetime.datetime.now()
 print(start_time)
 
-with open ("gvl_mainst_vendors.csv", "w", newline="") as outfile:
+with open("gvl_mainst_vendors.csv", "w", newline="") as outfile:
 
     url = "http://www.saturdaymarketlive.com/101/Current-Vendors"
     content = requests.get(url).text
@@ -40,7 +40,6 @@ with open ("gvl_mainst_vendors.csv", "w", newline="") as outfile:
         except IndexError:
             vendor_web = ""
         print(vendor_web)
-
 
         csv_row = [vendor_name, vendor_desc.strip('\n'), vendor_web]
 

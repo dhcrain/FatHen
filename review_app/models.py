@@ -1,12 +1,11 @@
 from django.db import models
-from django.template.defaultfilters import slugify
+# from django.template.defaultfilters import slugify
 from autoslug import AutoSlugField
 from localflavor.us.models import PhoneNumberField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.urlresolvers import reverse
 import datetime
-
 
 
 class VendorType(models.Model):
@@ -68,7 +67,6 @@ class FarmersMarket(models.Model):
         return reverse('farmers_market_detail_view', kwargs={'fm_slug': self.fm_slug})
 
 
-
 class Vendor(models.Model):
     vendor_user = models.ForeignKey('auth.User')
     at_farmers_market = models.ManyToManyField("FarmersMarket", verbose_name='Located here')
@@ -88,7 +86,6 @@ class Vendor(models.Model):
 
     def __str__(self):
         return self.vendor_name
-
 
     @property
     def get_vendor_order_by(self):
@@ -118,7 +115,6 @@ class Vendor(models.Model):
         return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
 
 
-
 class Profile(models.Model):
     FARMERS_MARKET = 'Farmers Market'
     VENDOR = 'Vendor'
@@ -129,7 +125,6 @@ class Profile(models.Model):
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
     profile_fm_like = models.ManyToManyField(FarmersMarket, blank=True, related_name='fm_likes')
     profile_vendor_like = models.ManyToManyField(Vendor, blank=True, related_name='vendor_likes')
-
 
     def __str__(self):
         return str(self.profile_user)
@@ -167,8 +162,6 @@ class Status(models.Model):
             return self.status_vendor
         elif self.status_fm:
             return self.status_fm
-
-
 
 
 @receiver(post_save, sender='auth.User')

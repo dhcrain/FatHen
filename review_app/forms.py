@@ -5,6 +5,7 @@ from django import forms
 from review_app.models import Status
 from django.utils.translation import ugettext_lazy as _
 
+
 class StatusCreateForm(forms.ModelForm):
 
     class Meta:
@@ -20,6 +21,7 @@ class StatusCreateForm(forms.ModelForm):
             'status_present': _('Tell your customers if you will be there.'),
         }
 
+
 class ContactForm(forms.Form):
 
     name = forms.CharField(required=True)
@@ -32,12 +34,13 @@ class ContactForm(forms.Form):
 class UserCreationEmailForm(UserCreationForm):
     # we are using email as username so override label and validators
     username = forms.CharField(
-        label = "Email:",
-        max_length = 30,
-        required = True,
+        label="Email:",
+        max_length=30,
+        required=True,
         validators=[validate_email],
         help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.")
     )
+
     class Meta:
         model = User
         fields = ("username", "password1", "password2")

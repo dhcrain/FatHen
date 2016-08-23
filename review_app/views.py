@@ -7,20 +7,22 @@ from functools import reduce
 from django.http import HttpResponseRedirect
 from django.db.models import Case, When, Q
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import Http404
+# from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from fm_proj.settings import EMAIL_HOST_USER
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic import View, TemplateView, CreateView, DetailView, ListView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from review_app.models import Profile, FarmersMarket, Vendor, VendorType, Status
+from review_app.models import Profile, FarmersMarket, Vendor, Status
 from review_app.forms import StatusCreateForm, ContactForm, UserCreationEmailForm
 from review.templatetags.review_tags import total_review_average
 from review.forms import ReviewForm
 # Create your views here.
+
 
 class IndexView(ListView):
     template_name = 'index.html'
@@ -31,7 +33,7 @@ class IndexView(ListView):
         reviews = [(total_review_average(market), market.pk) for market in FarmersMarket.objects.all()]
         pk_list = [mkt[1] for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)]
         preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
-        return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved) # [:10]
+        return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)  # [:10]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,19 +61,17 @@ class FarmersMarketListView(ListView):
             return FarmersMarket.objects.all()
 
 
-
 class FarmersMarketDetailView(DetailView):
     model = FarmersMarket
     slug_field = 'fm_slug'
     slug_url_kwarg = 'fm_slug'
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         fm_slug = self.kwargs.get('fm_slug')
         sort = self.request.GET.get('sort')
         rated = self.request.GET.get('rated')
-        forecast = self.request.GET.get('forecast')
+        # forecast = self.request.GET.get('forecast')
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
         api_key = os.environ['forecast_api']
         url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, location.fm_lat, location.fm_long)
@@ -92,7 +92,7 @@ class FarmersMarketDetailView(DetailView):
             context['vendor_list_nr_status'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No Response").distinct()
             context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present=None).distinct()
 
-            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
+            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug)  # .order_by('status')
             # vendor_list = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
             # paginator = Paginator(vendor_list, 25) # Show 25 vendors per page
             # page = self.request.GET.get('page')
@@ -104,8 +104,6 @@ class FarmersMarketDetailView(DetailView):
             # except EmptyPage:
             #     # If page is out of range (e.g. 9999), deliver last page of results.
             #     context['vendor_list'] = paginator.page(paginator.num_pages)
-
-
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
         google_api = os.environ['google_maps_api']
         map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(google_api, mrkt.fm_address)
@@ -115,7 +113,7 @@ class FarmersMarketDetailView(DetailView):
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
         context['num_likes'] = location.fm_likes.count()
-        context['asdf'] = User.objects.get(username='asdf') # default 'owner' of all fm/v
+        context['asdf'] = User.objects.get(username='asdf')  # default 'owner' of all fm/v
         return context
 
 
@@ -152,7 +150,7 @@ class FarmersMarketCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))
+        return reverse('farmers_market_detail_view', args=(self.object.fm_slug,))
 
 
 class FarmersMarketUpdateView(LoginRequiredMixin, UpdateView):
@@ -174,7 +172,7 @@ class FarmersMarketUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('farmers_market_detail_view',args=(self.object.fm_slug,))
+        return reverse('farmers_market_detail_view', args=(self.object.fm_slug,))
 
 
 class ProfileFMLikeUpdateView(LoginRequiredMixin, View):
@@ -214,7 +212,7 @@ class VendorDetailView(DetailView):
         context['status_list'] = Status.objects.filter(status_vendor=vendor)
         context['review_form'] = ReviewForm(vendor)
         context['num_likes'] = vendor.vendor_likes.count()
-        context['asdf'] = User.objects.get(username='asdf') # default 'owner' of all fm/v
+        context['asdf'] = User.objects.get(username='asdf')  # default 'owner' of all fm/v
         return context
 
 
@@ -248,7 +246,7 @@ class VendorCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('vendor_detail_view',args=(self.object.vendor_slug,))
+        return reverse('vendor_detail_view', args=(self.object.vendor_slug,))
 
 
 class VendorUpdateView(LoginRequiredMixin, UpdateView):
@@ -265,7 +263,7 @@ class VendorUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('vendor_detail_view',args=(self.object.vendor_slug,))
+        return reverse('vendor_detail_view', args=(self.object.vendor_slug,))
 
 
 class VendorDeleteView(LoginRequiredMixin, DeleteView):
@@ -319,6 +317,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         context['status_list'] = Status.objects.filter(Q(status_vendor__in=vendor_favs) | Q(status_fm__in=fm_favs)).filter(status_created__gt=one_week)
         return context
+
 
 # modified from https://www.calazan.com/adding-basic-search-to-your-django-site/
 class SearchListView(ListView):
