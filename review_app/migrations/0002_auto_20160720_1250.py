@@ -6,6 +6,7 @@ from django.db import migrations
 import csv
 from django.template.defaultfilters import slugify
 
+
 def fm_data_migrate(apps, schema_editor):
     FarmersMarket = apps.get_model("review_app", "FarmersMarket")
     with open("review_app/data/sc_farmers_markets2.csv") as infile:

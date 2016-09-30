@@ -91,27 +91,18 @@ class FarmersMarketDetailView(DetailView):
             context['vendor_list_no'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No").distinct()
             context['vendor_list_nr_status'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No Response").distinct()
             context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present=None).distinct()
-
             context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug)  # .order_by('status')
-            # vendor_list = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug) #.order_by('status')
-            # paginator = Paginator(vendor_list, 25) # Show 25 vendors per page
-            # page = self.request.GET.get('page')
-            # try:
-            #     context['vendor_list'] = paginator.page(page)
-            # except PageNotAnInteger:
-            #     # If page is not an integer, deliver first page.
-            #     context['vendor_list'] = paginator.page(1)
-            # except EmptyPage:
-            #     # If page is out of range (e.g. 9999), deliver last page of results.
-            #     context['vendor_list'] = paginator.page(paginator.num_pages)
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
         google_api = os.environ['google_maps_api']
         map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(google_api, mrkt.fm_address)
         context['google_map'] = map_url
         context['fm_status_form'] = StatusCreateForm()
         context['review_form'] = ReviewForm(mrkt)
+        """
+        removed one_week filter for demo purposes
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
-        context['status_list'] = Status.objects.filter(status_fm=mrkt).filter(status_created__gt=one_week)
+        """
+        context['status_list'] = Status.objects.filter(status_fm=mrkt)  # .filter(status_created__gt=one_week)
         context['num_likes'] = location.fm_likes.count()
         context['asdf'] = User.objects.get(username='asdf')  # default 'owner' of all fm/v
         return context
@@ -314,8 +305,11 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         profile = Profile.objects.get(profile_user=self.request.user)
         fm_favs = profile.profile_fm_like.all()
         vendor_favs = profile.profile_vendor_like.all()
+        """
+        removed one_week filter for demo purposes
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
-        context['status_list'] = Status.objects.filter(Q(status_vendor__in=vendor_favs) | Q(status_fm__in=fm_favs)).filter(status_created__gt=one_week)
+        """
+        context['status_list'] = Status.objects.filter(Q(status_vendor__in=vendor_favs) | Q(status_fm__in=fm_favs))  # .filter(status_created__gt=one_week)
         return context
 
 
