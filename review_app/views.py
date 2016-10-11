@@ -9,8 +9,10 @@ from django.db.models import Case, When, Q
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import Http404
 # from django.core.paginator import Paginator
-from django.core.mail import send_mail
-from fm_proj.settings import EMAIL_HOST_USER
+# from django.core.mail import send_mail
+# from fm_proj.settings import EMAIL_HOST_USER
+from django.contrib.messages.views import SuccessMessageMixin
+from review_app.tasks import contact_email
 # from django.shortcuts import render
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic import View, TemplateView, CreateView, DetailView, ListView, FormView
@@ -334,10 +336,11 @@ class SearchListView(ListView):
         return result
 
 
-class ContactView(FormView):
+class ContactView(SuccessMessageMixin, FormView):
     form_class = ContactForm
     template_name = 'review_app/contact.html'
-    success_url = reverse_lazy('index_view')
+    success_url = reverse_lazy('contact_view')
+    success_message = "Thank you %(name)s, we will be in touch shortly"
 
     def form_valid(self, form):
         name = form.cleaned_data.get('name')
@@ -346,16 +349,8 @@ class ContactView(FormView):
         form_message = form.cleaned_data.get('message')
         subject = form.cleaned_data.get('subject').strip()
         from_email = form.cleaned_data.get('email')
-        from review_app.tasks import contact_email
-        contact_email(name, from_email, user, form_message, subject)
-        # message += "\n\n{0}".format(form.cleaned_data.get('message'))
-        # send_mail(
-        #     subject=form.cleaned_data.get('subject').strip(),
-        #     message=message,
-        #     from_email=form.cleaned_data.get('email'),
-        #     recipient_list=['fathen.co@gmail.com'],
-        # )
 
+        contact_email.delay(name, from_email, user, form_message, subject)
 
         # message = "{name} / {email} / {user} said: ".format(
         #     name=form.cleaned_data.get('name'),

@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 
 {% block body %}
+
     <h1>Send us an email</h1>
+
+    {% if messages %}
+    <div class="alert-box success">
+        {% for message in messages %}
+        <h4>{{ message }}</h4>
+        {% endfor %}
+    </div>
+    {% endif %}
 
     <form class="" action="" method="post">
         {% csrf_token %}
