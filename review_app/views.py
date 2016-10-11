@@ -349,20 +349,9 @@ class ContactView(SuccessMessageMixin, FormView):
         form_message = form.cleaned_data.get('message')
         subject = form.cleaned_data.get('subject').strip()
         from_email = form.cleaned_data.get('email')
-
+        # This is used to send the email with Celery delay
         contact_email.delay(name, from_email, user, form_message, subject)
 
-        # message = "{name} / {email} / {user} said: ".format(
-        #     name=form.cleaned_data.get('name'),
-        #     email=form.cleaned_data.get('email'),
-        #     user=self.request.user)
-        # message += "\n\n{0}".format(form.cleaned_data.get('message'))
-        # send_mail(
-        #     subject=form.cleaned_data.get('subject').strip(),
-        #     message=message,
-        #     from_email=form.cleaned_data.get('email'),
-        #     recipient_list=['fathen.co@gmail.com'],
-        # )
         return super().form_valid(form)
 
 
