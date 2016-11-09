@@ -12,7 +12,8 @@ def send_simple_message():
         data={"from": "FrmrsMrkt.com <info@frmrsmrkt.com>",
               "to": ["dhcrain@gmail.com", "davis@dhcrain.com"],
               "subject": "Hello",
-              "text": "Heeeeeyyyyyyyyyy!!!!!!!")
+              "text": "Heeeeeyyyyyyyyyy!!!!!!!"})
+
     print(email)
     return email
 
