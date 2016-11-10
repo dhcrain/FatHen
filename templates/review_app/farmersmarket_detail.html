@@ -46,7 +46,6 @@
             {% endif %}
         </div>
         <div class="small-6 columns">
-
             {# Rating/Favorite Button #}
             {% if request.user.is_authenticated %}
                 <form class="" action="{% url 'profile_fm_like_update_view' object.fm_slug request.user.pk %}" method="post">

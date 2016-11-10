@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.urlresolvers import reverse
 import datetime
+from review.templatetags.review_tags import total_review_average
 
 
 class VendorType(models.Model):
@@ -66,6 +67,10 @@ class FarmersMarket(models.Model):
     def get_absolute_url(self):
         return reverse('farmers_market_detail_view', kwargs={'fm_slug': self.fm_slug})
 
+    @property
+    def get_rating(self):
+        return (total_review_average(self) / 20)
+
 
 class Vendor(models.Model):
     vendor_user = models.ForeignKey('auth.User')
@@ -113,6 +118,10 @@ class Vendor(models.Model):
 
     def get_absolute_url(self):
         return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
+
+    @property
+    def get_rating(self):
+        return (total_review_average(self) / 20)
 
 
 class Profile(models.Model):
