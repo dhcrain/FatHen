@@ -109,14 +109,16 @@ class Vendor(models.Model):
         if self.vendor_picture:
             return self.vendor_picture.url
         else:
-            return "https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/vendor_icon.png"
+            # return "https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/vendor_icon.png"
+            return "../../static/review_app/img/vendor_icon.png"
 
     @property
     def vendor_banner_picture_url(self):
         if self.vendor_banner_picture:
             return self.vendor_banner_picture.url
         else:
-            return "https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/pea.jpg"
+            # return "https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/pea.jpg"
+            return "../../static/review_app/img/pea.jpg"
 
     def get_absolute_url(self):
         return reverse('vendor_detail_view', kwargs={'vendor_slug': self.vendor_slug})
