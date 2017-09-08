@@ -78,8 +78,9 @@ class FarmersMarketDetailView(DetailView):
         api_key = os.environ['forecast_api']
         url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, location.fm_lat, location.fm_long)
         response = requests.get(url).json()
-        context['forecast_summary'] = response['daily']['summary']  # weekly summary
-        context['forecast_iframe_url'] = "http://forecast.io/embed/#lat={}&lon={}&name={}".format(location.fm_lat, location.fm_long, location.fm_name)
+        if (location.fm_lat is not None or location.fm_long is not None):
+            context['forecast_summary'] = response['daily']['summary']  # weekly summary
+            context['forecast_iframe_url'] = "http://forecast.io/embed/#lat={}&lon={}&name={}".format(location.fm_lat, location.fm_long, location.fm_name)
         if sort:
             context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).order_by(sort)
         elif rated:
