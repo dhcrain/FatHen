@@ -4,9 +4,21 @@ import geocoder
 import csv
 import datetime
 import re
+from io import open as iopen
 
 start_time = datetime.datetime.now()
 print(start_time)
+
+
+def requests_image(file_url, file_name):
+    suffix_list = ['jpg', 'gif', 'png', 'tif', 'svg', ]
+    file_suffix = file_name.split('.')[1]
+    i = requests.get(file_url)
+    if file_suffix in suffix_list and i.status_code == requests.codes.ok:
+        with iopen(file_name, 'wb') as file:
+            file.write(i.content)
+    else:
+        return False
 
 with open("mi_farmers_markets.csv", "w", newline="") as outfile:
     page_size = 2000
@@ -17,6 +29,18 @@ with open("mi_farmers_markets.csv", "w", newline="") as outfile:
     for fm in content["features"]:
         fm_name = fm["properties"]["plainTitle"].replace("&amp;", "&").replace("&#039;", "'").replace("’", "'").replace("`", "'").strip()
         print(fm_name)
+
+        rendered_content = fm['properties']['renderedContent']
+        content_html = BeautifulSoup(rendered_content, "html.parser")
+        img_link = content_html.find('img', class_='img-responsive')
+        file_name = ""
+        if img_link is not None:
+            img_url = 'http:' + img_link.attrs['src'].replace('ar_5:4,c_fill,w_200,g_face,q_50/', '')
+            file_name = fm_name.replace(' ', '_').replace(',', '').replace("'", "").replace("/", "").lower() + '.jpg'
+            print(file_name)
+            print(img_url)
+            requests_image(img_url, file_name)
+
         fm_lat = fm["geometry"]["coordinates"][0]
         fm_long = fm["geometry"]["coordinates"][1]
 
@@ -103,7 +127,8 @@ with open("mi_farmers_markets.csv", "w", newline="") as outfile:
                    fm_phone,
                    season,
                    fm_lat,
-                   fm_long]
+                   fm_long,
+                   file_name]
 
         writer = csv.writer(outfile, quoting=csv.QUOTE_MINIMAL)
         writer.writerow(csv_row)

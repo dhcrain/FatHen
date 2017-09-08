@@ -10,3 +10,11 @@ vendor_images/
 status_images/
 .envrc
 profile_images/
+
+scraper/mi_images/
+
+scraper/gvl_mainst_vendors\.csv
+
+*.csv
+
+scraper/test\.py
