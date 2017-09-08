@@ -18,3 +18,5 @@ scraper/gvl_mainst_vendors\.csv
 *.csv
 
 scraper/test\.py
+
+\.vscode/
