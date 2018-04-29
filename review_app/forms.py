@@ -4,7 +4,8 @@ from django.core.validators import validate_email
 from django import forms
 from review_app.models import Status
 from django.utils.translation import ugettext_lazy as _
-
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
+from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 
 class StatusCreateForm(forms.ModelForm):
 
@@ -28,7 +29,7 @@ class ContactForm(forms.Form):
     email = forms.EmailField(required=True)
     subject = forms.CharField(required=True)
     message = forms.CharField(widget=forms.Textarea)
-
+    captcha = ReCaptchaField(widget=ReCaptchaWidget(), label='')
 
 # https://djangosnippets.org/snippets/3043/
 class UserCreationEmailForm(UserCreationForm):
