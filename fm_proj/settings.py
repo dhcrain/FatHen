@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'storages',
     'rest_framework',
     'rest_framework_docs',
+    'captcha',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -223,3 +224,8 @@ BROKER_CONNECTION_TIMEOUT = 30  # May require a long timeout due to Linux DNS ti
 CELERY_RESULT_BACKEND = None  # AMQP is not recommended as result backend as it creates thousands of queues
 CELERY_SEND_EVENTS = False  # Will not create celeryev.* queues
 CELERY_EVENT_QUEUE_EXPIRES = 60  # Will delete all celeryev. queues without consumers after 1 minute.
+
+
+RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_PUBLIC_KEY']
+RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_PRIVATE_KEY']
+NOCAPTCHA = True
