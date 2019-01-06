@@ -26,7 +26,11 @@ SECRET_KEY = os.environ.get('secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'fm-review-stage.herokuapp.com',
+    'fathen.co',
+    '127.0.0.1',
+]
 
 
 # Application definition
