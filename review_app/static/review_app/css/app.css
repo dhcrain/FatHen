@@ -215,6 +215,9 @@ footer a:hover {
     margin-top: 5rem;
 }
 
+label.required:after {
+    content: '*';
+}
 
 /* From future version of Foundation CSS */
 .alert-box {
