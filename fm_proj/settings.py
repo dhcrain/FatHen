@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'storages',
     'rest_framework',
     'rest_framework_docs',
-    'snowpenguin.django.recaptcha2',
+    'captcha',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -230,3 +230,4 @@ CELERY_EVENT_QUEUE_EXPIRES = 60  # Will delete all celeryev. queues without cons
 
 RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_PUBLIC_KEY']
 RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_PRIVATE_KEY']
+NOCAPTCHA = True
