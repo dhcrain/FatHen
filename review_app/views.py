@@ -23,7 +23,6 @@ from review_app.models import Profile, FarmersMarket, Vendor, Status
 from review_app.forms import StatusCreateForm, ContactForm, UserCreationEmailForm
 from review.templatetags.review_tags import total_review_average
 from review.forms import ReviewForm
-# Create your views here.
 
 
 class IndexView(ListView):
