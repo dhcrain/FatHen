@@ -3,7 +3,7 @@ boto==2.42.0
 click==6.6
 decorator==4.0.10
 dj-database-url==0.4.1
-Django==1.9.13
+Django==1.11.29
 django-autoslug==1.9.3
 django-generic-positions==0.2.2
 django-hvad==1.5.1
