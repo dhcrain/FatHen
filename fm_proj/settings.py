@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     'www.fathen.co',
     '127.0.0.1',
     '127.0.0.1:8000',
+    'fathen.dhcrain.com'
 ]
 
 LOGGING = {
