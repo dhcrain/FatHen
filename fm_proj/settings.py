@@ -21,13 +21,55 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%q=x!-%^j&_=^u=wc4cv=cpaa^)3u^&i*vgl&k2%)^bx=o)1by'
+SECRET_KEY = os.environ.get('secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('debug') == 'True':
+    DEBUG = True
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'fm-review-stage.herokuapp.com',
+    'fathen.co',
+    'www.fathen.co',
+    '127.0.0.1',
+    '127.0.0.1:8000',
+    'fathen.dhcrain.com'
+]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+                       'pathname=%(pathname)s lineno=%(lineno)s ' +
+                       'funcname=%(funcName)s %(message)s'),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'testlogger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+}
 
 # Application definition
 
@@ -57,6 +99,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'fm_proj.urls'
@@ -155,21 +198,18 @@ AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
     'Cache-Control': 'max-age=94608000',
     }
 
-aws_bucket_name = os.environ.get('aws_bucket_name')
-aws_access_key_id = os.environ['aws_access_key_id']
-aws_secret_access_key = os.environ['aws_secret_access_key']
-
-AWS_STORAGE_BUCKET_NAME = aws_bucket_name
-AWS_ACCESS_KEY_ID = aws_access_key_id
-AWS_SECRET_ACCESS_KEY = aws_secret_access_key
+# AWS_STORAGE_BUCKET_NAME = os.environ.get('aws_bucket_name')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('NOTHING_HERE')
+AWS_ACCESS_KEY_ID = os.environ['aws_access_key_id']
+AWS_SECRET_ACCESS_KEY = os.environ['aws_secret_access_key']
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
 # it simple - just use this domain plus the path. (If this isn't set, things get complicated).
 # This controls how the `static` template tag from `staticfiles` gets expanded, if you're using it.
 # We also use it in the next setting.
-AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(aws_bucket_name)
+AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 
-if aws_bucket_name:
+if AWS_STORAGE_BUCKET_NAME:
     # This is used by the `static` template tag from `static`, if you're using that. Or if anything else
     # refers directly to STATIC_URL. So it's safest to always set it.
     # STATIC_URL = 'https://{}/'.format(AWS_S3_CUSTOM_DOMAIN)
@@ -184,6 +224,7 @@ if aws_bucket_name:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
     STATICFILES_LOCATION = 'static'
+
 
 # For django-review
 # this would use a RadioSelect instead of the default Select
