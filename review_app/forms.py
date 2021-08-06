@@ -1,10 +1,11 @@
+from captcha.fields import ReCaptchaField
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
-from django import forms
-from review_app.models import Status
 from django.utils.translation import ugettext_lazy as _
-from captcha.fields import ReCaptchaField
+
+from review_app.models import Status
 
 
 class StatusCreateForm(forms.ModelForm):

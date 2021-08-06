@@ -1,37 +1,31 @@
 import datetime
 import operator
-import requests
-import geocoder
 import os
 from functools import reduce
-from django.http import HttpResponseRedirect
-from django.db.models import Case, When, Q
-from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import Http404
 
+import geocoder
+import requests
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 # from django.core.paginator import Paginator
 # from django.core.mail import send_mail
 # from fm_proj.settings import EMAIL_HOST_USER
 from django.contrib.messages.views import SuccessMessageMixin
-from review_app.tasks import contact_email
-
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.db.models import Case, Q, When
+from django.http import Http404, HttpResponseRedirect
+from django.views.generic import (CreateView, DetailView, FormView, ListView,
+                                  TemplateView, View)
 # from django.shortcuts import render
-from django.views.generic.edit import UpdateView, DeleteView
-from django.views.generic import (
-    View,
-    TemplateView,
-    CreateView,
-    DetailView,
-    ListView,
-    FormView,
-)
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from review_app.models import Profile, FarmersMarket, Vendor, Status
-from review_app.forms import StatusCreateForm, ContactForm, UserCreationEmailForm
-from review.templatetags.review_tags import total_review_average
+from django.views.generic.edit import DeleteView, UpdateView
 from review.forms import ReviewForm
+from review.templatetags.review_tags import total_review_average
+
+from review_app.forms import (ContactForm, StatusCreateForm,
+                              UserCreationEmailForm)
+from review_app.models import FarmersMarket, Profile, Status, Vendor
+from review_app.tasks import contact_email
 
 
 class IndexView(ListView):
