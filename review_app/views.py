@@ -48,12 +48,13 @@ class IndexView(ListView):
 
     def get_queryset(self):
         # http://stackoverflow.com/a/38390480/5119789
-        reviews = [
-            (total_review_average(market), market.pk)
-            for market in FarmersMarket.objects.all()
+        reviews = [(total_review_average(market), market.pk)
+                   for market in FarmersMarket.objects.all()]
+        pk_list = [
+            mkt[1] for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)
         ]
-        pk_list = [mkt[1] for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)]
-        preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
+        preserved = Case(
+            *[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
         # [:10]
         return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)
 
@@ -75,15 +76,16 @@ class FarmersMarketListView(ListView):
             return FarmersMarket.objects.all().order_by(sort)
         elif rated:
             # http://stackoverflow.com/a/38390480/5119789
-            reviews = [
-                (total_review_average(market), market.pk)
-                for market in FarmersMarket.objects.all()
-            ]
+            reviews = [(total_review_average(market), market.pk)
+                       for market in FarmersMarket.objects.all()]
             pk_list = [
-                mkt[1] for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)
+                mkt[1]
+                for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)
             ]
-            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
-            return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)
+            preserved = Case(
+                *[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
+            return FarmersMarket.objects.filter(
+                pk__in=pk_list).order_by(preserved)
         else:
             return FarmersMarket.objects.all()
 
@@ -102,73 +104,55 @@ class FarmersMarketDetailView(DetailView):
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
         api_key = os.environ["forecast_api"]
         url = "https://api.forecast.io/forecast/{}/{},{}".format(
-            api_key, location.fm_lat, location.fm_long
-        )
+            api_key, location.fm_lat, location.fm_long)
         response = requests.get(url).json()
         if location.fm_lat is not None or location.fm_long is not None:
             # weekly summary
             context["forecast_summary"] = response["daily"]["summary"]
             context[
-                "forecast_iframe_url"
-            ] = "https://forecast.io/embed/#lat={}&lon={}&name={}".format(
-                location.fm_lat, location.fm_long, location.fm_name
-            )
+                "forecast_iframe_url"] = "https://forecast.io/embed/#lat={}&lon={}&name={}".format(
+                    location.fm_lat, location.fm_long, location.fm_name)
         if sort:
             context["vendor_list"] = Vendor.objects.filter(
-                at_farmers_market__fm_slug=fm_slug
-            ).order_by(sort)
+                at_farmers_market__fm_slug=fm_slug).order_by(sort)
         elif rated:
             # http://stackoverflow.com/a/38390480/5119789
-            reviews = [
-                (total_review_average(vendor), vendor.pk)
-                for vendor in Vendor.objects.all()
-            ]
+            reviews = [(total_review_average(vendor), vendor.pk)
+                       for vendor in Vendor.objects.all()]
             pk_list = [
                 vendor[1]
                 for vendor in sorted(reviews, key=lambda x: x[0], reverse=True)
             ]
-            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
-            context["vendor_list"] = (
-                Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug)
-                .filter(pk__in=pk_list)
-                .order_by(preserved)
-            )
+            preserved = Case(
+                *[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
+            context["vendor_list"] = (Vendor.objects.filter(
+                at_farmers_market__fm_slug=fm_slug).filter(
+                    pk__in=pk_list).order_by(preserved))
         else:
             context["vendor_list_present"] = (
-                Vendor.objects.prefetch_related("status_set")
-                .filter(
-                    at_farmers_market__fm_slug=fm_slug, status__status_present="Yes"
-                )
-                .distinct()
-            )
+                Vendor.objects.prefetch_related("status_set").filter(
+                    at_farmers_market__fm_slug=fm_slug,
+                    status__status_present="Yes").distinct())
             context["vendor_list_no"] = (
-                Vendor.objects.prefetch_related("status_set")
-                .filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No")
-                .distinct()
-            )
+                Vendor.objects.prefetch_related("status_set").filter(
+                    at_farmers_market__fm_slug=fm_slug,
+                    status__status_present="No").distinct())
             context["vendor_list_nr_status"] = (
-                Vendor.objects.prefetch_related("status_set")
-                .filter(
+                Vendor.objects.prefetch_related("status_set").filter(
                     at_farmers_market__fm_slug=fm_slug,
                     status__status_present="No Response",
-                )
-                .distinct()
-            )
+                ).distinct())
             context["vendor_list_nr"] = (
-                Vendor.objects.prefetch_related("status_set")
-                .filter(at_farmers_market__fm_slug=fm_slug, status__status_present=None)
-                .distinct()
-            )
+                Vendor.objects.prefetch_related("status_set").filter(
+                    at_farmers_market__fm_slug=fm_slug,
+                    status__status_present=None).distinct())
             context["vendor_list"] = Vendor.objects.prefetch_related(
-                "status_set"
-            ).filter(
-                at_farmers_market__fm_slug=fm_slug
-            )  # .order_by('status')
+                "status_set").filter(
+                    at_farmers_market__fm_slug=fm_slug)  # .order_by('status')
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
         google_api = os.environ["google_maps_api"]
         map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(
-            google_api, mrkt.fm_address
-        )
+            google_api, mrkt.fm_address)
         context["google_map"] = map_url
         context["fm_status_form"] = StatusCreateForm()
         context["review_form"] = ReviewForm(mrkt)
@@ -177,12 +161,10 @@ class FarmersMarketDetailView(DetailView):
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         """
         context["status_list"] = Status.objects.filter(
-            status_fm=mrkt
-        )  # .filter(status_created__gt=one_week)
+            status_fm=mrkt)  # .filter(status_created__gt=one_week)
         context["num_likes"] = location.fm_likes.count()
         context["asdf"] = User.objects.get(
-            username="asdf"
-        )  # default 'owner' of all fm/v
+            username="asdf")  # default 'owner' of all fm/v
         return context
 
 
@@ -199,7 +181,7 @@ class FarmersMarketStatusCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         fm_slug = self.kwargs.get("fm_slug")
-        return reverse("farmers_market_detail_view", args=(fm_slug,))
+        return reverse("farmers_market_detail_view", args=(fm_slug, ))
 
 
 class FarmersMarketCreateView(LoginRequiredMixin, CreateView):
@@ -232,7 +214,8 @@ class FarmersMarketCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("farmers_market_detail_view", args=(self.object.fm_slug,))
+        return reverse("farmers_market_detail_view",
+                       args=(self.object.fm_slug, ))
 
 
 class FarmersMarketUpdateView(LoginRequiredMixin, UpdateView):
@@ -267,7 +250,8 @@ class FarmersMarketUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("farmers_market_detail_view", args=(self.object.fm_slug,))
+        return reverse("farmers_market_detail_view",
+                       args=(self.object.fm_slug, ))
 
 
 class ProfileFMLikeUpdateView(LoginRequiredMixin, View):
@@ -275,12 +259,13 @@ class ProfileFMLikeUpdateView(LoginRequiredMixin, View):
         fm_like = self.request.POST.get("fm_like")
         profile = Profile.objects.get(id=pk)
         if fm_like == "Favorite":
-            profile.profile_fm_like.add(FarmersMarket.objects.get(fm_slug=fm_slug))
+            profile.profile_fm_like.add(
+                FarmersMarket.objects.get(fm_slug=fm_slug))
         else:
-            profile.profile_fm_like.remove(FarmersMarket.objects.get(fm_slug=fm_slug))
+            profile.profile_fm_like.remove(
+                FarmersMarket.objects.get(fm_slug=fm_slug))
         return HttpResponseRedirect(
-            reverse("farmers_market_detail_view", args=(fm_slug,))
-        )
+            reverse("farmers_market_detail_view", args=(fm_slug, )))
 
 
 class ProfileVendorLikeView(LoginRequiredMixin, View):
@@ -288,12 +273,13 @@ class ProfileVendorLikeView(LoginRequiredMixin, View):
         vendor_like = self.request.POST.get("vendor_like")
         profile = Profile.objects.get(id=pk)
         if vendor_like == "Favorite":
-            profile.profile_vendor_like.add(Vendor.objects.get(vendor_slug=vendor_slug))
+            profile.profile_vendor_like.add(
+                Vendor.objects.get(vendor_slug=vendor_slug))
         else:
             profile.profile_vendor_like.remove(
-                Vendor.objects.get(vendor_slug=vendor_slug)
-            )
-        return HttpResponseRedirect(reverse("vendor_detail_view", args=(vendor_slug,)))
+                Vendor.objects.get(vendor_slug=vendor_slug))
+        return HttpResponseRedirect(
+            reverse("vendor_detail_view", args=(vendor_slug, )))
 
 
 class VendorDetailView(DetailView):
@@ -310,8 +296,7 @@ class VendorDetailView(DetailView):
         context["review_form"] = ReviewForm(vendor)
         context["num_likes"] = vendor.vendor_likes.count()
         context["asdf"] = User.objects.get(
-            username="asdf"
-        )  # default 'owner' of all fm/v
+            username="asdf")  # default 'owner' of all fm/v
         return context
 
 
@@ -328,7 +313,7 @@ class VendorStatusCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         vendor_slug = self.kwargs.get("vendor_slug")
-        return reverse("vendor_detail_view", args=(vendor_slug,))
+        return reverse("vendor_detail_view", args=(vendor_slug, ))
 
 
 class VendorCreateView(LoginRequiredMixin, CreateView):
@@ -354,7 +339,7 @@ class VendorCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("vendor_detail_view", args=(self.object.vendor_slug,))
+        return reverse("vendor_detail_view", args=(self.object.vendor_slug, ))
 
 
 class VendorUpdateView(LoginRequiredMixin, UpdateView):
@@ -380,7 +365,7 @@ class VendorUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("vendor_detail_view", args=(self.object.vendor_slug,))
+        return reverse("vendor_detail_view", args=(self.object.vendor_slug, ))
 
 
 class VendorDeleteView(LoginRequiredMixin, DeleteView):
@@ -442,8 +427,8 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         """
         context["status_list"] = Status.objects.filter(
-            Q(status_vendor__in=vendor_favs) | Q(status_fm__in=fm_favs)
-        )  # .filter(status_created__gt=one_week)
+            Q(status_vendor__in=vendor_favs)
+            | Q(status_fm__in=fm_favs))  # .filter(status_created__gt=one_week)
         return context
 
 
@@ -461,21 +446,19 @@ class SearchListView(ListView):
             query_list = query.split()
             if search_type == "fm_name":
                 result = result.filter(
-                    reduce(operator.and_, (Q(fm_name__icontains=q) for q in query_list))
-                )
+                    reduce(operator.and_,
+                           (Q(fm_name__icontains=q) for q in query_list)))
             if search_type == "fm_address":
                 result = result.filter(
-                    reduce(
-                        operator.and_, (Q(fm_address__icontains=q) for q in query_list)
-                    )
-                )
+                    reduce(operator.and_,
+                           (Q(fm_address__icontains=q) for q in query_list)))
             if search_type == "fm_programs_accepted":
                 result = result.filter(
                     reduce(
                         operator.and_,
-                        (Q(fm_programs_accepted__icontains=q) for q in query_list),
-                    )
-                )
+                        (Q(fm_programs_accepted__icontains=q)
+                         for q in query_list),
+                    ))
         return result
 
 

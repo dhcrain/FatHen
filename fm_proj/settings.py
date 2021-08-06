@@ -16,7 +16,6 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -43,14 +42,15 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": (
-                "%(asctime)s [%(process)d] [%(levelname)s] "
-                + "pathname=%(pathname)s lineno=%(lineno)s "
-                + "funcname=%(funcName)s %(message)s"
-            ),
-            "datefmt": "%Y-%m-%d %H:%M:%S",
+            "format": ("%(asctime)s [%(process)d] [%(levelname)s] " +
+                       "pathname=%(pathname)s lineno=%(lineno)s " +
+                       "funcname=%(funcName)s %(message)s"),
+            "datefmt":
+            "%Y-%m-%d %H:%M:%S",
         },
-        "simple": {"format": "%(levelname)s %(message)s"},
+        "simple": {
+            "format": "%(levelname)s %(message)s"
+        },
     },
     "handlers": {
         "null": {
@@ -122,7 +122,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "fm_proj.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
@@ -133,25 +132,27 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -174,7 +175,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, "staticfiles")
 STATIC_URL = "/static/"
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
+STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"), )
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
@@ -182,13 +183,11 @@ STATICFILES_STORAGE = "whitenoise.django.GzipManifestStaticFilesStorage"
 
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'  # Error on user_media/css/img/progressbar.gif
 
-
 db_from_env = dj_database_url.config()
 DATABASES["default"].update(db_from_env)
 
 MEDIA_ROOT = BASE_DIR
 MEDIA_URL = "/media/"
-
 
 # Django-starages / AWS S3 / https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/
 AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
@@ -223,7 +222,6 @@ if AWS_STORAGE_BUCKET_NAME:
 
     STATICFILES_LOCATION = "static"
 
-
 # For django-review
 # this would use a RadioSelect instead of the default Select
 REVIEW_FORM_CHOICE_WIDGET = "django.forms.widgets.RadioSelect"
@@ -239,16 +237,20 @@ def REVIEW_UPDATE_SUCCESS_URL(review):
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-    ],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 25,
+    "DEFAULT_PERMISSION_CLASSES":
+    ["rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"],
+    "DEFAULT_PAGINATION_CLASS":
+    "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE":
+    25,
     "DEFAULT_THROTTLE_CLASSES": (
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
     ),
-    "DEFAULT_THROTTLE_RATES": {"anon": "100/day", "user": "1000/day"},
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "100/day",
+        "user": "1000/day"
+    },
 }
 
 EMAIL_HOST_USER = "fathen.co@gmail.com"
@@ -268,7 +270,6 @@ CELERY_RESULT_BACKEND = None
 CELERY_SEND_EVENTS = False  # Will not create celeryev.* queues
 # Will delete all celeryev. queues without consumers after 1 minute.
 CELERY_EVENT_QUEUE_EXPIRES = 60
-
 
 RECAPTCHA_PUBLIC_KEY = os.environ["RECAPTCHA_PUBLIC_KEY"]
 RECAPTCHA_PRIVATE_KEY = os.environ["RECAPTCHA_PRIVATE_KEY"]

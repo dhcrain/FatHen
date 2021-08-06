@@ -18,30 +18,29 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="profile",
             name="profile_fm_like",
-            field=models.ManyToManyField(
-                blank=True, related_name="fm_likes", to="review_app.FarmersMarket"
-            ),
+            field=models.ManyToManyField(blank=True,
+                                         related_name="fm_likes",
+                                         to="review_app.FarmersMarket"),
         ),
         migrations.AlterField(
             model_name="profile",
             name="profile_vendor_like",
-            field=models.ManyToManyField(
-                blank=True, related_name="vendor_likes", to="review_app.Vendor"
-            ),
+            field=models.ManyToManyField(blank=True,
+                                         related_name="vendor_likes",
+                                         to="review_app.Vendor"),
         ),
         migrations.AlterField(
             model_name="vendor",
             name="at_farmers_market",
-            field=models.ManyToManyField(
-                to="review_app.FarmersMarket", verbose_name="Located here"
-            ),
+            field=models.ManyToManyField(to="review_app.FarmersMarket",
+                                         verbose_name="Located here"),
         ),
         migrations.AlterField(
             model_name="vendor",
             name="vendor_banner_picture",
-            field=models.ImageField(
-                blank=True, upload_to="vendor_images", verbose_name="Banner Picture"
-            ),
+            field=models.ImageField(blank=True,
+                                    upload_to="vendor_images",
+                                    verbose_name="Banner Picture"),
         ),
         migrations.AlterField(
             model_name="vendor",
@@ -66,16 +65,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="vendor",
             name="vendor_phone",
-            field=localflavor.us.models.PhoneNumberField(
-                blank=True, verbose_name="Phone"
-            ),
+            field=localflavor.us.models.PhoneNumberField(blank=True,
+                                                         verbose_name="Phone"),
         ),
         migrations.AlterField(
             model_name="vendor",
             name="vendor_picture",
-            field=models.ImageField(
-                blank=True, upload_to="vendor_images", verbose_name="Profile Picture"
-            ),
+            field=models.ImageField(blank=True,
+                                    upload_to="vendor_images",
+                                    verbose_name="Profile Picture"),
         ),
         migrations.AlterField(
             model_name="vendor",

@@ -42,9 +42,9 @@ class UserCreationEmailForm(UserCreationForm):
         max_length=30,
         required=True,
         validators=[validate_email],
-        help_text=_(
-            "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
-        ),
+        help_text=
+        _("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
+          ),
     )
 
     class Meta:
