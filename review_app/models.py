@@ -1,6 +1,5 @@
 import datetime
 
-# from django.template.defaultfilters import slugify
 from autoslug import AutoSlugField
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -8,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from localflavor.us.models import PhoneNumberField
 from review.templatetags.review_tags import total_review_average
+# from django.template.defaultfilters import slugify
 
 
 class VendorType(models.Model):
