@@ -31,10 +31,14 @@ class IndexView(ListView):
 
     def get_queryset(self):
         # http://stackoverflow.com/a/38390480/5119789
-        reviews = [(total_review_average(market), market.pk) for market in FarmersMarket.objects.all()]
-        pk_list = [mkt[1] for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)]
-        preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
-        return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)  # [:10]
+        reviews = [(total_review_average(market), market.pk)
+                   for market in FarmersMarket.objects.all()]
+        pk_list = [mkt[1]
+                   for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)]
+        preserved = Case(*[When(pk=pk, then=pos)
+                         for pos, pk in enumerate(pk_list)])
+        # [:10]
+        return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -54,9 +58,12 @@ class FarmersMarketListView(ListView):
             return FarmersMarket.objects.all().order_by(sort)
         elif rated:
             # http://stackoverflow.com/a/38390480/5119789
-            reviews = [(total_review_average(market), market.pk) for market in FarmersMarket.objects.all()]
-            pk_list = [mkt[1] for mkt in sorted(reviews, key=lambda x: x[0], reverse=True)]
-            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
+            reviews = [(total_review_average(market), market.pk)
+                       for market in FarmersMarket.objects.all()]
+            pk_list = [mkt[1] for mkt in sorted(
+                reviews, key=lambda x: x[0], reverse=True)]
+            preserved = Case(*[When(pk=pk, then=pos)
+                             for pos, pk in enumerate(pk_list)])
             return FarmersMarket.objects.filter(pk__in=pk_list).order_by(preserved)
         else:
             return FarmersMarket.objects.all()
@@ -75,28 +82,42 @@ class FarmersMarketDetailView(DetailView):
         # forecast = self.request.GET.get('forecast')
         location = FarmersMarket.objects.get(fm_slug=fm_slug)
         api_key = os.environ['forecast_api']
-        url = "https://api.forecast.io/forecast/{}/{},{}".format(api_key, location.fm_lat, location.fm_long)
+        url = "https://api.forecast.io/forecast/{}/{},{}".format(
+            api_key, location.fm_lat, location.fm_long)
         response = requests.get(url).json()
         if (location.fm_lat is not None or location.fm_long is not None):
-            context['forecast_summary'] = response['daily']['summary']  # weekly summary
-            context['forecast_iframe_url'] = "https://forecast.io/embed/#lat={}&lon={}&name={}".format(location.fm_lat, location.fm_long, location.fm_name)
+            # weekly summary
+            context['forecast_summary'] = response['daily']['summary']
+            context['forecast_iframe_url'] = "https://forecast.io/embed/#lat={}&lon={}&name={}".format(
+                location.fm_lat, location.fm_long, location.fm_name)
         if sort:
-            context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).order_by(sort)
+            context['vendor_list'] = Vendor.objects.filter(
+                at_farmers_market__fm_slug=fm_slug).order_by(sort)
         elif rated:
             # http://stackoverflow.com/a/38390480/5119789
-            reviews = [(total_review_average(vendor), vendor.pk) for vendor in Vendor.objects.all()]
-            pk_list = [vendor[1] for vendor in sorted(reviews, key=lambda x: x[0], reverse=True)]
-            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
-            context['vendor_list'] = Vendor.objects.filter(at_farmers_market__fm_slug=fm_slug).filter(pk__in=pk_list).order_by(preserved)
+            reviews = [(total_review_average(vendor), vendor.pk)
+                       for vendor in Vendor.objects.all()]
+            pk_list = [vendor[1] for vendor in sorted(
+                reviews, key=lambda x: x[0], reverse=True)]
+            preserved = Case(*[When(pk=pk, then=pos)
+                             for pos, pk in enumerate(pk_list)])
+            context['vendor_list'] = Vendor.objects.filter(
+                at_farmers_market__fm_slug=fm_slug).filter(pk__in=pk_list).order_by(preserved)
         else:
-            context['vendor_list_present'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="Yes").distinct()
-            context['vendor_list_no'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No").distinct()
-            context['vendor_list_nr_status'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present="No Response").distinct()
-            context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug, status__status_present=None).distinct()
-            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(at_farmers_market__fm_slug=fm_slug)  # .order_by('status')
+            context['vendor_list_present'] = Vendor.objects.prefetch_related('status_set').filter(
+                at_farmers_market__fm_slug=fm_slug, status__status_present="Yes").distinct()
+            context['vendor_list_no'] = Vendor.objects.prefetch_related('status_set').filter(
+                at_farmers_market__fm_slug=fm_slug, status__status_present="No").distinct()
+            context['vendor_list_nr_status'] = Vendor.objects.prefetch_related('status_set').filter(
+                at_farmers_market__fm_slug=fm_slug, status__status_present="No Response").distinct()
+            context['vendor_list_nr'] = Vendor.objects.prefetch_related('status_set').filter(
+                at_farmers_market__fm_slug=fm_slug, status__status_present=None).distinct()
+            context['vendor_list'] = Vendor.objects.prefetch_related('status_set').filter(
+                at_farmers_market__fm_slug=fm_slug)  # .order_by('status')
         mrkt = FarmersMarket.objects.get(fm_slug=fm_slug)
         google_api = os.environ['google_maps_api']
-        map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(google_api, mrkt.fm_address)
+        map_url = "https://www.google.com/maps/embed/v1/place?key={}&q={}".format(
+            google_api, mrkt.fm_address)
         context['google_map'] = map_url
         context['fm_status_form'] = StatusCreateForm()
         context['review_form'] = ReviewForm(mrkt)
@@ -104,9 +125,11 @@ class FarmersMarketDetailView(DetailView):
         removed one_week filter for demo purposes
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         """
-        context['status_list'] = Status.objects.filter(status_fm=mrkt)  # .filter(status_created__gt=one_week)
+        context['status_list'] = Status.objects.filter(
+            status_fm=mrkt)  # .filter(status_created__gt=one_week)
         context['num_likes'] = location.fm_likes.count()
-        context['asdf'] = User.objects.get(username='asdf')  # default 'owner' of all fm/v
+        context['asdf'] = User.objects.get(
+            username='asdf')  # default 'owner' of all fm/v
         return context
 
 
@@ -174,9 +197,11 @@ class ProfileFMLikeUpdateView(LoginRequiredMixin, View):
         fm_like = self.request.POST.get('fm_like')
         profile = Profile.objects.get(id=pk)
         if fm_like == 'Favorite':
-            profile.profile_fm_like.add(FarmersMarket.objects.get(fm_slug=fm_slug))
+            profile.profile_fm_like.add(
+                FarmersMarket.objects.get(fm_slug=fm_slug))
         else:
-            profile.profile_fm_like.remove(FarmersMarket.objects.get(fm_slug=fm_slug))
+            profile.profile_fm_like.remove(
+                FarmersMarket.objects.get(fm_slug=fm_slug))
         return HttpResponseRedirect(reverse('farmers_market_detail_view', args=(fm_slug,)))
 
 
@@ -186,9 +211,11 @@ class ProfileVendorLikeView(LoginRequiredMixin, View):
         vendor_like = self.request.POST.get('vendor_like')
         profile = Profile.objects.get(id=pk)
         if vendor_like == 'Favorite':
-            profile.profile_vendor_like.add(Vendor.objects.get(vendor_slug=vendor_slug))
+            profile.profile_vendor_like.add(
+                Vendor.objects.get(vendor_slug=vendor_slug))
         else:
-            profile.profile_vendor_like.remove(Vendor.objects.get(vendor_slug=vendor_slug))
+            profile.profile_vendor_like.remove(
+                Vendor.objects.get(vendor_slug=vendor_slug))
         return HttpResponseRedirect(reverse('vendor_detail_view', args=(vendor_slug,)))
 
 
@@ -205,7 +232,8 @@ class VendorDetailView(DetailView):
         context['status_list'] = Status.objects.filter(status_vendor=vendor)
         context['review_form'] = ReviewForm(vendor)
         context['num_likes'] = vendor.vendor_likes.count()
-        context['asdf'] = User.objects.get(username='asdf')  # default 'owner' of all fm/v
+        context['asdf'] = User.objects.get(
+            username='asdf')  # default 'owner' of all fm/v
         return context
 
 
@@ -274,7 +302,8 @@ class VendorDeleteView(LoginRequiredMixin, DeleteView):
 
 class StatusCreateView(LoginRequiredMixin, CreateView):
     model = Status
-    fields = ['status_vendor', 'status_fm', 'status_present', 'status_picture', 'status_comment']
+    fields = ['status_vendor', 'status_fm',
+              'status_present', 'status_picture', 'status_comment']
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
@@ -311,7 +340,8 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         removed one_week filter for demo purposes
         one_week = datetime.datetime.now() + datetime.timedelta(days=-7)
         """
-        context['status_list'] = Status.objects.filter(Q(status_vendor__in=vendor_favs) | Q(status_fm__in=fm_favs))  # .filter(status_created__gt=one_week)
+        context['status_list'] = Status.objects.filter(Q(status_vendor__in=vendor_favs) | Q(
+            status_fm__in=fm_favs))  # .filter(status_created__gt=one_week)
         return context
 
 
@@ -328,11 +358,14 @@ class SearchListView(ListView):
         if query:
             query_list = query.split()
             if search_type == 'fm_name':
-                result = result.filter(reduce(operator.and_, (Q(fm_name__icontains=q) for q in query_list)))
+                result = result.filter(
+                    reduce(operator.and_, (Q(fm_name__icontains=q) for q in query_list)))
             if search_type == 'fm_address':
-                result = result.filter(reduce(operator.and_, (Q(fm_address__icontains=q) for q in query_list)))
+                result = result.filter(
+                    reduce(operator.and_, (Q(fm_address__icontains=q) for q in query_list)))
             if search_type == 'fm_programs_accepted':
-                result = result.filter(reduce(operator.and_, (Q(fm_programs_accepted__icontains=q) for q in query_list)))
+                result = result.filter(reduce(
+                    operator.and_, (Q(fm_programs_accepted__icontains=q) for q in query_list)))
         return result
 
 
@@ -364,8 +397,8 @@ class RegisterView(CreateView):
     success_url = reverse_lazy("login")
 
     def form_valid(self, form):
-            # we are using email as username so let's copy it also to email field
-            user = form.save(commit=False)
-            user.email = user.username
-            user.save()
-            return super().form_valid(form)
+        # we are using email as username so let's copy it also to email field
+        user = form.save(commit=False)
+        user.email = user.username
+        user.save()
+        return super().form_valid(form)

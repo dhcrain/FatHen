@@ -196,7 +196,7 @@ MEDIA_URL = '/media/'
 AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
     'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
     'Cache-Control': 'max-age=94608000',
-    }
+}
 
 # AWS_STORAGE_BUCKET_NAME = os.environ.get('aws_bucket_name')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('NOTHING_HERE')
@@ -232,7 +232,10 @@ REVIEW_FORM_CHOICE_WIDGET = 'django.forms.widgets.RadioSelect'
 # Limit to 1 review per user per item REVIEW_FORM_CHOICE_WIDGET
 REVIEW_AVOID_MULTIPLE_REVIEWS = True
 # new redirect after review
-REVIEW_UPDATE_SUCCESS_URL = lambda review: review.reviewed_item.get_absolute_url()
+
+
+def REVIEW_UPDATE_SUCCESS_URL(
+    review): return review.reviewed_item.get_absolute_url()
 
 
 REST_FRAMEWORK = {
@@ -263,10 +266,13 @@ EMAIL_PORT = 587
 BROKER_URL = os.environ.get('CLOUDAMQP_URL')
 BROKER_POOL_LIMIT = 1  # Will decrease connection usage
 BROKER_HEARTBEAT = None  # We're using TCP keep-alive instead
-BROKER_CONNECTION_TIMEOUT = 30  # May require a long timeout due to Linux DNS timeouts etc
-CELERY_RESULT_BACKEND = None  # AMQP is not recommended as result backend as it creates thousands of queues
+# May require a long timeout due to Linux DNS timeouts etc
+BROKER_CONNECTION_TIMEOUT = 30
+# AMQP is not recommended as result backend as it creates thousands of queues
+CELERY_RESULT_BACKEND = None
 CELERY_SEND_EVENTS = False  # Will not create celeryev.* queues
-CELERY_EVENT_QUEUE_EXPIRES = 60  # Will delete all celeryev. queues without consumers after 1 minute.
+# Will delete all celeryev. queues without consumers after 1 minute.
+CELERY_EVENT_QUEUE_EXPIRES = 60
 
 
 RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_PUBLIC_KEY']
