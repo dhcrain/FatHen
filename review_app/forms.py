@@ -8,23 +8,22 @@ from captcha.fields import ReCaptchaField
 
 
 class StatusCreateForm(forms.ModelForm):
-
     class Meta:
         model = Status
-        fields = ['status_comment', 'status_present', 'status_picture']
+        fields = ["status_comment", "status_present", "status_picture"]
 
         labels = {
-            'status_comment': _('Status'),
-            'status_present': _('Will you be there?'),
-            'status_picture': _('Picture')
+            "status_comment": _("Status"),
+            "status_present": _("Will you be there?"),
+            "status_picture": _("Picture"),
         }
         help_texts = {
-            'status_present': _('Tell your customers if you will be there.'),
+            "status_present": _("Tell your customers if you will be there."),
         }
 
 
 class ContactForm(forms.Form):
-    required_css_class = 'required'
+    required_css_class = "required"
     captcha = ReCaptchaField()
     name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
@@ -34,7 +33,7 @@ class ContactForm(forms.Form):
 
 # https://djangosnippets.org/snippets/3043/
 class UserCreationEmailForm(UserCreationForm):
-    required_css_class = 'required'
+    required_css_class = "required"
     captcha = ReCaptchaField()
     # we are using email as username so override label and validators
     username = forms.CharField(
@@ -43,7 +42,8 @@ class UserCreationEmailForm(UserCreationForm):
         required=True,
         validators=[validate_email],
         help_text=_(
-            "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.")
+            "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
     )
 
     class Meta:
