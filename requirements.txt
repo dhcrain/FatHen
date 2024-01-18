@@ -16,7 +16,7 @@ future==0.15.2
 geocoder==1.15.1
 gunicorn==19.6.0
 Metafone==0.5
-Pillow==9.3.0
+Pillow==5.4.1
 probableparsing==0.0.1
 psycopg2==2.7.6.1
 python-crfsuite==0.9.6
