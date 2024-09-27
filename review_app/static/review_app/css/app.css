@@ -125,7 +125,8 @@ input.secondary.hollow.button {
     padding-top: 1.75em;
 }
 .home-hero {
-    background: url("https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/fathen.jpg");
+    /* background: url("https://s3-us-west-2.amazonaws.com/frmrsmrkt/review_app/img/fathen.jpg"); */
+    background: url("../img/fathen.jpg");
     height: 100%;
     background-repeat:no-repeat;
     -webkit-background-size:cover;

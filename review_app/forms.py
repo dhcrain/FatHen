@@ -24,15 +24,17 @@ class StatusCreateForm(forms.ModelForm):
 
 class ContactForm(forms.Form):
     required_css_class = 'required'
+    captcha = ReCaptchaField()
     name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
     subject = forms.CharField(required=True)
     message = forms.CharField(widget=forms.Textarea)
-    captcha = ReCaptchaField()
 
 
 # https://djangosnippets.org/snippets/3043/
 class UserCreationEmailForm(UserCreationForm):
+    required_css_class = 'required'
+    captcha = ReCaptchaField()
     # we are using email as username so override label and validators
     username = forms.CharField(
         label="Email:",

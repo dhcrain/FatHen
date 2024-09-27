@@ -1,22 +1,20 @@
 venv
+.envrc
 *.pyc
-staticfiles
 .DS_Store
 .idea/
 __pycache__/
 db.sqlite3
 fm_images/
+staticfiles
 vendor_images/
 status_images/
-.envrc
 profile_images/
 
 scraper/mi_images/
-
 scraper/gvl_mainst_vendors\.csv
-
 *.csv
-
 scraper/test\.py
+\.vscode/
 
 \.vscode/
